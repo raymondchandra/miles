@@ -52,7 +52,7 @@ include("class/user.php");
 		{
 			//user
 			$user = new User();
-			$inputUser['account_id'] = $account->getLastId($link);
+			$inputUser['account_id'] = mysqli_insert_id();
 			$inputUser['first_name'] = $input['first_name'];
 			$inputUser['last_name'] = $input['last_name'];
 			$inputUser['birthday'] = $input['birthday'];
@@ -72,7 +72,7 @@ include("class/user.php");
 	
 	$app->get('/user/:id', function($id) use ($link){
 		$user = new User();
-		$respond = $user->getUserById($link,$id);
+		$respond = $user->getUserById($id);
 		if(is_string($respond))
 		{
 			echo $respond;
@@ -243,9 +243,9 @@ include("class/user.php");
 		$inputPlace = $input['place'];
 		$inputCategory = $input['feature'];
 		$inputPrice = explode(";", $input['price']) ;
+		
 		$place = new Place();
 		$respond = $place->insertPlace($link,$inputPlace);
-		
 		if($respond != "success")
 		{
 			echo $respond;
@@ -254,7 +254,7 @@ include("class/user.php");
 		{
 		
 			$errorCheck = true;
-			$place_id = $place->getLastId($link);
+			$place_id = mysqli_insert_id();
 			foreach($inputCategory as $value)
 			{
 				$respond = $place->addCategory($link,$place_id,"feature",$value);
@@ -361,6 +361,165 @@ include("class/user.php");
 		}
     });
 //end of place
+
+//check_in
+	$app->post('/checkIn',function () use ($link,$app){
+		$request = $app->request();
+		$body = $request->getBody();
+		$input = json_decode($body,true);
+		
+		$profile_id = $input['profile_id'];
+		$place_id = $input['place_id'];
+		$timeline = new Timeline();
+		$respond = $timeline->checkIn($link,$profile_id,$place_id);
+		if($respond == "success")
+		{
+			$place = new Place();
+			$place_name = $place->getNameFromId($link,$place_id);
+			json_decode($place_name);
+			if(json_last_error() == JSON_ERROR_NONE)
+				echo $place_name;
+			else
+				echo $timeline->postTimeline($link,$profile_id,"check_in",$place_name);
+		}
+		else
+			echo $respond;
+		
+	});
+//end of check_in
+
+//review
+	$app->get('/review/:field/:value',function ($field,$value) use ($link){
+		$place = new Place();
+		if($field == "place")
+		{
+			$respond = $place->getReviewByPlace($link,$value);
+			if(is_string($respond))
+			{
+				echo $respond;
+			}
+			else
+			{
+				echo json_encode($respond);
+			}
+		}
+		else if($field == "user")
+		{
+			$respond = $place->getReviewByUser($link,$value);
+			if(is_string($respond))
+			{
+				echo $respond;
+			}
+			else
+			{
+				echo json_encode($respond);
+			}
+		}
+	});
+	
+	$app->post('/review',function () use ($link,$app){
+		$request = $app->request();
+		$body = $request->getBody();
+		$input = json_decode($body,true);
+		
+		$review['place_id'] = $input['place_id'];
+		$review['profile_id'] = $input['profile_id'];
+		$review['text'] = $input['text'];
+		$review['rating'] = $input['rating'];
+		//review
+		$place = new Place();
+		$respond = $place->addReview($link,$review);
+		
+		//timeline
+		if($respond == "success")
+		{
+			$place_name = $place->getNameFromId($link,$review['place_id']);
+			json_decode($place_name);
+			if(json_last_error() == JSON_ERROR_NONE)
+				echo $place_name;
+			else
+			{
+				$timeline = new Timeline();
+				echo $timeline->postTimeline($link,$review['profile_id'],"review",$place_name);
+			}
+		}
+		else
+			echo $respond;
+		//hitung rating
+		
+	});
+	
+	$app->put('/review/:id',function($id) use ($link,$app) {
+		$request = $app->request();
+		$body = $request->getBody();
+		$input = json_decode($body,true);
+		
+		$review['text'] = $input['text'];
+		$review['rating'] = $input['rating'];
+		//review
+		$place = new Place();
+		echo $place->addReview($link,$review);
+	});
+	
+	$app->delete('/review/:id',function($id) use ($link) {
+		$place = new Place();
+		$respond = $place->deleteLikeReview($link,$id);
+		if($respond!="success")
+		{
+			echo $respond;
+		}
+		else
+		{
+			$respond = $place->deleteReview($link,$id);
+			if($respond=="success") echo '{"status":"success"}';
+			else echo $respond;
+		}
+	});
+//end of review
+
+//like_review
+	$app->get('/likeReview',function () use ($link,$app){
+		
+	});
+	
+	$app->get('/likeReview/:user',function ($user) use ($link,$app){
+	
+	});
+	
+	$app->post('/likeReview',function () use ($link,$app){
+		$request = $app->request();
+		$body = $request->getBody();
+		$input = json_decode($body,true);
+		
+		$review_id = $input['review_id'];
+		$profile_id = $input['profile_id'];
+		//like_review
+		$place = new Place();
+		$respond = $place->likeReview($link,$review_id,$profile_id);
+		
+		//timeline
+		if($respond == "success")
+		{
+			$place_name = $place->getNameFromId($link,$review['place_id']);
+			json_decode($place_name);
+			if(json_last_error() == JSON_ERROR_NONE)
+				echo $place_name;
+			else
+			{
+				$timeline = new Timeline();
+				echo $timeline->postTimeline($link,$review['profile_id'],"likereview",$place_name);
+			}
+		}
+		else
+			echo $respond;
+	});
+	
+	$app->delete('/likeReview/:id',function ($id) use ($link,$app){
+		//$place = new Place();
+		//echo $place->unlikeReview($link,$id);
+	});
+	
+//end of like_review
 
 
 //run

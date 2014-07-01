@@ -36,7 +36,7 @@
 		}
 		
 		function getFollowerByUser(){}
-	//end of fav_place
+	//end of follower
 	
 	//preference
 		function addPreference(){}

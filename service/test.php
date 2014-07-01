@@ -20,19 +20,5 @@
 	$string =json_encode($array);
 	
 	echo $string;
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 ?>

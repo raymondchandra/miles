@@ -100,7 +100,7 @@
 			}
 		}
 		
-		function getLastId($link)
+		/*(function getLastId($link)
 		{
 			$sql = 'SELECT id FROM account ORDER BY id DESC LIMIT 1';
 			
@@ -115,6 +115,6 @@
 			}else{
 				return '{"status":"error","message":"sql error"}';
 			}
-		}
+		}*/
 	}
 ?>

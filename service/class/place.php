@@ -40,7 +40,7 @@
 			$photo = mysqli_escape_string($link,$place['photo']);
 			$day_life = $place['days'];
 			
-			$sql = 'UPDATE place SET name="'.$name.'", address="'.$address.'",telp="'.$telp.'",website="'.$website.'",email="'.$email.'", day_life='.$day_life.', create_time=now(), photo="'.$photo.'" WHERE id='.$id;
+			$sql = 'UPDATE place SET name="'.$name.'",address="'.$address.'",telp="'.$telp.'",website="'.$website.'",email="'.$email.'", day_life='.$day_life.', create_time=now(), photo="'.$photo.'" WHERE id='.$id;
 			if (mysqli_query($link, $sql)) {
 				//success
 				return "success";
@@ -63,6 +63,22 @@
 				if($num_rows == 1){
 					$rows = mysqli_fetch_assoc($result);
 					return $rows;
+				}else{
+					return '{"status":"error","message":"place not found"}';
+				}
+			}else{
+				return '{"status":"error","message":"sql error"}';
+			}
+		}
+		
+		function getNameFromId($link,$id){
+			$sql = 'SELECT name FROM place WHERE id ='.$id;
+			
+			if($result = mysqli_query($link, $sql)){
+				$num_rows = mysqli_num_rows($result);
+				if($num_rows == 1){
+					$rows = mysqli_fetch_assoc($result);
+					return $rows['name'];
 				}else{
 					return '{"status":"error","message":"place not found"}';
 				}
@@ -96,7 +112,7 @@
 		
 		function getPlaceFromDayLife(){}
 		
-		function getLastId($link)
+		/*function getLastId($link)
 		{
 			$sql = 'SELECT id FROM place ORDER BY id DESC LIMIT 1';
 			
@@ -111,7 +127,7 @@
 			}else{
 				return '{"status":"error","message":"sql error"}';
 			}
-		}
+		}*/
 	//end of place
 		
 	//place_category
@@ -185,7 +201,21 @@
 	//end of gallery
 	
 	//review
-		function addReview(){}
+		function addReview($link,$review)
+		{
+			$place_id = mysqli_escape_string($link,$review['place_id']);
+			$profile_id = mysqli_escape_string($link,$review['profile_id']);
+			$text = mysqli_escape_string($link,$review['text']);
+			$rating = $review['rating'];
+			$sql = 'INSERT INTO review (place_id,profile_id,text,rating,num_like) VALUES ('.$place_id.','.$profile_id.',"'$text'",'.$rating.',0)';
+			if (mysqli_query($link, $sql)) {
+				//success
+				return "success";
+			}else{
+				//error
+				return '{"status":"error","message":"check in failed"}';
+			}
+		}
 		
 		function deleteReview($link,$id)
 		{
@@ -199,11 +229,76 @@
 			}
 		}
 		
-		function editReview(){}
+		function editReview($link,$id,$review)
+		{
+			$text = mysqli_escape_string($link,$review['text']);
+			$rating = $review['rating'];
+			
+			$sql = 'UPDATE review SET text="'.$text.'", rating="'.$rating.'" WHERE id='.$id;
+			if (mysqli_query($link, $sql)) {
+				//success
+				return '{"status":"success"}';
+			}else{
+				//error
+				return '{"status":"error","message":"check in failed"}';
+			}
+		}
 		
-		function getReviewByPlace(){}
+		function getReviewByPlace($link,$place_id)
+		{
+			$sql = 'SELECT * FROM review WHERE place_id="'.$place_id.'"';
+			
+			if($result = mysqli_query($link, $sql)){
+				$num_rows = mysqli_num_rows($result);
+				if($num_rows == 0){
+					return '{"status":"error","message":"category not found"}';
+				}else{
+					$rows = array();
+					while($r = mysqli_fetch_assoc($result)) {
+						$sql = 'SELECT account_id FROM profile WHERE id="'.$r['profile_id'].'" LIMIT 1';
+						$result = mysql_query($sql);
+						$value = mysql_fetch_object($result);
+						$sql = 'SELECT username FROM account WHERE id="'.$value->account_id.'" LIMIT 1';
+						$result = mysql_query($sql);
+						$value = mysql_fetch_object($result);
+						$r['name'] = $value->username;
+						
+						/*$sql = 'SELECT last_name,first_name FROM profile WHERE id="'.$r['profile_id'].'" LIMIT 1';
+						$result = mysql_query($sql);
+						$value = mysql_fetch_object($result);
+						$r['name'] = $value->first_name.' '.$value->last_name;*/
+						$rows[] = $r;
+					}
+					return $rows;
+				}
+			}else{
+				return '{"status":"error","message":"sql error"}';
+			}
+		}
 		
-		function getReviewByUser(){}
+		function getReviewByUser($link,$profile_id)
+		{
+			$sql = 'SELECT * FROM review WHERE place_id="'.$profile_id.'"';
+			
+			if($result = mysqli_query($link, $sql)){
+				$num_rows = mysqli_num_rows($result);
+				if($num_rows == 0){
+					return '{"status":"error","message":"category not found"}';
+				}else{
+					$rows = array();
+					while($r = mysqli_fetch_assoc($result)) {
+						$sql = 'SELECT name FROM place WHERE id="'.$r['place_id'].'" LIMIT 1';
+						$result = mysql_query($sql);
+						$value = mysql_fetch_object($result);
+						$r['place'] = $value->name;
+						$rows[] = $r;
+					}
+					return $rows;
+				}
+			}else{
+				return '{"status":"error","message":"sql error"}';
+			}
+		}
 	//end of review
 	
 	//like_review
@@ -212,6 +307,18 @@
 		function unlikeReview(){}
 		
 		function getLikeByReview(){}
+		
+		function deleteLikeReview($link,$review_id)
+		{
+			$sql = 'DELETE FROM like_review WHERE review_id ='.$review_id;
+			if (mysqli_query($link, $sql)) {
+				//success
+				return "success";
+			}else{
+				//error
+				return '{"status":"error","message":"place not deleted"}';
+			}
+		}
 	//end of like_review
 	
 	
