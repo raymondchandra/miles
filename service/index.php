@@ -52,7 +52,7 @@ include("class/user.php");
 		{
 			//user
 			$user = new User();
-			$inputUser['account_id'] = mysqli_insert_id();
+			$inputUser['account_id'] = mysqli_insert_id($link);
 			$inputUser['first_name'] = $input['first_name'];
 			$inputUser['last_name'] = $input['last_name'];
 			$inputUser['birthday'] = $input['birthday'];
@@ -72,13 +72,17 @@ include("class/user.php");
 	
 	$app->get('/user/:id', function($id) use ($link){
 		$user = new User();
-		$respond = $user->getUserById($id);
+		$respond = $user->getUserById($link,$id);
 		if(is_string($respond))
 		{
 			echo $respond;
 		}
 		else
 		{
+			//tambah last login
+			$timeline = new Timeline();
+			$lastCheckIn = $timeline->getLastCheckInByUser($link,$id);
+			$respond['last_check_in'] = $lastCheckIn;
 			echo json_encode($respond);
 		}
 	});
@@ -254,7 +258,7 @@ include("class/user.php");
 		{
 		
 			$errorCheck = true;
-			$place_id = mysqli_insert_id();
+			$place_id = mysqli_insert_id($link);
 			foreach($inputCategory as $value)
 			{
 				$respond = $place->addCategory($link,$place_id,"feature",$value);
@@ -396,7 +400,7 @@ include("class/user.php");
 			if(json_last_error() == JSON_ERROR_NONE)
 				echo $place_name;
 			else
-				echo $timeline->postTimeline($link,$profile_id,"check_in",$place_name);
+				echo $timeline->postTimeline($link,$profile_id,"check_in",$place_name,$place_id);
 		}
 		else
 			echo $respond;
@@ -455,13 +459,14 @@ include("class/user.php");
 				echo $place_name;
 			else
 			{
+				//hitung rating
+				$place->countRating($link,$review['place_id']);
 				$timeline = new Timeline();
-				echo $timeline->postTimeline($link,$review['profile_id'],"review",$place_name);
+				echo $timeline->postTimeline($link,$review['profile_id'],"review",$place_name,$review['place_id']);
 			}
 		}
 		else
 			echo $respond;
-		//hitung rating
 		
 	});
 	
@@ -499,7 +504,7 @@ include("class/user.php");
 	});
 	
 	$app->get('/likeReview/:user',function ($user) use ($link,$app){
-	
+		
 	});
 	
 	$app->post('/likeReview',function () use ($link,$app){
@@ -523,21 +528,47 @@ include("class/user.php");
 			else
 			{
 				$timeline = new Timeline();
-				echo $timeline->postTimeline($link,$review['profile_id'],"likereview",$place_name);
+				echo $timeline->postTimeline($link,$review['profile_id'],"likereview",$place_name,$review['place_id']);
 			}
 		}
 		else
 			echo $respond;
 	});
 	
-	$app->delete('/likeReview/:id',function ($id) use ($link,$app){
-		//$place = new Place();
-		//echo $place->unlikeReview($link,$id);
+	$app->delete('/likeReview/:review_id/:profile_id',function ($review_id,$profile_id) use ($link,$app){
+		$place = new Place();
+		echo $place->unlikeReview($link,$review_id,$profile_id);
 	});
 	
 //end of like_review
 
-
+//timeline
+	$app->get('/timeline/:profile_id', function($profile_id) use ($link){
+		$timeline = new Timeline();
+		$respond = $timeline->getTimelineByUser($link,$profile_id);
+		if(is_string($respond))
+		{
+			echo $respond;
+		}
+		else
+		{
+			echo json_encode($respond);
+		}
+	});
+	
+	$app->get('/post/:profile_id', function($profile_id) use (){
+		$timeline = new Timeline();
+		$respond = $timeline->getTimelineByUserNFollowing($link,$profile_id);
+		if(is_string($respond))
+		{
+			echo $respond;
+		}
+		else
+		{
+			echo json_encode($respond);
+		}
+	});
+//end of timeline
 //run
 $app->run();
 

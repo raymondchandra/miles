@@ -11,7 +11,11 @@
 			if($result = mysqli_query($link, $sql)){
 				$num_rows = mysqli_num_rows($result);
 				if($num_rows == 1){
-					return '{"status":"accept"}';
+					$value = mysqli_fetch_object($result);
+					$sql = 'SELECT id FROM profile WHERE account_id="'.$value->id.'" LIMIT 1';
+					$result = mysqli_query($link,$sql);
+					$value = mysqli_fetch_object($result);
+					return '{"status":"accept","id":"'.$value->id.'"}';
 				}else{
 					return '{"status":"reject"}';
 				}

@@ -55,6 +55,23 @@
 			
 		}
 		
+		function countRating($link,$id)
+		{
+		
+			$sql = 'SELECT avg(rating) as avg FROM review WHERE place_id ='.$id.' GROUP BY place_id';
+			$result = mysqli_query($link,$sql);
+			$value = mysqli_fetch_object($result);
+			$rating = $value->avg; 
+			$sql = 'UPDATE place SET rating="'.$rating.'" WHERE id='.$id;
+			if (mysqli_query($link, $sql)) {
+				//success
+				return "success";
+			}else{
+				//error
+				return '{"status":"error","message":"place not updated"}';
+			}
+		}
+		
 		function getPlaceFromId($link,$id){
 			$sql = 'SELECT * FROM place WHERE id ='.$id;
 			
@@ -207,7 +224,7 @@
 			$profile_id = mysqli_escape_string($link,$review['profile_id']);
 			$text = mysqli_escape_string($link,$review['text']);
 			$rating = $review['rating'];
-			$sql = 'INSERT INTO review (place_id,profile_id,text,rating,num_like) VALUES ('.$place_id.','.$profile_id.',"'$text'",'.$rating.',0)';
+			$sql = 'INSERT INTO review (place_id,profile_id,text,rating,num_like) VALUES ('.$place_id.','.$profile_id.',"'.$text.'",'.$rating.',0)';
 			if (mysqli_query($link, $sql)) {
 				//success
 				return "success";
@@ -255,18 +272,12 @@
 				}else{
 					$rows = array();
 					while($r = mysqli_fetch_assoc($result)) {
-						$sql = 'SELECT account_id FROM profile WHERE id="'.$r['profile_id'].'" LIMIT 1';
-						$result = mysql_query($sql);
-						$value = mysql_fetch_object($result);
-						$sql = 'SELECT username FROM account WHERE id="'.$value->account_id.'" LIMIT 1';
-						$result = mysql_query($sql);
-						$value = mysql_fetch_object($result);
-						$r['name'] = $value->username;
 						
-						/*$sql = 'SELECT last_name,first_name FROM profile WHERE id="'.$r['profile_id'].'" LIMIT 1';
+						
+						$sql = 'SELECT last_name,first_name FROM profile WHERE id="'.$r['profile_id'].'" LIMIT 1';
 						$result = mysql_query($sql);
 						$value = mysql_fetch_object($result);
-						$r['name'] = $value->first_name.' '.$value->last_name;*/
+						$r['name'] = $value->first_name.' '.$value->last_name;
 						$rows[] = $r;
 					}
 					return $rows;
@@ -302,9 +313,29 @@
 	//end of review
 	
 	//like_review
-		function likeReview(){}
+		function likeReview($link,$review_id,$profile_id)
+		{
+			$sql = 'INSERT INTO like_review (review_id,profile_id) VALUES ('.$review_id.','.$profile_id.')';
+			if (mysqli_query($link, $sql)) {
+				//success
+				return '{"status":"success"}';
+			}else{
+				//error
+				return '{"status":"error","message":"place not deleted"}';
+			}
+		}
 		
-		function unlikeReview(){}
+		function unlikeReview($link,$review_id,$profile_id)
+		{
+			$sql = 'DELETE FROM like_review WHERE review_id ='.$review_id.' AND profile_id='.$profile_id;
+			if (mysqli_query($link, $sql)) {
+				//success
+				return '{"status":"success"}';
+			}else{
+				//error
+				return '{"status":"error","message":"place not deleted"}';
+			}
+		}
 		
 		function getLikeByReview(){}
 		
