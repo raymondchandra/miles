@@ -561,7 +561,8 @@ body {
 }
 
 /*--------------------------------------------Landing Section------------------------------------*/
-#landing_sec {
+
+	#landing_sec {
 
 	position: relative;
 	
@@ -589,22 +590,7 @@ body {
 		display: block;
 	}
 	
-	.welcome_c {
-		@include dimension(100%, auto);
-		display: block;
-		
-		.welcome_tbl {
-			@include dimension(100%, inherit);
-			display: table;
-			
-			.welcome_cell {
-				@include dimension(100%, inherit);
-				display: table-cell;
-				vertical-align: middle;
-				text-align: center;
-			}
-		}
-	}
+
 	
 	.welcome_logo {
 		background: url('../img/welcome_logo.svg') no-repeat;
@@ -1479,7 +1465,6 @@ and (-webkit-min-device-pixel-ratio: 2){
 
 body {
   font: 14px/1.5 helvetica-neue, helvetica, arial, san-serif;
-  padding:10px;
 }
  
 h1 {
@@ -1510,5 +1495,68 @@ h1 {
   vertical-align: middle;
   border:1px solid #474747;
 }
+
+.miles_logo_login {
+	background: url('../images/miles_logo.svg') no-repeat center center; 
+	background-size: 256px 131.913px;
+	width: 360px;
+	height: 186px;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 10px;
+	
+	
+}
+
+.login_area {
+	padding: 20px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-o-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	box-sizing: border-box;
+	
+	width: 400px;
+	margin-left: auto;
+	margin-right: auto;
+	//border: 1px solid #efefef;
+}
+.welcome_c {
+	@include dimension(100%, auto);
+	display: block;
+	
+	.welcome_tbl {
+		@include dimension(100%, inherit);
+		display: table;
+		
+		.welcome_cell {
+			@include dimension(100%, inherit);
+			display: table-cell;
+			vertical-align: middle;
+			text-align: center;
+			
+			.row {
+				margin-bottom: 14px;
+				display: block;
+				
+			
+				label.error {
+					display: inline-block;
+					position: absolute;
+					width: 340px;
+					text-align: left;
+					color: #f00;
+					font-weight: 400;
+				}
+			}
+		}
+	}
+	
+	.login_front {
+		margin-top: 30px;
+	}
+}
+
 
 
