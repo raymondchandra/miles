@@ -301,60 +301,76 @@ include("class/user.php");
 		$inputCategory = $input['feature'];
 		$inputPrice = $input['price'];
 		$place = new Place();
-		$respond = $place->updatePlace($link,$id,$inputPlace);
 		
-		if($respond != "success")
+		$respond = $place->getPlaceFromId($link,$id);
+		if(is_string($respond))
 		{
 			echo $respond;
 		}
 		else
 		{
-			$place->delCategory($link,$id);
-			$errorCheck = true;
-			foreach($inputCategory as $value)
+			//delete foto
+			$dir = 'http://milesyourday.com/file_upload/place/'.$respond['name'].'/'.$respond['photo'];
+			unlink($dir);
+			$respond = $place->updatePlace($link,$id,$inputPlace);
+		
+			if($respond != "success")
 			{
-				$respond = $place->addCategory($link,$id,"feature",$value);
-				if($respond!="success") $errorCheck = false;
+				echo $respond;
 			}
-			
-			$low = $inputPrice[0];
-			$high = $inputPrice[1];
-			if($low < $high)
+			else
 			{
-				if($low <= 30000)
+				$place->delCategory($link,$id);
+				$errorCheck = true;
+				foreach($inputCategory as $value)
 				{
-					$respond = $place->addCategory($link,$id,"price","Below 30000");
+					$respond = $place->addCategory($link,$id,"feature",$value);
 					if($respond!="success") $errorCheck = false;
 				}
-				$priceRange = array(30000,50000,100000,200000,300000,500000);
-				for($i = 1;$i<count($priceRange);$i++)
+				
+				$low = $inputPrice[0];
+				$high = $inputPrice[1];
+				if($low < $high)
 				{
-					if(($priceRange[$i-1] < $low && $low <= $priceRange[$i]) || ($priceRange[$i-1] < $high && $high <= $priceRange[$i]) || ($low <=$priceRange[$i-1] && $high > $priceRange[$i]))
+					if($low <= 30000)
 					{
-						$respond = $place->addCategory($link,$id,"price",($priceRange[$i-1]+1)." - ".$priceRange[$i]);
+						$respond = $place->addCategory($link,$id,"price","Below 30000");
+						if($respond!="success") $errorCheck = false;
+					}
+					$priceRange = array(30000,50000,100000,200000,300000,500000);
+					for($i = 1;$i<count($priceRange);$i++)
+					{
+						if(($priceRange[$i-1] < $low && $low <= $priceRange[$i]) || ($priceRange[$i-1] < $high && $high <= $priceRange[$i]) || ($low <=$priceRange[$i-1] && $high > $priceRange[$i]))
+						{
+							$respond = $place->addCategory($link,$id,"price",($priceRange[$i-1]+1)." - ".$priceRange[$i]);
+							if($respond!="success") $errorCheck = false;
+						}
+					}
+					if($high >500000)
+					{
+						$respond = $place->addCategory($link,$id,"price","Above 500000");
 						if($respond!="success") $errorCheck = false;
 					}
 				}
-				if($high >500000)
-				{
-					$respond = $place->addCategory($link,$id,"price","Above 500000");
-					if($respond!="success") $errorCheck = false;
-				}
+				if($errorCheck) echo '{"status":"success"}';
+				else echo '{"status":"error","message":"not all category updated"}';
 			}
-			if($errorCheck) echo '{"status":"success"}';
-			else echo '{"status":"error","message":"not all category updated"}';
 		}
+		
     });
 	
 	$app->delete('/place/:id',function($id) use ($link) {
         $place = new Place();
-		$respond = $place->delCategory($link,$id);
-		if($respond!="success")
+		$respond = $place->getPlaceFromId($link,$id);
+		if(is_string($respond))
 		{
 			echo $respond;
 		}
 		else
 		{
+			//delete foto
+			$dir = 'http://milesyourday.com/file_upload/place/'.$respond['name'];
+			rmdir($dir);
 			$respond = $place->deletePlace($link,$id);
 			if($respond=="success") echo '{"status":"success"}';
 			else echo $respond;
