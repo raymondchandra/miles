@@ -268,7 +268,7 @@
 			if($result = mysqli_query($link, $sql)){
 				$num_rows = mysqli_num_rows($result);
 				if($num_rows == 0){
-					return '{"status":"error","message":"category not found"}';
+					return '{"status":"error","message":"review not found"}';
 				}else{
 					$rows = array();
 					while($r = mysqli_fetch_assoc($result)) {
@@ -294,7 +294,7 @@
 			if($result = mysqli_query($link, $sql)){
 				$num_rows = mysqli_num_rows($result);
 				if($num_rows == 0){
-					return '{"status":"error","message":"category not found"}';
+					return '{"status":"error","message":"review not found"}';
 				}else{
 					$rows = array();
 					while($r = mysqli_fetch_assoc($result)) {
@@ -337,7 +337,29 @@
 			}
 		}
 		
-		function getLikeByReview(){}
+		function getLikeByReview($link,$review_id,$profile_id)
+		{
+			$sql = 'SELECT count(profile_id) as ct FROM like_review GROUP BY review_id HAVING review_id='.review_id;
+						
+			if($result = mysqli_query($link, $sql)){
+				$value = mysql_fetch_object($result);
+				$numLike = $value->ct;
+				
+				$sql = 'SELECT * FROM like_review WHERE review_id='.$review_id.' AND profile_id='.$profile_id' LIMIT 1';
+				if($result = mysqli_query($link, $sql)){
+					$num_rows = mysqli_num_rows($result);
+					if($num_rows == 1){
+						return '{"count":"'.$numLike.'","like":"yes"}';
+					}else{
+						return '{"count":"'.$numLike.'","like":"no"}';
+					}
+				}else{
+					return '{"status":"error","message":"sql error"}';
+				}
+			}else{
+				return '{"status":"error","message":"sql error"}';
+			}
+		}
 		
 		function deleteLikeReview($link,$review_id)
 		{

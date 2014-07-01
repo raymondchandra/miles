@@ -21,21 +21,77 @@
 	//end of fav_place
 	
 	//follower
-		function addFollower(){}
-		
-		function deleteFollower($link,$id)
+		function follow($link,$profile_id,$follower_id)
 		{
-			$sql = 'DELETE FROM follower WHERE id ='.$id;
+			$sql = 'INSERT INTO follower (profile_id,follower_id) VALUES ('.$profile_id.','.$follower_id.')';
 			if (mysqli_query($link, $sql)) {
 				//success
-				return "success";
+				return '{"status":"success"}';
 			}else{
 				//error
 				return '{"status":"error","message":"place not deleted"}';
 			}
 		}
 		
-		function getFollowerByUser(){}
+		function unfollow($link,$profile_id,$follower_id)
+		{
+			$sql = 'DELETE FROM follower WHERE follower_id ='.$follower_id.' AND profile_id='.$profile_id;
+			if (mysqli_query($link, $sql)) {
+				//success
+				return '{"status":"success"}';
+			}else{
+				//error
+				return '{"status":"error","message":"place not deleted"}';
+			}
+		}
+		
+		function getFollower($link,$profile_id)
+		{
+			$sql = 'SELECT follower_id FROM follower WHERE profile_id="'.$profile_id.'"';
+			
+			if($result = mysqli_query($link, $sql)){
+				$num_rows = mysqli_num_rows($result);
+				if($num_rows == 0){
+					return '{"status":"error","message":"follower not found"}';
+				}else{
+					$rows = array();
+					while($r = mysqli_fetch_assoc($result)) {
+						$sql = 'SELECT last_name,first_name FROM profile WHERE id="'.$r['follower_id'].'" LIMIT 1';
+						$result = mysql_query($sql);
+						$value = mysql_fetch_object($result);
+						$r['name'] = $value->first_name.' '.$value->last_name;
+						$rows[] = $r;
+					}
+					return $rows;
+				}
+			}else{
+				return '{"status":"error","message":"sql error"}';
+			}
+		}
+		
+		function getFollowing($link,$follower_id)
+		{
+			$sql = 'SELECT profile_id FROM follower WHERE follower_id="'.$follower_id.'"';
+			
+			if($result = mysqli_query($link, $sql)){
+				$num_rows = mysqli_num_rows($result);
+				if($num_rows == 0){
+					return '{"status":"error","message":"following not found"}';
+				}else{
+					$rows = array();
+					while($r = mysqli_fetch_assoc($result)) {
+						$sql = 'SELECT last_name,first_name FROM profile WHERE id="'.$r['profile_id'].'" LIMIT 1';
+						$result = mysql_query($sql);
+						$value = mysql_fetch_object($result);
+						$r['name'] = $value->first_name.' '.$value->last_name;
+						$rows[] = $r;
+					}
+					return $rows;
+				}
+			}else{
+				return '{"status":"error","message":"sql error"}';
+			}
+		}
 	//end of follower
 	
 	//preference

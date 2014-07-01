@@ -503,8 +503,9 @@ include("class/user.php");
 		
 	});
 	
-	$app->get('/likeReview/:user',function ($user) use ($link,$app){
-		
+	$app->get('/likeReview/:review_id/:profile_id',function ($review_id,$profile_id) use ($link,$app){
+		$place = new Place();
+		echo $place->getLikeByReview($link,$review_id,$profile_id);
 	});
 	
 	$app->post('/likeReview',function () use ($link,$app){
