@@ -1,2 +1,4 @@
 E:\xampp\htdocs\pgcunpar.com\assets\css
 sass --watch --style compressed main.scss:main.css reset.scss:reset.css font.scss:font.css
+
+sass --watch main.scss:main.css reset.scss:reset.css font.scss:font.css all.scss:all.css 
