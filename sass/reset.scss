@@ -1,0 +1,536 @@
+/* `XHTML, HTML4, HTML5 Reset
+----------------------------------------------------------------------------------------------------*/
+/* line 25, ../sass/reset.scss */
+a, abbr, acronym, address, applet, article, aside, audio,
+b, big, blockquote, body,
+canvas, caption, center, cite, code,
+dd, del, details, dfn, dialog, div, dl, dt,
+em, embed,
+fieldset, figcaption, figure, font, footer, form,
+h1, h2, h3, h4, h5, h6, header, hgroup, hr, html,
+i, iframe, img, ins,
+kbd,
+label, legend, li,
+main, mark, menu, meter,
+nav,
+object, ol, output,
+p, pre, progress,
+q,
+rp, rt,
+ruby,
+s, samp, section, small, span, strike, strong, sub, summary, sup,
+table, tbody, td, tfoot, th, thead, time, tr, tt,
+u, ul, 
+var, video,
+xmp {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  line-height: 1.5em;
+  letter-spacing: 0;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 300; /*400 is normal*/
+  /*300*/
+  color: #353535;
+  word-wrap: break-word; }
+
+html,
+body {
+  height: 100%; }
+
+article,
+aside, 
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+menu,
+nav,
+section {
+  /*
+    Override the default (display: inline) for
+    browsers that do not recognize HTML5 tags.
+  
+    IE8 (and lower) requires a shiv:
+    http://ejohn.org/blog/html5-shiv
+  */
+  display: block; }
+  
+$green: #228b22;
+$green_line: #8bc08b;
+$green_flat: #14c760;
+$text_clr: #353535;  
+$brown: #b57b15;
+$silver_line: #e1e1e1;
+
+p {
+	line-height: 1.7em;
+}
+
+b, .strong,
+strong {
+  /*
+    Makes browsers agree.
+    IE + Opera = font-weight: bold.
+    Gecko + WebKit = font-weight: bolder.
+  */
+  font-weight: bold; }
+
+img {
+  color: transparent;
+  font-size: 0;
+  vertical-align: middle;
+  /*
+    For IE.
+    http://css-tricks.com/ie-fix-bicubic-scaling-for-images
+  */
+  -ms-interpolation-mode: bicubic; }
+
+ol,
+ul {
+  list-style: none; }
+
+li {
+  /*
+    For IE6 + IE7:
+  
+    "display: list-item" keeps bullets from
+    disappearing if hasLayout is triggered.
+  */
+  display: list-item; }
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0; }
+
+th,
+td,
+caption {
+  font-weight: normal;
+  vertical-align: top;
+  text-align: left; }
+
+q {
+  quotes: none; }
+ 
+q:before,
+q:after {
+  content: "";
+  content: none; }
+
+sub,
+sup,
+small {
+  font-size: 75%; }
+ 
+sub,
+sup {
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline; }
+
+sub {
+  bottom: -0.25em; }
+
+sup {
+  top: -0.5em; }
+
+svg {
+  /*
+    For IE9. Without, occasionally draws shapes
+    outside the boundaries of <svg> rectangle.
+  */
+  overflow: hidden; }
+
+/*
+  Custom reset
+*/
+a.link {
+	text-decoration: none;
+	color: $green;
+	font-weight: 400;
+}
+
+a.button, input[type=submit],
+input[type=email],
+input[type=button],
+textarea {
+  -webkit-appearance: none; 
+  cursor: pointer;
+  }
+
+a.button, input[type=submit], input[type=button]  {
+  height: 46px;
+  line-height: 46px;
+  background: $green_flat;
+  padding: 0 30px 0 30px;
+  display: inline-block;
+  text-decoration: none;
+  font-weight: 400;
+  color: #fff !important;
+  border: none !important;
+  margin-top: 60px; 
+  font-size: 18px;}
+
+a.button:active, input[type=submit]:active, input[type=button]:active {
+  height: 46px;
+  line-height: 46px;
+  background: #123;
+  padding: 0 30px 0 30px;
+  display: inline-block;
+  text-decoration: none;
+  font-weight: 400;
+  color: #fff !important;
+  border: none !important;
+  margin-top: 60px;
+	font-size:18px;}
+
+p {
+	text-align: justify;
+}
+
+::selection {
+    background: #f0a92d; /*#b57b15*/
+    color: #000;
+}
+/* Gecko/Mozilla */
+::-moz-selection {
+    background: #f0a92d; /*#b57b15*/
+    color: #000;
+}
+/* Webkit */
+::-webkit-selection {
+    background: #f0a92d; /*#b57b15*/
+    color: #000;
+}
+/* Opera */
+::-o-selection {
+    background: #f0a92d; /*#b57b15*/
+    color: #000;
+}
+/* Ms */ 
+::-ms-selection {
+    background: #f0a92d; /*#951b81*/
+    color: #000;
+}
+/*--------------------------------------------label, input text, and inpute pass Mod------------------------------------*/
+
+label {
+	width: 120px;
+	display: inline-block;
+}
+input[type=text], input[type=email], input[type=url], input[type=password] {
+  -webkit-transition: all 0.30s ease-in-out;
+  -moz-transition: all 0.30s ease-in-out;
+  -ms-transition: all 0.30s ease-in-out;
+  -o-transition: all 0.30s ease-in-out;
+  
+  height: 30px;
+  text-indent: 10px;
+  
+  border: 1px solid $silver_line;
+  padding-left: 5px;
+  padding-right: 5px;
+  
+  outline: none;
+  
+  font-weight: 300;
+}
+
+input[type=text]:focus, input[type=password]:focus {
+  height: 30px;
+  text-indent: 10px;
+  
+  border: 1px solid $green_line;
+  padding-left: 5px;
+  padding-right: 5px;
+  
+  font-weight: 300;
+}
+
+input[type=radio] {
+	
+}
+
+select {
+	height: 30px;
+	border: 1px solid $silver_line;
+	padding-left: 5px;
+	padding-right: 5px;
+	margin: 0 10px 0 0;
+	outline: none;
+	
+	&:focus {
+		border: 1px solid $green_line;
+	}
+  
+}
+
+textarea {
+
+	border: 1px solid $silver_line;
+	outline: none;
+	font-family: 'Open Sans';
+	letter-spacing: 0.05em;
+	font-size: 15px;
+	
+	&:focus {
+		border: 1px solid $green_line;
+	}
+}
+
+
+/*
+
+
+/*--------------------------------------------Font Size------------------------------------*/
+.fnts_15 {
+	font-size: 15px !important; /*15px*/
+}
+
+.fnts_18 {
+	font-size: 18px !important; /*1em = 18px*/
+}
+
+.fnts_20 {
+	font-size: 20px !important; /*20px*/
+}
+
+.fnts_22 {
+	font-size: 22px !important; /*22px*/
+}
+
+.fnts_24 {
+	font-size: 24px !important; /*24px*/
+}
+
+.fnts_36 {
+	font-size: 36px !important; /*24px*/
+}
+
+.fnts_48 {
+	font-size: 48px !important; /*24px*/
+}
+
+.fnts_60 {
+	font-size: 60px !important; /*24px*/
+}
+
+.linh_48 {
+	line-height: 48px !important;
+}
+
+/*--------------------------------------------Color------------------------------------*/
+.clr_white {
+	color: #fff;
+}
+
+.clr_green {
+	color: #228b22;
+}
+
+.clr_red {
+	color: #CC0000;
+}
+
+
+/*--------------------------------------------Bg Color------------------------------------*/
+.bgclr_white {
+	background: #fff;
+}
+
+.bgclr_white_08 {
+	background: rgba(255, 255, 255, 0.8);
+}
+
+.bgclr_green {
+	background: #228b22;
+}
+
+/*--------------------------------------------Title------------------------------------*/
+.t_48 {
+	font-size: 2.6666666666666666666666666666667em; /*48/18*/
+	line-height: 1em;
+	letter-spacing: -0.05em;
+	margin-bottom: 10px;
+}
+
+.t_60 {
+	font-size: 3.3333333333333333333333333333333em; /*48/18*/
+	line-height: 1em;
+	letter-spacing: -0.05em;
+	margin-bottom: 17px;
+}
+/*--------------------------------------------SubTitle------------------------------------*/
+.st_14 {
+	font-size: 0.77777777777777777777777777777778em;
+	line-height: 1em;
+	letter-spacing: 0.4em;
+	margin-top: 20px;
+}
+/*--------------------------------------------Display------------------------------------*/
+.d_tbl {
+	display: table !important;
+}
+
+.d_blk {
+	display: block !important;
+}
+
+.d_tblc {
+	display: table-cell !important;
+	vertical-align: middle;
+}
+/*--------------------------------------------Margin------------------------------------*/
+.mt_120 {
+	margin-top: 120px;
+}  
+
+.mt_93{
+	margin-top: 93px;
+}
+
+.mt_90 {
+	margin-top: 90px;
+}
+
+.mt_60 {
+	margin-top: 60px !important;
+}
+
+.mt_40 {
+	margin-top: 40px !important;
+}
+
+.mt_30 {
+	margin-top: 30px !important;
+}
+
+.mt_20 {
+	margin-top: 20px !important;
+}
+
+.mt_5 {
+	margin-top: 5px !important;
+}
+
+.mb_240 {
+	margin-bottom: 240px !important;
+}
+
+.mb_120 {
+	margin-bottom: 120px !important;
+}
+
+.mb_60 {
+	margin-bottom: 60px !important;
+}
+
+.mb_40 {
+	margin-bottom: 40px !important;
+}
+
+.mb_30 {
+	margin-bottom: 30px !important;
+}
+
+.mb_20 {
+	margin-bottom: 20px !important;
+}
+.mb_10 {
+	margin-bottom: 10px !important;
+}
+.mb_5 {
+	margin-bottom: 5px !important;
+}
+
+.ml_20 {
+	margin-left: 20px !important;
+}
+
+.ml_30 {
+	margin-left: 30px !important;
+}
+
+.ml_40 {
+	margin-left: 40px !important;
+}
+
+.mlr_a{
+	margin-left: auto !important;
+	margin-right: auto !important;
+}
+/*--------------------------------------------Padding------------------------------------*/
+.pd_30 {
+	padding: 30px;
+}
+
+.pd_20 {
+	padding: 20px !important;
+}
+
+.pdt_20 {
+	padding-top: 20px !important;
+}
+
+.pdr_40 {
+	padding-right: 40px !important;
+}
+/*--------------------------------------------Width------------------------------------*/
+.wdth_940 {
+	width: 940px !important;
+}
+.wdth_920 {
+	width: 920px !important;
+}
+.wdth_900 {
+	width: 900px !important;
+}
+.wdth_420 {
+	width: 400px !important;
+}
+
+/*--------------------------------------------Position------------------------------------*/
+.p_rel {
+	position: relative !important;
+}
+
+.p_abs {
+	position: absolute !important;
+}
+/*--------------------------------------------Overflow------------------------------------*/
+.of_hide {
+	overflow: hidden !important;
+}
+
+.of_x_hide {
+	overflow-x: hidden !important;
+}
+
+/*--------------------------------------------Text Align------------------------------------*/
+.tal_c {
+	text-align: center !important;
+}
+
+.tal_r {
+	text-align: right !important;
+}
+
+.tal_l {
+	text-align: left !important;
+}
+
+.tal_j {
+	text-align: justify !important;
+}
+
+
+
+/*--------------------------------------------Button, Submit, and Link Mod------------------------------------*/
+
+
+

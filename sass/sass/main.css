@@ -1,0 +1,1561 @@
+/*
+  960 Grid System ~ Core CSS.
+  Learn more ~ http://960.gs/
+
+  Licensed under GPL and MIT.
+*/
+/*
+  Forces backgrounds to span full width,
+  even if there is horizontal scrolling.
+  Increase this if your layout is wider.
+
+  Note: IE6 works fine without this fix.
+*/
+body {
+  min-width: 960px; }
+
+/* `Container
+----------------------------------------------------------------------------------------------------*/
+.c_12 {
+  margin-left: auto;
+  margin-right: auto;
+  width: 960px; }
+
+/* `Grid >> Global
+----------------------------------------------------------------------------------------------------*/
+.g_1,
+.g_2,
+.g_3,
+.g_4,
+.g_5,
+.g_6,
+.g_7,
+.g_8,
+.g_9,
+.g_10,
+.g_11,
+.g_12 {
+  display: inline;
+  float: left;
+  margin-left: 10px;
+  margin-right: 10px; }
+
+.g_ex_1,
+.g_ex_2,
+.g_ex_3,
+.g_ex_4,
+.g_ex_5,
+.g_ex_6,
+.g_ex_7,
+.g_ex_8,
+.g_ex_9,
+.g_ex_10,
+.g_ex_11,
+.g_ex_12 {
+  display: inline;
+  float: left;
+  padding-left: 10px;
+  padding-right: 10px; }
+
+.push_1, .pull_1,
+.push_2, .pull_2,
+.push_3, .pull_3,
+.push_4, .pull_4,
+.push_5, .pull_5,
+.push_6, .pull_6,
+.push_7, .pull_7,
+.push_8, .pull_8,
+.push_9, .pull_9,
+.push_10, .pull_10,
+.push_11, .pull_11 {
+  position: relative; }
+
+/* `Grid >> Children (Alpha ~ First, Omega ~ Last)
+----------------------------------------------------------------------------------------------------*/
+.alpha {
+  margin-left: 0; }
+
+.omega {
+  margin-right: 0; }
+
+/* `Grid >> 12 Columns
+----------------------------------------------------------------------------------------------------*/
+.c_12 .g_1 {
+  width: 60px; }
+
+.c_12 .g_2 {
+  width: 140px; }
+
+.c_12 .g_3 {
+  width: 220px; }
+
+.c_12 .g_4 {
+  width: 300px; }
+
+.c_12 .g_5 {
+  width: 380px; }
+
+.c_12 .g_6 {
+  width: 460px; }
+
+.c_12 .g_7 {
+  width: 540px; }
+
+.c_12 .g_8 {
+  width: 620px; }
+
+.c_12 .g_9 {
+  width: 700px; }
+
+.c_12 .g_10 {
+  width: 780px; }
+
+.c_12 .g_11 {
+  width: 860px; }
+
+.c_12 .g_12 {
+  width: 940px; }
+
+.c_12 .g_ex_1 {
+  width: 80px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  /*Firefox 1-3*/
+  -webkit-box-sizing: border-box;
+  /* Safari */ }
+
+.c_12 .g_ex_2 {
+  width: 160px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  /*Firefox 1-3*/
+  -webkit-box-sizing: border-box;
+  /* Safari */ }
+
+.c_12 .g_ex_3 {
+  width: 240px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  /*Firefox 1-3*/
+  -webkit-box-sizing: border-box;
+  /* Safari */ }
+
+.c_12 .g_ex_4 {
+  width: 320px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  /*Firefox 1-3*/
+  -webkit-box-sizing: border-box;
+  /* Safari */ }
+
+.c_12 .g_ex_5 {
+  width: 400px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  /*Firefox 1-3*/
+  -webkit-box-sizing: border-box;
+  /* Safari */ }
+
+.c_12 .g_ex_6 {
+  width: 480px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  /*Firefox 1-3*/
+  -webkit-box-sizing: border-box;
+  /* Safari */ }
+
+.c_12 .g_ex_7 {
+  width: 560px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  /*Firefox 1-3*/
+  -webkit-box-sizing: border-box;
+  /* Safari */ }
+
+.c_12 .g_ex_8 {
+  width: 640px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  /*Firefox 1-3*/
+  -webkit-box-sizing: border-box;
+  /* Safari */ }
+
+.c_12 .g_ex_9 {
+  width: 720px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  /*Firefox 1-3*/
+  -webkit-box-sizing: border-box;
+  /* Safari */ }
+
+.c_12 .g_ex_10 {
+  width: 800px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  /*Firefox 1-3*/
+  -webkit-box-sizing: border-box;
+  /* Safari */ }
+
+.c_12 .g_ex_11 {
+  width: 880px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  /*Firefox 1-3*/
+  -webkit-box-sizing: border-box;
+  /* Safari */ }
+
+.c_12 .g_ex_12 {
+  width: 960px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  /*Firefox 1-3*/
+  -webkit-box-sizing: border-box;
+  /* Safari */ }
+
+/* `Prefix Extra Space >> 12 Columns
+----------------------------------------------------------------------------------------------------*/
+.c_12 .prefix_1 {
+  padding-left: 80px; }
+
+.c_12 .prefix_2 {
+  padding-left: 160px; }
+
+.c_12 .prefix_3 {
+  padding-left: 240px; }
+
+.c_12 .prefix_4 {
+  padding-left: 320px; }
+
+.c_12 .prefix_5 {
+  padding-left: 400px; }
+
+.c_12 .prefix_6 {
+  padding-left: 480px; }
+
+.c_12 .prefix_7 {
+  padding-left: 560px; }
+
+.c_12 .prefix_8 {
+  padding-left: 640px; }
+
+.c_12 .prefix_9 {
+  padding-left: 720px; }
+
+.c_12 .prefix_10 {
+  padding-left: 800px; }
+
+.c_12 .prefix_11 {
+  padding-left: 880px; }
+
+/* `Suffix Extra Space >> 12 Columns
+----------------------------------------------------------------------------------------------------*/
+.c_12 .suffix_1 {
+  padding-right: 80px; }
+
+.c_12 .suffix_2 {
+  padding-right: 160px; }
+
+.c_12 .suffix_3 {
+  padding-right: 240px; }
+
+.c_12 .suffix_4 {
+  padding-right: 320px; }
+
+.c_12 .suffix_5 {
+  padding-right: 400px; }
+
+.c_12 .suffix_6 {
+  padding-right: 480px; }
+
+.c_12 .suffix_7 {
+  padding-right: 560px; }
+
+.c_12 .suffix_8 {
+  padding-right: 640px; }
+
+.c_12 .suffix_9 {
+  padding-right: 720px; }
+
+.c_12 .suffix_10 {
+  padding-right: 800px; }
+
+.c_12 .suffix_11 {
+  padding-right: 880px; }
+
+/* `Push Space >> 12 Columns
+----------------------------------------------------------------------------------------------------*/
+.c_12 .push_1 {
+  left: 80px; }
+
+.c_12 .push_2 {
+  left: 160px; }
+
+.c_12 .push_3 {
+  left: 240px; }
+
+.c_12 .push_4 {
+  left: 320px; }
+
+.c_12 .push_5 {
+  left: 400px; }
+
+.c_12 .push_6 {
+  left: 480px; }
+
+.c_12 .push_7 {
+  left: 560px; }
+
+.c_12 .push_8 {
+  left: 640px; }
+
+.c_12 .push_9 {
+  left: 720px; }
+
+.c_12 .push_10 {
+  left: 800px; }
+
+.c_12 .push_11 {
+  left: 880px; }
+
+/* `Pull Space >> 12 Columns
+----------------------------------------------------------------------------------------------------*/
+.c_12 .pull_1 {
+  left: -80px; }
+
+.c_12 .pull_2 {
+  left: -160px; }
+
+.c_12 .pull_3 {
+  left: -240px; }
+
+.c_12 .pull_4 {
+  left: -320px; }
+
+.c_12 .pull_5 {
+  left: -400px; }
+
+.c_12 .pull_6 {
+  left: -480px; }
+
+.c_12 .pull_7 {
+  left: -560px; }
+
+.c_12 .pull_8 {
+  left: -640px; }
+
+.c_12 .pull_9 {
+  left: -720px; }
+
+.c_12 .pull_10 {
+  left: -800px; }
+
+.c_12 .pull_11 {
+  left: -880px; }
+
+/* `Clear Floated Elements
+----------------------------------------------------------------------------------------------------*/
+/* http://sonspring.com/journal/clearing-floats */
+.clear {
+  clear: both;
+  display: block;
+  overflow: hidden;
+  visibility: hidden;
+  width: 0;
+  height: 0; }
+
+/* http://www.yuiblog.com/blog/2010/09/27/clearfix-reloaded-overflowhidden-demystified */
+.clearfix:before,
+.clearfix:after,
+.c_12:before,
+.c_12:after {
+  content: '.';
+  display: block;
+  overflow: hidden;
+  visibility: hidden;
+  font-size: 0;
+  line-height: 0;
+  width: 0;
+  height: 0; }
+
+.clearfix:after,
+.c_12:after {
+  clear: both; }
+
+/*
+  The following zoom:1 rule is specifically for IE6 + IE7.
+  Move to separate stylesheet if invalid CSS is a problem.
+*/
+.clearfix,
+.c_12 {
+  zoom: 1; }
+
+/*--------------------------------------------Styling Starts Here------------------------------------*/
+/*--------------------------------------------Main Navigation------------------------------------*/
+.border_white_07 {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.7); }
+
+#main_nav {
+  width: 100%;
+  height: 70px;
+  display: block;
+  position: fixed;
+  z-index: 99999; }
+  #main_nav .header_logo {
+    background: url("../img/header_logo.svg") no-repeat;
+    background-size: 62px 70px;
+    width: 62px;
+    height: 70px;
+    display: block;
+    float: left; }
+  #main_nav .header_pgc {
+    width: auto;
+    height: auto;
+    float: left;
+    font-family: pn_regular;
+    letter-spacing: -0.05em;
+    line-height: 0.94444444444444444444444444444444em;
+    display: block; }
+  #main_nav ul#header_nav {
+    width: auto;
+    height: 70px;
+    float: right;
+    display: block; }
+    #main_nav ul#header_nav li {
+      text-align: center;
+      margin: 0 15px;
+      display: block;
+      float: left; }
+      #main_nav ul#header_nav li a {
+        line-height: 70px;
+        display: block;
+        cursor: pointer; }
+      #main_nav ul#header_nav li a.clr_white {
+        font-size: 0.83333333333333333333333333333333em;
+        text-decoration: none; }
+      #main_nav ul#header_nav li a.clr_white:hover {
+        font-size: 0.83333333333333333333333333333333em;
+        text-decoration: none;
+        color: forestgreen;
+        -webkit-transition: all ease-out 270ms;
+        -moz-transition: all ease-out 270ms;
+        -o-transition: all ease-out 270ms;
+        transition: all ease-out 270ms; }
+      #main_nav ul#header_nav li a.clr_white:active {
+        font-size: 0.83333333333333333333333333333333em;
+        text-decoration: none;
+        color: #353535; }
+      #main_nav ul#header_nav li a.clr_green {
+        font-size: 0.83333333333333333333333333333333em;
+        text-decoration: none; }
+      #main_nav ul#header_nav li a.clr_green:hover {
+        font-size: 0.83333333333333333333333333333333em;
+        text-decoration: none;
+        color: #676767;
+        -webkit-transition: all ease-out 270ms;
+        -moz-transition: all ease-out 270ms;
+        -o-transition: all ease-out 270ms;
+        transition: all ease-out 270ms; }
+      #main_nav ul#header_nav li a.clr_green:active {
+        font-size: 0.83333333333333333333333333333333em;
+        text-decoration: none;
+        color: #353535; }
+
+/*--------------------------------------------Landing Section------------------------------------*/
+#landing_sec {
+  position: relative;
+  background: url("../img/landing_bg.jpg") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  min-height: 720px;
+  /*863px*/ }
+  #landing_sec #bgfixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    /* Preserve aspet ratio */
+    min-width: 100%;
+    min-height: 100%;
+    z-index: -7; }
+  #landing_sec .blank_space {
+    width: 100%;
+    height: 70px;
+    display: block; }
+  #landing_sec .welcome_c {
+    width: 100%;
+    height: auto;
+    display: block; }
+    #landing_sec .welcome_c .welcome_tbl {
+      width: 100%;
+      height: inherit;
+      display: table; }
+      #landing_sec .welcome_c .welcome_tbl .welcome_cell {
+        width: 100%;
+        height: inherit;
+        display: table-cell;
+        vertical-align: middle;
+        text-align: center; }
+  #landing_sec .welcome_logo {
+    background: url("../img/welcome_logo.svg") no-repeat;
+    background-size: 222px 250px;
+    width: 222px;
+    height: 250px;
+    display: block;
+    margin: 0 auto 36px auto; }
+  #landing_sec .green_bar {
+    width: 100%;
+    height: 200px;
+    position: absolute;
+    bottom: 0;
+    display: block;
+    z-index: 1; }
+    #landing_sec .green_bar * {
+      color: #fff; }
+    #landing_sec .green_bar .val {
+      font-size: 3.333333333333333333333333em;
+      line-height: 1em;
+      width: 100%;
+      text-align: center;
+      display: block;
+      margin-top: 47px; }
+    #landing_sec .green_bar .des {
+      font-size: 1.1111111111111111111111111111111em;
+      line-height: 1em;
+      width: 100%;
+      text-align: center;
+      display: block;
+      margin-top: 10px; }
+  #landing_sec .green_bar:after {
+    content: "";
+    background: forestgreen;
+    opacity: 0.75;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    z-index: -1; }
+  #landing_sec .nod3_left:after {
+    content: "";
+    width: 1px;
+    height: 180px;
+    display: block;
+    position: absolute;
+    background: #fff;
+    bottom: 10px;
+    left: 319px;
+    opacity: 0.2; }
+  #landing_sec .nod3_right:after {
+    content: "";
+    width: 1px;
+    height: 180px;
+    display: block;
+    position: absolute;
+    background: #fff;
+    bottom: 10px;
+    right: 319px;
+    opacity: 0.2; }
+
+/*--------------------------------------------Intro Section------------------------------------*/
+#intro_sec {
+  background-color: #fff; }
+  #intro_sec .world_container {
+    width: 470px;
+    height: 583px;
+    position: relative;
+    display: block;
+    float: left;
+    z-index: 0; }
+  #intro_sec #world_bg {
+    position: absolute;
+    width: 1418px;
+    height: 583px;
+    display: block;
+    background: url("../img/world.png") no-repeat;
+    top: 0;
+    right: -160px;
+    z-index: -1; }
+
+/*--------------------------------------------About Section------------------------------------*/
+#about_pgc_sec {
+  background: url("../img/about_bg.jpg") no-repeat center center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover; }
+  #about_pgc_sec .lg_270 {
+    width: 270px;
+    height: 0px;
+    border-top: 1px solid #8bc08b;
+    position: absolute; }
+  #about_pgc_sec .lg_310 {
+    width: 310px;
+    height: 0px;
+    border-top: 1px solid #8bc08b;
+    position: absolute; }
+  #about_pgc_sec .lg_820 {
+    width: 820px;
+    height: 0px;
+    border-top: 1px solid #8bc08b;
+    position: absolute; }
+  #about_pgc_sec .lgr_tr_40 {
+    width: 39px;
+    height: 39px;
+    border-top: 1px solid #8bc08b;
+    border-right: 1px solid #8bc08b;
+    border-radius: 0 40px 0 0;
+    position: absolute; }
+  #about_pgc_sec .lgr_br_40 {
+    width: 39px;
+    height: 39px;
+    border-bottom: 1px solid #8bc08b;
+    border-right: 1px solid #8bc08b;
+    border-radius: 0 0 40px 0;
+    position: absolute; }
+  #about_pgc_sec .lgr_bl_40 {
+    width: 39px;
+    height: 39px;
+    border-bottom: 1px solid #8bc08b;
+    border-left: 1px solid #8bc08b;
+    border-radius: 0 0 0 40px;
+    position: absolute; }
+  #about_pgc_sec .lgr_tl_40 {
+    width: 39px;
+    height: 39px;
+    border-top: 1px solid #8bc08b;
+    border-left: 1px solid #8bc08b;
+    border-radius: 40px 0 0 0;
+    position: absolute; }
+  #about_pgc_sec .lgr_vert_n1 {
+    width: 0;
+    height: 466px;
+    border-right: 1px solid #8bc08b;
+    position: absolute; }
+  #about_pgc_sec .lgr_vert_n2 {
+    width: 0;
+    height: 361px;
+    border-right: 1px solid #8bc08b;
+    position: absolute; }
+  #about_pgc_sec .lgr_vert_n3 {
+    width: 0;
+    height: 454px;
+    border-right: 1px solid #8bc08b;
+    position: absolute; }
+  #about_pgc_sec .c_tujuan_266 {
+    width: 266px;
+    height: auto;
+    display: inline-block;
+    margin: 0 auto 0 auto;
+    text-align: center;
+    float: left; }
+    #about_pgc_sec .c_tujuan_266 p {
+      text-align: center !important;
+      font-size: 0.83333em; }
+  #about_pgc_sec .c_tujuan_266_n {
+    width: 266px;
+    height: auto;
+    display: inline-block;
+    margin: 0 auto 0 -5px;
+    text-align: center;
+    float: left; }
+    #about_pgc_sec .c_tujuan_266_n p {
+      text-align: center !important;
+      font-size: 0.83333em; }
+  #about_pgc_sec .c_tujuan_300_n {
+    width: 300px;
+    height: auto;
+    display: inline-block;
+    margin: 0 auto 0 -5px;
+    text-align: center;
+    float: left; }
+    #about_pgc_sec .c_tujuan_300_n p {
+      text-align: center !important;
+      font-size: 0.83333em; }
+  #about_pgc_sec .c_tujuan_566_n {
+    width: 566px;
+    height: auto;
+    display: inline-block;
+    margin: 0 auto 0 -5px;
+    text-align: center;
+    float: left; }
+    #about_pgc_sec .c_tujuan_566_n p {
+      text-align: center !important;
+      font-size: 0.83333em; }
+  #about_pgc_sec .c_tujuan_60 {
+    width: 60px;
+    height: 1px;
+    display: inline-block;
+    margin: 0 auto 0 auto;
+    text-align: center;
+    float: left; }
+    #about_pgc_sec .c_tujuan_60 p {
+      text-align: center !important;
+      font-size: 0.83333em; }
+  #about_pgc_sec .c_tujuan_60_n {
+    width: 60px;
+    height: 1px;
+    display: inline-block;
+    margin: 0 auto 0 -5px;
+    text-align: center;
+    float: left; }
+    #about_pgc_sec .c_tujuan_60_n p {
+      text-align: center !important;
+      font-size: 0.83333em; }
+  #about_pgc_sec .tri_00 {
+    font-family: pn_bold; }
+  #about_pgc_sec .outputs {
+    font-family: pn_bold;
+    line-height: 140px; }
+
+/*--------------------------------------------Schedules Section------------------------------------*/
+#schedules_sec {
+  background-color: #f2f2f2;
+  border-bottom: 1px solid #8bc08b;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  /*Firefox 1-3*/
+  -webkit-box-sizing: border-box;
+  /* Safari */ }
+  #schedules_sec .int_head_green {
+    height: 210px;
+    background: forestgreen;
+    opacity: 0.75;
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 2; }
+  #schedules_sec .int_head_gry {
+    height: 210px;
+    background: none;
+    opacity: 1.0;
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    border-bottom: 1px solid #8bc08b;
+    border-top: 1px solid #8bc08b;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    /*Firefox 1-3*/
+    -webkit-box-sizing: border-box;
+    /* Safari */ }
+  #schedules_sec .unpar_side {
+    background: url("../img/unpar_bg.jpg") no-repeat right top;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    min-height: 978px;
+    display: block;
+    top: 0;
+    right: 0;
+    position: absolute;
+    z-index: 1;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    /*Firefox 1-3*/
+    -webkit-box-sizing: border-box;
+    /* Safari */
+    border-right: 1px solid #8bc08b; }
+  #schedules_sec .lembang_side {
+    background: url("../img/lembang_bg.jpg") no-repeat left top;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    min-height: 978px;
+    display: block;
+    top: 0;
+    left: 0;
+    position: absolute;
+    z-index: 1; }
+
+.date_node {
+  margin: 0 auto 0 auto;
+  width: 56%;
+  height: 90px;
+  display: block;
+  position: relative;
+  overflow: hidden; }
+  .date_node .dd {
+    font-size: 60px;
+    position: absolute;
+    left: 0; }
+  .date_node .mm {
+    font-size: 20px;
+    position: absolute;
+    left: 79px;
+    top: 17px; }
+  .date_node .yyyy {
+    font-size: 20px;
+    position: absolute;
+    left: 121px;
+    top: 46px; }
+  .date_node .mpery {
+    position: absolute;
+    left: 99px;
+    top: 24px; }
+
+/*--------------------------------------------Speaker Section------------------------------------*/
+#speakers_sec {
+  background-color: #fff; }
+  #speakers_sec #c_speakers {
+    display: table;
+    width: 100%;
+    height: auto; }
+  #speakers_sec .node_speaker {
+    display: table-cell;
+    width: 25%;
+    height: auto;
+    overflow: hidden;
+    cursor: pointer; }
+    #speakers_sec .node_speaker:hover .speaker_id {
+      background: #1f1f1f;
+      -webkit-transition: all ease-out 0.2s;
+      -moz-transition: all ease-out 0.2s;
+      -o-transition: all ease-out 0.2s;
+      transition: all ease-out 0.2s; }
+      #speakers_sec .node_speaker:hover .speaker_id * {
+        color: #fff; }
+    #speakers_sec .node_speaker:active .speaker_id {
+      background: #1f1f1f;
+      -webkit-transition: all ease-out 0.2s;
+      -moz-transition: all ease-out 0.2s;
+      -o-transition: all ease-out 0.2s;
+      transition: all ease-out 0.2s; }
+      #speakers_sec .node_speaker:active .speaker_id * {
+        color: #fff; }
+    #speakers_sec .node_speaker:hover .plus {
+      background-position: -431px -19px;
+      width: 19px;
+      height: 19px;
+      display: block;
+      margin: 0 auto 0 auto;
+      position: absolute;
+      top: 45px;
+      right: 34px;
+      -webkit-transition: all ease-out 0.2s;
+      -moz-transition: all ease-out 0.2s;
+      -o-transition: all ease-out 0.2s;
+      transition: all ease-out 0.2s; }
+    #speakers_sec .node_speaker > img {
+      display: block; }
+  #speakers_sec .speaker_id {
+    position: relative;
+    padding-top: 30px;
+    padding-bottom: 30px; }
+    #speakers_sec .speaker_id .plus {
+      background-position: -431px 0;
+      width: 19px;
+      height: 19px;
+      display: block;
+      margin: 0 auto 0 auto;
+      position: absolute;
+      top: 45px;
+      right: 34px; }
+
+.name_spkr {
+  font-family: pn_bold;
+  text-align: center;
+  display: block;
+  width: 100%;
+  line-height: 27px; }
+
+.job_spkr {
+  width: 100%;
+  text-align: center;
+  display: block; }
+
+/*--------------------------------------------Registration Section------------------------------------*/
+#registration_sec {
+  background-color: #fafafa; }
+
+.clear_mrgn {
+  clear: both;
+  display: block;
+  overflow: hidden;
+  visibility: hidden;
+  width: 100%;
+  height: 20px; }
+
+.row_form {
+  width: 100%;
+  height: auto;
+  margin-bottom: 14px;
+  display: block;
+  clear: both;
+  overflow: hidden;
+  position: relative; }
+  .row_form > label {
+    float: left;
+    line-height: 40px;
+    margin-left: 20px;
+    position: relative; }
+  .row_form > .label_imp {
+    float: left;
+    line-height: 40px;
+    margin-left: 20px;
+    position: relative; }
+    .row_form > .label_imp:after {
+      content: "*";
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      display: block;
+      right: 10px;
+      top: 0;
+      color: red;
+      font-size: 14px; }
+  .row_form > input {
+    float: left; }
+  .row_form > input[type=radio] {
+    margin-top: 15px; }
+
+.warning_red {
+  background: #E4252D;
+  color: #fff;
+  font-size: 14px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  /*Firefox 1-3*/
+  -webkit-box-sizing: border-box;
+  /* Safari */
+  padding: 10px 17px;
+  height: 40px; }
+
+/*--------------------------------------------Contact Us Section------------------------------------*/
+#contact_us_sec {
+  background-color: #fff; }
+
+/*--------------------------------------------Sponsorship Section------------------------------------*/
+#sponsorship_sec {
+  background-color: #fff; }
+
+/*--------------------------------------------Popup Material------------------------------------*/
+.pop_up_super_c {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  z-index: 999999;
+  background-color: rgba(0, 0, 0, 0.8);
+  top: 0px;
+  left: 0px;
+  overflow: auto; }
+
+.pop_up_tbl {
+  width: 100%;
+  height: 100%;
+  display: table;
+  z-index: 1999999;
+  overflow-y: hidden;
+  vertical-align: middle; }
+
+.pop_up_cell {
+  display: table-cell;
+  vertical-align: middle; }
+
+.exit {
+  z-index: 2999999;
+  display: block;
+  top: 0;
+  right: 0;
+  position: fixed;
+  cursor: pointer; }
+
+.pu_col_400 {
+  float: left;
+  width: 400px;
+  height: auto;
+  display: block; }
+
+.pu_col_540 {
+  float: left;
+  width: 540px;
+  height: auto;
+  display: block; }
+
+.lb_100 {
+  width: 100px;
+  height: 1px;
+  display: block;
+  background: #b57b15;
+  margin: 30px auto 30px auto; }
+
+.lg_100 {
+  width: 100px;
+  height: 1px;
+  display: block;
+  background: #8bc08b;
+  margin: 30px auto 30px auto; }
+
+.pu_faq_00 li {
+  line-height: 25px; }
+
+/*--------------------------------------------Image Party------------------------------------*/
+.t_ico {
+  font-family: pn_bold;
+  font-size: 1.1111111111111111111111111111111em;
+  margin-top: 25px;
+  display: block; }
+
+.c_lg_ico {
+  width: 138px;
+  height: 138px;
+  display: block;
+  border: 1px solid forestgreen;
+  -webkit-border-radius: 999px;
+  -moz-border-radius: 999px;
+  -o-border-radius: 999px;
+  border-radius: 999px;
+  margin: 0 auto; }
+
+.sprt {
+  background-image: url("../img/sprt.png"); }
+
+/*------- hi-dpi resolution -------*/
+@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2 / 1), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+  .sprt {
+    background-image: url("../img/sprt@2x.png");
+    /*sprt@2x.png*/
+    background-size: 506px 74px;
+                            /* This replicates the original standard sprite dimensions, 
+and assumes the actual dimensions of sprt@2x.png are 1012x148px */ } }
+/*------- iPad mini in landscape -------
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) 
+and (orientation : landscape)
+and (-webkit-min-device-pixel-ratio: 1){
+	.sprt {
+		background: url('../img/sprt.png') no-repeat;
+	}
+}*/
+/*------- iPad mini in portrait -------
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) 
+and (orientation : portrait)
+and (-webkit-min-device-pixel-ratio: 1){
+	.sprt {
+		background: url('../img/sprt.png') no-repeat;
+	}
+}*/
+/*------- Retina iPad in landscape -------
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) 
+and (orientation : landscape)
+and (-webkit-min-device-pixel-ratio: 2){
+	.sprt {
+		background: url('../img/sprt.png') no-repeat;
+	}
+}*/
+/*------- Retina iPad in portrait -------
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) 
+and (orientation : portrait)
+and (-webkit-min-device-pixel-ratio: 2){
+	.sprt {
+		background: url('../img/sprt.png') no-repeat; 
+	}
+}*/
+/*the party popper*/
+/*------- the sprite definer -------*/
+.logo_about {
+  background-position: 0px 0px;
+  width: 66px;
+  height: 74px;
+  display: block;
+  /*------- hi-dpi resolution -------*/
+  /*------- iPad mini in landscape -------*/
+  /*------- iPad mini in portrait -------*/
+  /*------- Retina iPad in landscape -------*/
+  /*------- Retina iPad in portrait -------*/
+  position: absolute; }
+  @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2 / 1), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+    .logo_about {
+      background-position: 0px 0px;
+      width: 66px;
+      height: 74px;
+      display: block; } }
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 1) {
+    .logo_about {
+      background-position: 0px 0px;
+      width: 66px;
+      height: 74px;
+      display: block; } }
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 1) {
+    .logo_about {
+      background-position: 0px 0px;
+      width: 66px;
+      height: 74px;
+      display: block; } }
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 2) {
+    .logo_about {
+      background-position: 0px 0px;
+      width: 66px;
+      height: 74px;
+      display: block; } }
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
+    .logo_about {
+      background-position: 0px 0px;
+      width: 66px;
+      height: 74px;
+      display: block; } }
+
+.heart {
+  background-position: -66px 0;
+  width: 64px;
+  height: 64px;
+  display: block;
+  /*------- hi-dpi resolution -------*/
+  /*------- iPad mini in landscape -------*/
+  /*------- iPad mini in portrait -------*/
+  /*------- Retina iPad in landscape -------*/
+  /*------- Retina iPad in portrait -------*/
+  margin: 37px auto 0 auto; }
+  @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2 / 1), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+    .heart {
+      background-position: -66px 0;
+      width: 64px;
+      height: 64px;
+      display: block; } }
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 1) {
+    .heart {
+      background-position: -66px 0;
+      width: 64px;
+      height: 64px;
+      display: block; } }
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 1) {
+    .heart {
+      background-position: -66px 0;
+      width: 64px;
+      height: 64px;
+      display: block; } }
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 2) {
+    .heart {
+      background-position: -66px 0;
+      width: 64px;
+      height: 64px;
+      display: block; } }
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
+    .heart {
+      background-position: -66px 0;
+      width: 64px;
+      height: 64px;
+      display: block; } }
+
+.lamp {
+  background-position: -130px 0;
+  width: 64px;
+  height: 64px;
+  display: block;
+  /*------- hi-dpi resolution -------*/
+  /*------- iPad mini in landscape -------*/
+  /*------- iPad mini in portrait -------*/
+  /*------- Retina iPad in landscape -------*/
+  /*------- Retina iPad in portrait -------*/
+  margin: 37px auto 0 auto; }
+  @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2 / 1), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+    .lamp {
+      background-position: -130px 0;
+      width: 64px;
+      height: 64px;
+      display: block; } }
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 1) {
+    .lamp {
+      background-position: -130px 0;
+      width: 64px;
+      height: 64px;
+      display: block; } }
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 1) {
+    .lamp {
+      background-position: -130px 0;
+      width: 64px;
+      height: 64px;
+      display: block; } }
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 2) {
+    .lamp {
+      background-position: -130px 0;
+      width: 64px;
+      height: 64px;
+      display: block; } }
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
+    .lamp {
+      background-position: -130px 0;
+      width: 64px;
+      height: 64px;
+      display: block; } }
+
+.entre {
+  background-position: -194px 0;
+  width: 64px;
+  height: 64px;
+  display: block;
+  /*------- hi-dpi resolution -------*/
+  /*------- iPad mini in landscape -------*/
+  /*------- iPad mini in portrait -------*/
+  /*------- Retina iPad in landscape -------*/
+  /*------- Retina iPad in portrait -------*/
+  margin: 37px auto 0 auto; }
+  @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2 / 1), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+    .entre {
+      background-position: -194px 0;
+      width: 64px;
+      height: 64px;
+      display: block; } }
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 1) {
+    .entre {
+      background-position: -194px 0;
+      width: 64px;
+      height: 64px;
+      display: block; } }
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 1) {
+    .entre {
+      background-position: -194px 0;
+      width: 64px;
+      height: 64px;
+      display: block; } }
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 2) {
+    .entre {
+      background-position: -194px 0;
+      width: 64px;
+      height: 64px;
+      display: block; } }
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
+    .entre {
+      background-position: -194px 0;
+      width: 64px;
+      height: 64px;
+      display: block; } }
+
+.hat {
+  background-position: -258px 0;
+  width: 64px;
+  height: 64px;
+  display: block;
+  /*------- hi-dpi resolution -------*/
+  /*------- iPad mini in landscape -------*/
+  /*------- iPad mini in portrait -------*/
+  /*------- Retina iPad in landscape -------*/
+  /*------- Retina iPad in portrait -------*/
+  margin: 37px auto 0 auto; }
+  @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2 / 1), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+    .hat {
+      background-position: -258px 0;
+      width: 64px;
+      height: 64px;
+      display: block; } }
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 1) {
+    .hat {
+      background-position: -258px 0;
+      width: 64px;
+      height: 64px;
+      display: block; } }
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 1) {
+    .hat {
+      background-position: -258px 0;
+      width: 64px;
+      height: 64px;
+      display: block; } }
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 2) {
+    .hat {
+      background-position: -258px 0;
+      width: 64px;
+      height: 64px;
+      display: block; } }
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
+    .hat {
+      background-position: -258px 0;
+      width: 64px;
+      height: 64px;
+      display: block; } }
+
+.calndr {
+  background-position: -322px 0;
+  width: 64px;
+  height: 64px;
+  display: block;
+  /*------- hi-dpi resolution -------*/
+  /*------- iPad mini in landscape -------*/
+  /*------- iPad mini in portrait -------*/
+  /*------- Retina iPad in landscape -------*/
+  /*------- Retina iPad in portrait -------*/
+  margin: 37px auto 0 auto; }
+  @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2 / 1), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+    .calndr {
+      background-position: -322px 0;
+      width: 64px;
+      height: 64px;
+      display: block; } }
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 1) {
+    .calndr {
+      background-position: -322px 0;
+      width: 64px;
+      height: 64px;
+      display: block; } }
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 1) {
+    .calndr {
+      background-position: -322px 0;
+      width: 64px;
+      height: 64px;
+      display: block; } }
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 2) {
+    .calndr {
+      background-position: -322px 0;
+      width: 64px;
+      height: 64px;
+      display: block; } }
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
+    .calndr {
+      background-position: -322px 0;
+      width: 64px;
+      height: 64px;
+      display: block; } }
+
+.slash {
+  background-position: -386px 0;
+  width: 45px;
+  height: 45px;
+  display: block;
+  /*------- hi-dpi resolution -------*/
+  /*------- iPad mini in landscape -------*/
+  /*------- iPad mini in portrait -------*/
+  /*------- Retina iPad in landscape -------*/
+  /*------- Retina iPad in portrait -------*/
+  margin: 0 auto 0 auto; }
+  @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2 / 1), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+    .slash {
+      background-position: -386px 0;
+      width: 45px;
+      height: 45px;
+      display: block; } }
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 1) {
+    .slash {
+      background-position: -386px 0;
+      width: 45px;
+      height: 45px;
+      display: block; } }
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 1) {
+    .slash {
+      background-position: -386px 0;
+      width: 45px;
+      height: 45px;
+      display: block; } }
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 2) {
+    .slash {
+      background-position: -386px 0;
+      width: 45px;
+      height: 45px;
+      display: block; } }
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
+    .slash {
+      background-position: -386px 0;
+      width: 45px;
+      height: 45px;
+      display: block; } }
+
+.plus_wht {
+  background-position: -431px 0;
+  width: 19px;
+  height: 19px;
+  display: block;
+  /*------- hi-dpi resolution -------*/
+  /*------- iPad mini in landscape -------*/
+  /*------- iPad mini in portrait -------*/
+  /*------- Retina iPad in landscape -------*/
+  /*------- Retina iPad in portrait -------*/
+  margin: 0 auto 0 auto; }
+  @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2 / 1), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+    .plus_wht {
+      background-position: -431px 0;
+      width: 19px;
+      height: 19px;
+      display: block; } }
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 1) {
+    .plus_wht {
+      background-position: -431px 0;
+      width: 19px;
+      height: 19px;
+      display: block; } }
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 1) {
+    .plus_wht {
+      background-position: -431px 0;
+      width: 19px;
+      height: 19px;
+      display: block; } }
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 2) {
+    .plus_wht {
+      background-position: -431px 0;
+      width: 19px;
+      height: 19px;
+      display: block; } }
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
+    .plus_wht {
+      background-position: -431px 0;
+      width: 19px;
+      height: 19px;
+      display: block; } }
+
+.plus_blk {
+  background-position: -431px 19px;
+  width: 19px;
+  height: 19px;
+  display: block;
+  /*------- hi-dpi resolution -------*/
+  /*------- iPad mini in landscape -------*/
+  /*------- iPad mini in portrait -------*/
+  /*------- Retina iPad in landscape -------*/
+  /*------- Retina iPad in portrait -------*/
+  margin: 0 auto 0 auto; }
+  @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2 / 1), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+    .plus_blk {
+      background-position: -431px 19px;
+      width: 19px;
+      height: 19px;
+      display: block; } }
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 1) {
+    .plus_blk {
+      background-position: -431px 19px;
+      width: 19px;
+      height: 19px;
+      display: block; } }
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 1) {
+    .plus_blk {
+      background-position: -431px 19px;
+      width: 19px;
+      height: 19px;
+      display: block; } }
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 2) {
+    .plus_blk {
+      background-position: -431px 19px;
+      width: 19px;
+      height: 19px;
+      display: block; } }
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
+    .plus_blk {
+      background-position: -431px 19px;
+      width: 19px;
+      height: 19px;
+      display: block; } }
+
+.close_56 {
+  background-position: -450px 0px;
+  width: 56px;
+  height: 56px;
+  display: block;
+  /*------- hi-dpi resolution -------*/
+  /*------- iPad mini in landscape -------*/
+  /*------- iPad mini in portrait -------*/
+  /*------- Retina iPad in landscape -------*/
+  /*------- Retina iPad in portrait -------*/
+  margin: 0 auto 0 auto; }
+  @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2 / 1), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+    .close_56 {
+      background-position: -450px 0px;
+      width: 56px;
+      height: 56px;
+      display: block; } }
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 1) {
+    .close_56 {
+      background-position: -450px 0px;
+      width: 56px;
+      height: 56px;
+      display: block; } }
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 1) {
+    .close_56 {
+      background-position: -450px 0px;
+      width: 56px;
+      height: 56px;
+      display: block; } }
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 2) {
+    .close_56 {
+      background-position: -450px 0px;
+      width: 56px;
+      height: 56px;
+      display: block; } }
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
+    .close_56 {
+      background-position: -450px 0px;
+      width: 56px;
+      height: 56px;
+      display: block; } }
+
+/*--------------------------------------------Admin Area------------------------------------*/
+.c_registran {
+  width: 100%;
+  display: block;
+  overflow: hidden;
+  border-top: 1px solid #676767;
+  border-bottom: 1px solid #676767; }
+  .c_registran * {
+    font-size: 15px; }
+  .c_registran .cell {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    /*Firefox 1-3*/
+    -webkit-box-sizing: border-box;
+    /* Safari */
+    padding: 10px;
+    position: relative; }
+  .c_registran .row {
+    display: block;
+    margin-bottom: 14px; }
+    .c_registran .row .atr {
+      font-weight: bold;
+      display: block; }
+
+/*--------------------------------------------Miles Area------------------------------------*/
+/*--------------------------------------------Tambah Lokasi
+------------------------------------*/
+.tambah_lokasi {
+  height: 280px;
+  width: 100%;
+  display: block;
+  margin: auto;
+  background: #ececec;
+  padding: 20px;
+  border: 1px solid #ccc;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box; }
+
+.form_1 {
+  width: 25%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+  display: inline-block;
+  float: left; }
+
+/*--------------------------------------------Body
+------------------------------------*/
+body {
+  font: 14px/1.5 helvetica-neue, helvetica, arial, san-serif;
+  padding: 10px; }
+
+h1 {
+  margin-top: 0; }
+
+#image-list {
+  list-style: none;
+  margin: 0;
+  padding: 0; }
+
+#image-list li {
+  text-align: center;
+  margin-bottom: 19px; }
+
+#image-list li img {
+  height: 200px;
+  width: 200px;
+  vertical-align: middle;
+  border: 1px solid #474747; }

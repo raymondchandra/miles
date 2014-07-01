@@ -1,0 +1,26 @@
+[30-Jun-2014 11:20:03 Asia/Jakarta] PHP Warning:  mysqli_connect() [<a href='function.mysqli-connect'>function.mysqli-connect</a>]: (28000/1045): Access denied for user 'root'@'localhost' (using password: NO) in /home/milesyou/public_html/service/connect.php on line 6
+[30-Jun-2014 11:20:03 Asia/Jakarta] PHP Warning:  mysqli_error() expects exactly 1 parameter, 0 given in /home/milesyou/public_html/service/connect.php on line 8
+[30-Jun-2014 11:20:09 Asia/Jakarta] PHP Warning:  mysqli_connect() [<a href='function.mysqli-connect'>function.mysqli-connect</a>]: (28000/1045): Access denied for user 'root'@'localhost' (using password: NO) in /home/milesyou/public_html/service/connect.php on line 6
+[30-Jun-2014 11:20:09 Asia/Jakarta] PHP Warning:  mysqli_error() expects exactly 1 parameter, 0 given in /home/milesyou/public_html/service/connect.php on line 8
+[30-Jun-2014 11:25:19 Asia/Jakarta] PHP Warning:  mysqli_connect() [<a href='function.mysqli-connect'>function.mysqli-connect</a>]: (28000/1045): Access denied for user 'jasmi'@'localhost' (using password: YES) in /home/milesyou/public_html/service/connect.php on line 6
+[30-Jun-2014 11:25:19 Asia/Jakarta] PHP Warning:  mysqli_error() expects exactly 1 parameter, 0 given in /home/milesyou/public_html/service/connect.php on line 8
+[30-Jun-2014 11:26:32 Asia/Jakarta] PHP Warning:  mysqli_error() expects exactly 1 parameter, 0 given in /home/milesyou/public_html/service/connect.php on line 12
+[30-Jun-2014 11:27:54 Asia/Jakarta] PHP Warning:  mysqli_error() expects exactly 1 parameter, 0 given in /home/milesyou/public_html/service/connect.php on line 12
+[30-Jun-2014 11:28:30 Asia/Jakarta] PHP Warning:  mysqli_error() expects exactly 1 parameter, 0 given in /home/milesyou/public_html/service/connect.php on line 12
+[30-Jun-2014 11:28:31 Asia/Jakarta] PHP Warning:  mysqli_error() expects exactly 1 parameter, 0 given in /home/milesyou/public_html/service/connect.php on line 12
+[30-Jun-2014 11:28:32 Asia/Jakarta] PHP Warning:  mysqli_error() expects exactly 1 parameter, 0 given in /home/milesyou/public_html/service/connect.php on line 12
+[30-Jun-2014 11:28:32 Asia/Jakarta] PHP Warning:  mysqli_error() expects exactly 1 parameter, 0 given in /home/milesyou/public_html/service/connect.php on line 12
+[30-Jun-2014 11:28:37 Asia/Jakarta] PHP Warning:  mysqli_error() expects exactly 1 parameter, 0 given in /home/milesyou/public_html/service/connect.php on line 12
+[30-Jun-2014 11:30:03 Asia/Jakarta] PHP Warning:  mysqli_connect() [<a href='function.mysqli-connect'>function.mysqli-connect</a>]: (42000/1044): Access denied for user 'milesyou_jasmi'@'localhost' to database 'milesyou_miles_social' in /home/milesyou/public_html/service/connect.php on line 6
+[30-Jun-2014 11:30:03 Asia/Jakarta] PHP Warning:  mysqli_error() expects exactly 1 parameter, 0 given in /home/milesyou/public_html/service/connect.php on line 8
+[30-Jun-2014 11:31:06 Asia/Jakarta] PHP Parse error:  syntax error, unexpected T_STRING in /home/milesyou/public_html/service/connect.php on line 12
+[30-Jun-2014 11:31:08 Asia/Jakarta] PHP Parse error:  syntax error, unexpected T_STRING in /home/milesyou/public_html/service/connect.php on line 12
+[30-Jun-2014 11:31:10 Asia/Jakarta] PHP Parse error:  syntax error, unexpected T_STRING in /home/milesyou/public_html/service/connect.php on line 12
+[30-Jun-2014 11:31:53 Asia/Jakarta] PHP Warning:  mysqli_error() expects exactly 1 parameter, 0 given in /home/milesyou/public_html/service/connect.php on line 12
+[30-Jun-2014 11:31:54 Asia/Jakarta] PHP Warning:  mysqli_error() expects exactly 1 parameter, 0 given in /home/milesyou/public_html/service/connect.php on line 12
+[30-Jun-2014 11:33:11 Asia/Jakarta] PHP Parse error:  syntax error, unexpected '[' in /home/milesyou/public_html/service/class/account.php on line 112
+[30-Jun-2014 11:34:09 Asia/Jakarta] PHP Parse error:  syntax error, unexpected '[' in /home/milesyou/public_html/service/class/account.php on line 112
+[30-Jun-2014 11:34:50 Asia/Jakarta] PHP Parse error:  syntax error, unexpected '[' in /home/milesyou/public_html/service/class/account.php on line 112
+[30-Jun-2014 11:35:18 Asia/Jakarta] PHP Parse error:  syntax error, unexpected '[' in /home/milesyou/public_html/service/class/account.php on line 112
+[30-Jun-2014 11:37:27 Asia/Jakarta] PHP Parse error:  syntax error, unexpected '[' in /home/milesyou/public_html/service/class/place.php on line 110
+[30-Jun-2014 11:38:24 Asia/Jakarta] PHP Parse error:  syntax error, unexpected '[' in /home/milesyou/public_html/service/class/place.php on line 110

@@ -1,0 +1,1514 @@
+/*
+  960 Grid System ~ Core CSS.
+  Learn more ~ http://960.gs/
+
+  Licensed under GPL and MIT.
+*/
+
+/*
+  Forces backgrounds to span full width,
+  even if there is horizontal scrolling.
+  Increase this if your layout is wider.
+
+  Note: IE6 works fine without this fix.
+*/
+
+@mixin dimension($val, $vil){
+	width: $val;
+	height: $vil;
+}
+
+@mixin box-sizing($val){
+    box-sizing: $val;  
+    -moz-box-sizing: $val; /*Firefox 1-3*/  
+    -webkit-box-sizing: $val; /* Safari */  
+}
+
+@function substraction($some-number, $another-number){
+  @return $some-number + $another-number
+}
+
+@mixin transition ($val){
+	-webkit-transition: all ease-out $val;
+    -moz-transition: all ease-out $val;
+    -o-transition: all  ease-out $val;
+    transition: all ease-out $val;
+}
+
+@mixin border-radius($val){
+	-webkit-border-radius: $val;
+    -moz-border-radius: $val;
+    -o-border-radius: $val;
+    border-radius: $val;
+}
+ 
+
+$green: #228b22;
+$green_line: #8bc08b;
+$text_clr: #353535;
+$hover_blk: #1f1f1f;
+$brown: #b57b15;
+
+body {
+  min-width: 960px;
+}
+
+/* `Container
+----------------------------------------------------------------------------------------------------*/
+
+.c_12 {
+  margin-left: auto;
+  margin-right: auto;
+  width: 960px;
+}
+
+/* `Grid >> Global
+----------------------------------------------------------------------------------------------------*/
+
+.g_1,
+.g_2,
+.g_3,
+.g_4,
+.g_5,
+.g_6,
+.g_7,
+.g_8,
+.g_9,
+.g_10,
+.g_11,
+.g_12 {
+  display: inline;
+  float: left;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.g_ex_1,
+.g_ex_2,
+.g_ex_3,
+.g_ex_4,
+.g_ex_5,
+.g_ex_6,
+.g_ex_7,
+.g_ex_8,
+.g_ex_9,
+.g_ex_10,
+.g_ex_11,
+.g_ex_12 {
+  display: inline;
+  float: left;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+ 
+.push_1, .pull_1,
+.push_2, .pull_2,
+.push_3, .pull_3,
+.push_4, .pull_4,
+.push_5, .pull_5,
+.push_6, .pull_6,
+.push_7, .pull_7,
+.push_8, .pull_8,
+.push_9, .pull_9,
+.push_10, .pull_10,
+.push_11, .pull_11 {
+  position: relative;
+}
+
+/* `Grid >> Children (Alpha ~ First, Omega ~ Last)
+----------------------------------------------------------------------------------------------------*/
+
+.alpha {
+  margin-left: 0;
+}
+ 
+.omega {
+  margin-right: 0;
+}
+
+/* `Grid >> 12 Columns
+----------------------------------------------------------------------------------------------------*/
+
+.c_12 .g_1 {
+  width: 60px;
+}
+
+.c_12 .g_2 {
+  width: 140px;
+}
+
+.c_12 .g_3 {
+  width: 220px;
+}
+
+.c_12 .g_4 {
+  width: 300px;
+}
+
+.c_12 .g_5 {
+  width: 380px;
+}
+
+.c_12 .g_6 {
+  width: 460px;
+}
+
+.c_12 .g_7 {
+  width: 540px;
+}
+
+.c_12 .g_8 {
+  width: 620px;
+}
+
+.c_12 .g_9 {
+  width: 700px;
+}
+
+.c_12 .g_10 {
+  width: 780px;
+}
+
+.c_12 .g_11 {
+  width: 860px;
+}
+
+.c_12 .g_12 {
+  width: 940px;
+}
+
+.c_12 .g_ex_1 {
+  width: 80px;
+  @include box-sizing(border-box);
+}
+
+.c_12 .g_ex_2 {
+  width: 160px;
+  @include box-sizing(border-box);
+}
+
+.c_12 .g_ex_3 {
+  width: 240px;
+  @include box-sizing(border-box);
+}
+
+.c_12 .g_ex_4 {
+  width: 320px;
+  @include box-sizing(border-box);
+}
+ 
+.c_12 .g_ex_5 {
+  width: 400px;
+  @include box-sizing(border-box);
+}
+
+.c_12 .g_ex_6 {
+  width: 480px;
+  @include box-sizing(border-box);
+}
+
+.c_12 .g_ex_7 {
+  width: 560px;
+  @include box-sizing(border-box);
+}
+
+.c_12 .g_ex_8 {
+  width: 640px;
+  @include box-sizing(border-box);
+}
+
+.c_12 .g_ex_9 {
+  width: 720px;
+  @include box-sizing(border-box);
+}
+
+.c_12 .g_ex_10 {
+  width: 800px;
+  @include box-sizing(border-box);
+}
+
+.c_12 .g_ex_11 {
+  width: 880px;
+  @include box-sizing(border-box);
+}
+
+.c_12 .g_ex_12 {
+  width: 960px;
+  @include box-sizing(border-box);
+}
+
+/* `Prefix Extra Space >> 12 Columns
+----------------------------------------------------------------------------------------------------*/
+
+.c_12 .prefix_1 {
+  padding-left: 80px;
+}
+
+.c_12 .prefix_2 {
+  padding-left: 160px;
+}
+
+.c_12 .prefix_3 {
+  padding-left: 240px;
+}
+
+.c_12 .prefix_4 {
+  padding-left: 320px;
+}
+
+.c_12 .prefix_5 {
+  padding-left: 400px;
+}
+
+.c_12 .prefix_6 {
+  padding-left: 480px;
+}
+
+.c_12 .prefix_7 {
+  padding-left: 560px;
+}
+
+.c_12 .prefix_8 {
+  padding-left: 640px;
+}
+
+.c_12 .prefix_9 {
+  padding-left: 720px;
+}
+
+.c_12 .prefix_10 {
+  padding-left: 800px;
+}
+
+.c_12 .prefix_11 {
+  padding-left: 880px;
+}
+
+/* `Suffix Extra Space >> 12 Columns
+----------------------------------------------------------------------------------------------------*/
+
+.c_12 .suffix_1 {
+  padding-right: 80px;
+}
+
+.c_12 .suffix_2 {
+  padding-right: 160px;
+}
+
+.c_12 .suffix_3 {
+  padding-right: 240px;
+}
+
+.c_12 .suffix_4 {
+  padding-right: 320px;
+}
+
+.c_12 .suffix_5 {
+  padding-right: 400px;
+}
+
+.c_12 .suffix_6 {
+  padding-right: 480px;
+}
+
+.c_12 .suffix_7 {
+  padding-right: 560px;
+}
+
+.c_12 .suffix_8 {
+  padding-right: 640px;
+}
+
+.c_12 .suffix_9 {
+  padding-right: 720px;
+}
+
+.c_12 .suffix_10 {
+  padding-right: 800px;
+}
+
+.c_12 .suffix_11 {
+  padding-right: 880px;
+}
+
+/* `Push Space >> 12 Columns
+----------------------------------------------------------------------------------------------------*/
+
+.c_12 .push_1 {
+  left: 80px;
+}
+
+.c_12 .push_2 {
+  left: 160px;
+}
+
+.c_12 .push_3 {
+  left: 240px;
+}
+
+.c_12 .push_4 {
+  left: 320px;
+}
+
+.c_12 .push_5 {
+  left: 400px;
+}
+
+.c_12 .push_6 {
+  left: 480px;
+}
+
+.c_12 .push_7 {
+  left: 560px;
+}
+
+.c_12 .push_8 {
+  left: 640px;
+}
+
+.c_12 .push_9 {
+  left: 720px;
+}
+
+.c_12 .push_10 {
+  left: 800px;
+}
+
+.c_12 .push_11 {
+  left: 880px;
+}
+
+/* `Pull Space >> 12 Columns
+----------------------------------------------------------------------------------------------------*/
+
+.c_12 .pull_1 {
+  left: -80px;
+}
+
+.c_12 .pull_2 {
+  left: -160px;
+}
+
+.c_12 .pull_3 {
+  left: -240px;
+}
+
+.c_12 .pull_4 {
+  left: -320px;
+}
+
+.c_12 .pull_5 {
+  left: -400px;
+}
+
+.c_12 .pull_6 {
+  left: -480px;
+}
+
+.c_12 .pull_7 {
+  left: -560px;
+}
+
+.c_12 .pull_8 {
+  left: -640px;
+}
+
+.c_12 .pull_9 {
+  left: -720px;
+}
+
+.c_12 .pull_10 {
+  left: -800px;
+}
+
+.c_12 .pull_11 {
+  left: -880px;
+}
+
+/* `Clear Floated Elements
+----------------------------------------------------------------------------------------------------*/
+
+/* http://sonspring.com/journal/clearing-floats */
+
+.clear {
+  clear: both;
+  display: block;
+  overflow: hidden;
+  visibility: hidden;
+  width: 0;
+  height: 0;
+}
+
+/* http://www.yuiblog.com/blog/2010/09/27/clearfix-reloaded-overflowhidden-demystified */
+
+.clearfix:before,
+.clearfix:after,
+.c_12:before,
+.c_12:after {
+  content: '.';
+  display: block;
+  overflow: hidden;
+  visibility: hidden;
+  font-size: 0;
+  line-height: 0;
+  width: 0;
+  height: 0;
+}
+
+.clearfix:after,
+.c_12:after {
+  clear: both;
+}
+
+/*
+  The following zoom:1 rule is specifically for IE6 + IE7.
+  Move to separate stylesheet if invalid CSS is a problem.
+*/
+
+.clearfix,
+.c_12 {
+  zoom: 1;
+}
+
+/*--------------------------------------------Styling Starts Here------------------------------------*/
+
+/*--------------------------------------------Main Navigation------------------------------------*/
+.border_white_07 {
+	border-bottom: 1px solid rgba(255,255,255,0.7);
+}
+
+#main_nav {
+	@include dimension(100%, 70px);
+	display: block;
+	position: fixed;	
+	z-index: 99999;
+	
+	.header_logo {
+		background: url('../img/header_logo.svg') no-repeat;
+		background-size: 62px 70px;
+		@include dimension(62px, 70px);
+		display: block;
+		float: left;
+	}
+	
+	.header_pgc {
+		@include dimension(auto, auto);
+		float: left;
+		font-family: pn_regular;
+		letter-spacing: -0.05em;
+		line-height: 0.94444444444444444444444444444444em;
+		display: block;
+	}
+	
+	ul#header_nav {
+		@include dimension(auto, 70px);
+		float: right;
+		display: block;
+		
+		li {
+			
+			text-align: center;
+			margin: 0 15px;
+			display: block;
+			float: left;
+			
+			a {
+				line-height: 70px;
+				display: block;
+				cursor: pointer;
+			}
+			
+			a.clr_white {
+				font-size: 0.83333333333333333333333333333333em;
+				text-decoration: none;
+				
+			}
+			
+			a.clr_white:hover {
+				font-size: 0.83333333333333333333333333333333em;
+				text-decoration: none;
+				color: $green;
+				@include transition(270ms);
+			}
+			
+			a.clr_white:active {
+				font-size: 0.83333333333333333333333333333333em;
+				text-decoration: none;
+				color: $text_clr;
+			}
+			
+			a.clr_green {
+				font-size: 0.83333333333333333333333333333333em;
+				text-decoration: none;
+			}
+			
+			a.clr_green:hover {
+				font-size: 0.83333333333333333333333333333333em;
+				text-decoration: none;
+				color: #676767;
+				@include transition(270ms);
+			}
+			
+			a.clr_green:active {
+				font-size: 0.83333333333333333333333333333333em;
+				text-decoration: none;
+				color: $text_clr;
+			}
+			
+			
+		}
+	}
+}
+
+/*--------------------------------------------Landing Section------------------------------------*/
+#landing_sec {
+
+	position: relative;
+	
+	background: url('../img/landing_bg.jpg') no-repeat center center fixed; 
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	
+	min-height: 720px; /*863px*/;
+	
+	#bgfixed {
+		position: fixed; 
+		top: 0; 
+		left: 0; 
+
+		/* Preserve aspet ratio */
+		min-width: 100%;
+		min-height: 100%;
+		z-index: -7;
+	}
+	
+	.blank_space {
+		@include dimension(100%, 70px);
+		display: block;
+	}
+	
+	.welcome_c {
+		@include dimension(100%, auto);
+		display: block;
+		
+		.welcome_tbl {
+			@include dimension(100%, inherit);
+			display: table;
+			
+			.welcome_cell {
+				@include dimension(100%, inherit);
+				display: table-cell;
+				vertical-align: middle;
+				text-align: center;
+			}
+		}
+	}
+	
+	.welcome_logo {
+		background: url('../img/welcome_logo.svg') no-repeat;
+		background-size: 222px 250px;
+		@include dimension(222px, 250px);
+		display: block;
+		margin: 0 auto 36px auto;
+		
+	}
+	
+	.green_bar {
+		@include dimension(100%, 200px);
+		position: absolute;
+		bottom: 0;
+		display: block;
+		z-index: 1; 
+		
+		* {
+			color: #fff;
+		}
+		
+		.val {
+			font-size: 3.333333333333333333333333em;
+			line-height: 1em;
+			width: 100%;
+			text-align: center;
+			display: block;
+			margin-top: 47px;
+		}
+		
+		.des {
+			font-size: 1.1111111111111111111111111111111em;
+			line-height: 1em;
+			width: 100%;
+			text-align: center;
+			display: block;
+			margin-top: 10px;
+		}
+	}
+	
+	.green_bar:after {
+		content: "";
+		background: $green;
+		opacity: 0.75;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+		position: absolute;
+		z-index: -1;   
+	}
+	
+	.nod3_left:after {
+		content:"";
+		@include dimension(1px, 180px);
+		display: block;
+		position: absolute;
+		background: #fff;
+		bottom: 10px;
+		left: 319px;
+		opacity: 0.2;
+	}
+	
+	.nod3_right:after {
+		content:"";
+		@include dimension(1px, 180px);
+		display: block;
+		position: absolute;
+		background: #fff;
+		bottom: 10px;
+		right: 319px;
+		opacity: 0.2;
+	}
+	
+	
+	
+}
+
+/*--------------------------------------------Intro Section------------------------------------*/
+#intro_sec {
+
+	background-color: #fff;
+
+	.world_container {
+		@include dimension(470px, 583px);
+		position: relative;
+		display: block;
+		float: left;
+		
+		z-index:0;
+	}
+	
+	#world_bg {
+		position: absolute;
+		@include dimension(1418px, 583px);
+		display: block;
+		background: url('../img/world.png') no-repeat;
+		top:0; 
+		right: -160px;
+		z-index: -1;
+	}
+}
+
+/*--------------------------------------------About Section------------------------------------*/
+#about_pgc_sec {
+	
+	background: url('../img/about_bg.jpg') no-repeat center center; 
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	
+	
+	.lg_270 {
+		@include dimension(270px, 0px);
+		border-top: 1px solid $green_line;
+		position: absolute;
+	}
+	
+	.lg_310 {
+		@include dimension(310px, 0px);
+		border-top: 1px solid $green_line;
+		position: absolute;
+	}
+	
+	.lg_820 {
+		@include dimension(820px, 0px);
+		border-top: 1px solid $green_line;
+		position: absolute;
+	}
+	
+	.lgr_tr_40 {
+		@include dimension(39px, 39px);
+		border-top: 1px solid $green_line;
+		border-right: 1px solid $green_line;
+		border-radius: 0 40px 0 0;
+		position: absolute;
+	}
+	
+	.lgr_br_40 {
+		@include dimension(39px, 39px);
+		border-bottom: 1px solid $green_line;
+		border-right: 1px solid $green_line;
+		border-radius: 0 0 40px 0;
+		position: absolute;
+	}
+	
+	.lgr_bl_40 {
+		@include dimension(39px, 39px);
+		border-bottom: 1px solid $green_line;
+		border-left: 1px solid $green_line;
+		border-radius: 0 0 0 40px;
+		position: absolute;
+	}
+	
+	.lgr_tl_40 {
+		@include dimension(39px, 39px);
+		border-top: 1px solid $green_line;
+		border-left: 1px solid $green_line;
+		border-radius: 40px 0 0 0;
+		position: absolute;
+	}
+	
+	.lgr_vert_n1 {
+		@include dimension(0, 466px);
+		border-right: 1px solid $green_line;
+		position: absolute;
+	}
+	
+	.lgr_vert_n2 {
+		@include dimension(0, 361px);
+		border-right: 1px solid $green_line;
+		position: absolute;
+	}
+	
+	.lgr_vert_n3 {
+		@include dimension(0, 454px);
+		border-right: 1px solid $green_line;
+		position: absolute;
+	}
+	
+	.c_tujuan_266 {
+		@include dimension(266px, auto);
+		display: inline-block;
+		margin: 0 auto 0 auto;
+		text-align: center;
+		float: left;
+		
+		p {
+			text-align: center !important;
+			font-size: 0.83333333333333333333333333333333em
+		}
+	}
+	
+	.c_tujuan_266_n {
+		@include dimension(266px, auto);
+		display: inline-block;
+		margin: 0 auto 0 -5px;
+		text-align: center;
+		float: left;
+		
+		p {
+			text-align: center !important;
+			font-size: 0.83333333333333333333333333333333em
+		}
+	}
+	
+	.c_tujuan_300_n{
+		@include dimension(300px, auto);
+		display: inline-block;
+		margin: 0 auto 0 -5px;
+		text-align: center;
+		float: left;
+		
+		p {
+			text-align: center !important;
+			font-size: 0.83333333333333333333333333333333em
+		}
+	}
+	 
+	.c_tujuan_566_n{
+		@include dimension(566px, auto);
+		display: inline-block;
+		margin: 0 auto 0 -5px;
+		text-align: center;
+		float: left;
+		
+		p {
+			text-align: center !important;
+			font-size: 0.83333333333333333333333333333333em
+		}
+	}
+	
+	.c_tujuan_60{
+		@include dimension(60px, 1px);
+		display: inline-block;
+		margin: 0 auto 0 auto;
+		text-align: center;
+		float: left;
+		
+		p {
+			text-align: center !important;
+			font-size: 0.83333333333333333333333333333333em
+		}
+	}
+	
+	.c_tujuan_60_n{
+		@include dimension(60px, 1px);
+		display: inline-block;
+		margin: 0 auto 0 -5px;
+		text-align: center;
+		float: left;
+		
+		p {
+			text-align: center !important;
+			font-size: 0.83333333333333333333333333333333em
+		}
+	}
+	
+	.tri_00 {
+		font-family: pn_bold;
+	}
+	 
+	.outputs {
+		font-family: pn_bold; 
+		line-height: 140px;
+	} 
+	
+}
+/*--------------------------------------------Schedules Section------------------------------------*/
+#schedules_sec {
+
+	background-color: #f2f2f2;
+	
+	border-bottom: 1px solid $green_line;
+	
+	@include box-sizing(border-box);
+	
+	.int_head_green {
+		height: 210px;
+		background: rgb(34, 139, 34);
+		opacity: 0.75;
+		display: block; 
+		position: absolute;
+		top: 0; 
+		right: 0;
+		z-index: 2;
+	}
+	.int_head_gry {
+		height: 210px;
+		background: none;
+		opacity: 1.0;
+		display: block; 
+		position: absolute;
+		top: 0; 
+		left: 0;
+		z-index: 2;
+		border-bottom: 1px solid $green_line;
+		border-top: 1px solid $green_line;
+		@include box-sizing(border-box);
+	}
+	
+	.unpar_side {
+		background: url('../img/unpar_bg.jpg') no-repeat right top; 
+		-webkit-background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		background-size: cover;
+		min-height: 978px;
+		display: block;
+		top: 0; 
+		right: 0;
+		position: absolute;
+		z-index: 1;
+		@include box-sizing(border-box);
+		border-right: 1px solid $green_line;
+	}
+	
+	.lembang_side {
+		background: url('../img/lembang_bg.jpg') no-repeat left top; 
+		-webkit-background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		background-size: cover;
+		min-height: 978px;
+		display: block;
+		top: 0; 
+		left: 0;
+		position: absolute;
+		z-index: 1;
+	}
+	
+
+	 
+
+}
+	.date_node {
+		margin: 0 auto 0 auto; 
+		width: 56%; height: 90px; 
+		display: block; 
+		position: relative; 
+		overflow: hidden;
+		
+		.dd {
+			font-size: 60px;
+			position: absolute; 
+			left: 0;
+		}
+		
+		.mm {
+			font-size: 20px;
+			position: absolute; 
+			left: 79px; 
+			top: 17px;
+		}
+		
+		.yyyy {
+			font-size: 20px;
+			position: absolute; 
+			left: 121px; 
+			top: 46px;
+		}
+		
+		.mpery {
+			position: absolute; 
+			left: 99px; 
+			top: 24px;
+		}
+	}
+/*--------------------------------------------Speaker Section------------------------------------*/
+#speakers_sec {
+
+	background-color: #fff;
+
+	#c_speakers {
+		
+		display: table;
+		@include dimension(100%, auto);
+		
+	}
+	
+	.node_speaker {
+		display: table-cell;
+		@include dimension(25%, auto);
+		overflow: hidden;
+		cursor: pointer;
+		
+		&:hover .speaker_id {
+			background: $hover_blk;
+			@include transition(0.2s);
+			
+			* {
+				color: #fff;
+			}
+		}
+		
+		&:active .speaker_id {
+			background: $hover_blk;
+			@include transition(0.2s);
+			
+			* {
+				color: #fff;
+			}
+		}
+		
+		&:hover .plus {
+			background-position: -431px -19px;
+			@include dimension(19px, 19px);
+			display: block;
+			margin: 0 auto 0 auto;
+			position: absolute;
+			top: 45px;
+			right: 34px;
+			@include transition(0.2s);
+		}
+		
+		> img {
+			display: block;
+		}
+	}
+	
+	
+	
+	.speaker_id {
+		position: relative;
+		padding-top: 30px;
+		padding-bottom: 30px;
+	
+		.plus {
+			background-position: -431px 0;
+			@include dimension(19px, 19px);
+			display: block;
+			margin: 0 auto 0 auto;
+			position: absolute;
+			top: 45px;
+			right: 34px;
+		}
+	}
+}
+
+.name_spkr {
+	font-family: pn_bold;
+	text-align: center;
+	display: block;
+	width: 100%;
+	line-height: 27px;
+}
+
+.job_spkr {
+	width: 100%;
+	text-align: center;
+	display: block;
+}
+/*--------------------------------------------Registration Section------------------------------------*/
+#registration_sec {
+
+background-color: #fafafa;
+
+}
+
+.clear_mrgn {
+	clear: both;
+	display: block;
+	overflow: hidden;
+	visibility: hidden;
+	width: 100%;
+	height: 20px;
+}
+
+.row_form {
+	@include dimension(100%, auto);
+	margin-bottom: 14px;
+	display: block; 
+	clear: both;
+	overflow: hidden;
+	position: relative;
+	
+	> label {
+		float: left;
+		line-height: 40px;
+		margin-left: 20px;
+		position: relative;
+		
+	}
+	
+	> .label_imp {
+		float: left;
+		line-height: 40px;
+		margin-left: 20px;
+		position: relative;
+		
+		&:after {
+			content: "*";
+			position: absolute;
+			@include dimension(10px, 10px);
+			display: block;
+			right: 10px;top: 0;
+			color: red;
+			font-size: 14px;
+		}
+	}
+	
+	> input {
+		float: left;
+	}
+	
+	> input[type=radio] {
+		margin-top: 15px;
+	}
+	
+
+}
+ 
+.warning_red {
+	background: #E4252D;
+	//lineheight: 40px;
+	color: #fff;
+	font-size: 14px;
+	@include box-sizing(border-box);
+	padding: 10px 17px ;
+	height: 40px;
+	
+}
+
+/*--------------------------------------------Contact Us Section------------------------------------*/
+#contact_us_sec {
+
+	background-color: #fff;
+
+}
+
+/*--------------------------------------------Sponsorship Section------------------------------------*/
+#sponsorship_sec {
+
+	background-color: #fff;
+
+}
+
+/*--------------------------------------------Popup Material------------------------------------*/
+.pop_up_super_c {
+	@include dimension(100%, 100%);
+	position: fixed;
+	z-index: 999999;
+	background-color: rgba(0, 0, 0, 0.8);
+	top: 0px;
+	left: 0px;
+	overflow: auto;
+}
+
+.pop_up_tbl {
+	width: 100%;
+	height: 100%;
+	display: table;
+	z-index: 1999999;
+	overflow-y: hidden;
+	vertical-align: middle;
+}
+
+.pop_up_cell {
+	display: table-cell; 
+	vertical-align: middle;
+}
+
+.exit {
+	z-index: 2999999;
+	display: block;
+	top: 0;
+	right: 0;
+	position: fixed;
+	cursor: pointer;
+}
+
+.pu_col_400 {
+	float: left;
+	@include dimension(400px, auto);
+	display: block;
+}
+
+.pu_col_540 {
+	float: left;
+	@include dimension(540px, auto);
+	display: block;
+}
+
+.lb_100 {
+	@include dimension(100px, 1px);
+	display: block;
+	background: $brown;
+	margin: 30px auto 30px auto;
+}
+
+.lg_100 {
+	@include dimension(100px, 1px);
+	display: block;
+	background: $green_line;
+	margin: 30px auto 30px auto;
+}
+
+.pu_faq_00 {
+	
+	li {
+		line-height: 25px;
+	}
+}
+
+/*--------------------------------------------Image Party------------------------------------*/
+ 
+.t_ico {
+	font-family: pn_bold; 
+	font-size: 1.1111111111111111111111111111111em; 
+	margin-top: 25px; 
+	display: block;
+}
+
+.c_lg_ico {
+	@include dimension(138px, 138px);
+	display: block;
+	border: 1px solid $green;
+	@include border-radius(999px);
+	margin: 0 auto;
+}
+
+.sprt {
+	background-image: url('../img/sprt.png');
+}
+
+/*------- hi-dpi resolution -------*/
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2),
+only screen and (   min--moz-device-pixel-ratio: 2),
+only screen and (     -o-min-device-pixel-ratio: 2/1),
+only screen and (        min-device-pixel-ratio: 2),
+only screen and (                min-resolution: 192dpi),
+only screen and (                min-resolution: 2dppx) { 
+  .sprt {
+		background-image: url('../img/sprt@2x.png'); /*sprt@2x.png*/
+		background-size: 506px 74px;/* This replicates the original standard sprite dimensions, 
+		and assumes the actual dimensions of sprt@2x.png are 1012x148px */
+	}
+}
+
+/*------- iPad mini in landscape -------
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) 
+and (orientation : landscape)
+and (-webkit-min-device-pixel-ratio: 1){
+	.sprt {
+		background: url('../img/sprt.png') no-repeat;
+	}
+}*/
+
+/*------- iPad mini in portrait -------
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) 
+and (orientation : portrait)
+and (-webkit-min-device-pixel-ratio: 1){
+	.sprt {
+		background: url('../img/sprt.png') no-repeat;
+	}
+}*/
+
+/*------- Retina iPad in landscape -------
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) 
+and (orientation : landscape)
+and (-webkit-min-device-pixel-ratio: 2){
+	.sprt {
+		background: url('../img/sprt.png') no-repeat;
+	}
+}*/
+/*------- Retina iPad in portrait -------
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) 
+and (orientation : portrait)
+and (-webkit-min-device-pixel-ratio: 2){
+	.sprt {
+		background: url('../img/sprt.png') no-repeat; 
+	}
+}*/
+ 
+/*the party popper*/
+@function time($target, $container) {
+  @return ($target * $container);
+}
+
+/*------- the sprite definer -------*/ 
+@mixin sprite_1x($x, $y, $w, $h){
+	background-position: $x $y;
+	@include dimension($w, $h);
+	display: block;
+	
+	/*------- hi-dpi resolution -------*/
+	@media
+	only screen and (-webkit-min-device-pixel-ratio: 2),
+	only screen and (   min--moz-device-pixel-ratio: 2),
+	only screen and (     -o-min-device-pixel-ratio: 2/1),
+	only screen and (        min-device-pixel-ratio: 2),
+	only screen and (                min-resolution: 192dpi),
+	only screen and (                min-resolution: 2dppx) { 
+	    
+		background-position: $x $y;
+		@include dimension($w, $h);
+		display: block;
+	}
+    
+    /*------- iPad mini in landscape -------*/
+    @media only screen 
+    and (min-device-width : 768px) 
+    and (max-device-width : 1024px) 
+    and (orientation : landscape)
+    and (-webkit-min-device-pixel-ratio: 1){
+        background-position: $x $y;
+        @include dimension($w, $h);
+        display: block;
+    }
+    
+    /*------- iPad mini in portrait -------*/
+    @media only screen 
+    and (min-device-width : 768px) 
+    and (max-device-width : 1024px) 
+    and (orientation : portrait)
+    and (-webkit-min-device-pixel-ratio: 1){
+        background-position: $x $y;
+        @include dimension($w, $h);
+        display: block;
+    }
+    
+    /*------- Retina iPad in landscape -------*/
+    @media only screen 
+    and (min-device-width : 768px) 
+    and (max-device-width : 1024px) 
+    and (orientation : landscape)
+    and (-webkit-min-device-pixel-ratio: 2){
+		background-position: $x $y;
+		@include dimension($w, $h);
+		display: block;
+    }
+    /*------- Retina iPad in portrait -------*/
+    @media only screen 
+    and (min-device-width : 768px) 
+    and (max-device-width : 1024px) 
+    and (orientation : portrait)
+    and (-webkit-min-device-pixel-ratio: 2){
+		background-position: $x $y;
+		@include dimension($w, $h);
+		display: block;
+    }
+	
+	
+}
+
+.logo_about {
+	@include sprite_1x(0px, 0px, 66px, 74px);
+	position: absolute;
+}
+
+.heart {
+	@include sprite_1x(-66px, 0, 64px, 64px);
+	margin: 37px auto 0 auto;
+}
+
+.lamp {
+	@include sprite_1x(-130px, 0, 64px, 64px);
+	margin: 37px auto 0 auto;
+}
+
+.entre { 
+	@include sprite_1x(-194px, 0, 64px, 64px);
+	margin: 37px auto 0 auto;
+}  
+
+.hat {
+	@include sprite_1x(-258px, 0, 64px, 64px);
+	margin: 37px auto 0 auto;
+}
+
+.calndr {
+	@include sprite_1x(-322px, 0, 64px, 64px);
+	margin: 37px auto 0 auto;
+}
+
+.slash {
+	@include sprite_1x(-386px, 0, 45px, 45px);
+	margin: 0 auto 0 auto;
+}
+
+.plus_wht {
+	@include sprite_1x(-431px, 0, 19px, 19px);
+	margin: 0 auto 0 auto;
+}
+
+.plus_blk {
+	@include sprite_1x(-431px, 19px, 19px, 19px);
+	margin: 0 auto 0 auto;
+}
+
+.close_56 {
+	@include sprite_1x(-450px, 0px, 56px, 56px);
+	margin: 0 auto 0 auto;	
+}
+
+/*--------------------------------------------Admin Area------------------------------------*/
+
+.c_registran {
+	width: 100%;
+	display: block;
+	overflow: hidden;
+	border-top: 1px solid #676767;
+	border-bottom: 1px solid #676767;
+	
+	* {
+		font-size: 15px;
+	}
+	
+	.cell {
+		@include box-sizing(border-box);
+		padding: 10px;
+		position: relative;
+	}
+	
+	.row {
+		display: block;
+		margin-bottom: 14px;
+		.atr {
+			font-weight: bold;
+			display: block;
+		}
+	}
+}
+
+/*--------------------------------------------Miles Area------------------------------------*/
+
+
+/*--------------------------------------------Tambah Lokasi
+------------------------------------*/
+
+.tambah_lokasi {
+	height:280px;
+	width: 100%;
+	display: block;
+	  margin:auto;
+  background: #ececec;
+  padding: 20px;
+  border: 1px solid #ccc;
+  
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.form_1 {
+	width: 25%;
+	
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+  
+  display: inline-block;
+  float: left;
+}
+
+/*--------------------------------------------Body
+------------------------------------*/
+
+body {
+  font: 14px/1.5 helvetica-neue, helvetica, arial, san-serif;
+  padding:10px;
+}
+ 
+h1 {
+  margin-top:0;
+}
+ 
+#main {
+  //width: 300px;
+
+}
+ 
+#image-list {
+  list-style:none;
+  margin:0;
+  padding:0;
+}
+#image-list li {
+  //background: #fff;
+  //border: 1px solid #ccc;
+  text-align:center;
+  //padding:20px;
+  margin-bottom:19px;
+}
+#image-list li img {
+ // width: 258px;
+ height:200px;
+ width:200px;
+  vertical-align: middle;
+  border:1px solid #474747;
+}
+
+
