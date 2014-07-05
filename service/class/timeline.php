@@ -110,8 +110,10 @@
 			
 			if($result = mysqli_query($link, $sql)){
 				$num_rows = mysqli_num_rows($result);
-				if($num_rows == 1){
-					$rows = mysqli_fetch_assoc($result);
+				if($num_rows > 0){
+					while($r = mysqli_fetch_assoc($result)) {
+						$rows[] = $r;
+					}
 					return $rows;
 				}else{
 					return '{"status":"error","message":"timeline data not found"}';
@@ -123,12 +125,15 @@
 		
 		function getTimelineByUserNFollowing($link,$profile_id)
 		{
-			$sql = 'SELECT * FROM post WHERE profile_id = ANY(SELECT profile_id FROM follower WHERE follower_id='.$profile_id.')';
+			$sql = 'SELECT * FROM post WHERE profile_id = ANY(SELECT profile_id FROM follower WHERE follower_id='.$profile_id.')
+					UNION SELECT * FROM post WHERE profile_id ='.$profile_id;
 			
 			if($result = mysqli_query($link, $sql)){
 				$num_rows = mysqli_num_rows($result);
-				if($num_rows == 1){
-					$rows = mysqli_fetch_assoc($result);
+				if($num_rows > 0){
+					while($r = mysqli_fetch_assoc($result)) {
+						$rows[] = $r;
+					}
 					return $rows;
 				}else{
 					return '{"status":"error","message":"timeline data not found"}';

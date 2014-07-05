@@ -314,7 +314,7 @@ include("class/user.php");
 		else
 		{
 			//delete foto
-			$dir = 'http://milesyourday.com/file_upload/place/'.$respond['name'].'/'.$respond['photo'];
+			$dir = '../file_upload/place/'.$respond['name'].'-'.$respond['location'].'/'.$respond['photo'];
 			unlink($dir);
 			$respond = $place->updatePlace($link,$id,$inputPlace);
 		
@@ -362,9 +362,29 @@ include("class/user.php");
 		}
 		
     });
+	function deleteDirectory($dir) {
+	    if (!file_exists($dir)) {
+	        return true;
+	    }
+	    if (!is_dir($dir)) {
+	        return unlink($dir);
+	    }
+	    foreach (scandir($dir) as $item) {
+	        if ($item == '.' || $item == '..') {
+	            continue;
+	        }
+	
+	        if (!deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
+	            return false;
+	        }
+	
+	    }
+	    return rmdir($dir);
+	}
 	
 	$app->delete('/place/:id',function($id) use ($link) {
-        $place = new Place();
+        //echo '{"status":"tes"}';
+		$place = new Place();
 		$respond = $place->getPlaceFromId($link,$id);
 		if(is_string($respond))
 		{
@@ -373,11 +393,20 @@ include("class/user.php");
 		else
 		{
 			//delete foto
-			$dir = 'http://milesyourday.com/file_upload/place/'.$respond['name'];
-			rmdir($dir);
-			$respond = $place->deletePlace($link,$id);
-			if($respond=="success") echo '{"status":"success"}';
-			else echo $respond;
+			$dir = '../file_upload/place/'.$respond['name'].'-'.$respond['location'];
+			if (is_dir($dir)) {
+				deleteDirectory($dir);
+			}
+			
+			$respond = $place->delCategory($link,$id);
+			if($respond=="success"){
+				$respond = $place->deletePlace($link,$id);
+				if($respond=="success") echo '{"status":"success"}';
+				else echo $respond;
+			}else
+			{
+				echo $respond;
+			}
 		}
     });
 //end of place
@@ -499,9 +528,7 @@ include("class/user.php");
 //end of review
 
 //like_review
-	$app->get('/likeReview',function () use ($link,$app){
-		
-	});
+	//$app->get('/likeReview',function () use ($link,$app){});
 	
 	$app->get('/likeReview/:review_id/:profile_id',function ($review_id,$profile_id) use ($link,$app){
 		$place = new Place();
@@ -544,7 +571,7 @@ include("class/user.php");
 //end of like_review
 
 //timeline
-	$app->get('/timeline/:profile_id', function($profile_id) use ($link){
+	$app->get('/post/:profile_id', function($profile_id) use ($link){
 		$timeline = new Timeline();
 		$respond = $timeline->getTimelineByUser($link,$profile_id);
 		if(is_string($respond))
@@ -557,7 +584,7 @@ include("class/user.php");
 		}
 	});
 	
-	$app->get('/post/:profile_id', function($profile_id) use (){
+	$app->get('/timeline/:profile_id', function($profile_id) use ($link){
 		$timeline = new Timeline();
 		$respond = $timeline->getTimelineByUserNFollowing($link,$profile_id);
 		if(is_string($respond))
@@ -570,6 +597,24 @@ include("class/user.php");
 		}
 	});
 //end of timeline
+
+//follower
+	$app->get('/follow', function() use ($link){});
+	$app->get('/follow', function() use ($link){});
+	$app->post('/follow', function() use ($link){});
+	$app->delete('/follow', function() use ($link){});
+//end of follower
+
+//preferences
+	$app->get('/preference', function() use ($link){});
+	$app->post('/preference', function() use ($link){});
+	$app->delete('/preference', function() use ($link){});
+//end of preference
+
+//gallery
+	
+//end of gallery
+
 //run
 $app->run();
 

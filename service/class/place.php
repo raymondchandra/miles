@@ -79,6 +79,8 @@
 				$num_rows = mysqli_num_rows($result);
 				if($num_rows == 1){
 					$rows = mysqli_fetch_assoc($result);
+					$rows['photo'] = 'file_upload/place/'.$rows['name'].'-'.$rows['location'].'/'.$rows['photo'];
+			
 					return $rows;
 				}else{
 					return '{"status":"error","message":"place not found"}';
@@ -114,6 +116,8 @@
 				}else{
 					$rows = array();
 					while($r = mysqli_fetch_assoc($result)) {
+						$r['photo'] = 'file_upload/place/'.$r['name'].'-'.$r['location'].'/'.$r['photo'];
+			
 						$rows[] = $r;
 					}
 					return $rows;
@@ -345,7 +349,7 @@
 				$value = mysql_fetch_object($result);
 				$numLike = $value->ct;
 				
-				$sql = 'SELECT * FROM like_review WHERE review_id='.$review_id.' AND profile_id='.$profile_id' LIMIT 1';
+				$sql = 'SELECT * FROM like_review WHERE review_id='.$review_id.' AND profile_id='.$profile_id.' LIMIT 1';
 				if($result = mysqli_query($link, $sql)){
 					$num_rows = mysqli_num_rows($result);
 					if($num_rows == 1){
