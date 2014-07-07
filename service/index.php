@@ -58,7 +58,6 @@ include("class/user.php");
 			$inputUser['birthday'] = $input['birthday'];
 			$inputUser['sex'] = $input['sex'];
 			$inputUser['photo'] = $input['photo'];
-			$inputUser['email'] = $input['email'];
 			$inputUser['phone'] = $input['phone'];
 			$user->addUser($link,$inputUser);
 		}
