@@ -104,6 +104,24 @@
 			}
 		}
 		
+		function checkExist($link,$email)
+		{
+			$sql = 'SELECT * FROM account WHERE username = "'.$email;
+			
+			if($result = mysqli_query($link, $sql)){
+				$num_rows = mysqli_num_rows($result);
+				if($num_rows == 1){
+					$value = mysqli_fetch_object($result);
+					return '{"status":"exist"}';
+				}else{
+					return '{"status":"not exist"}';
+				}
+			}else{
+				return '{"status":"error"}';
+			}
+		}
+		
+		
 		/*(function getLastId($link)
 		{
 			$sql = 'SELECT id FROM account ORDER BY id DESC LIMIT 1';

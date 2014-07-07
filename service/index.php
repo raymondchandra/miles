@@ -17,6 +17,11 @@ include("class/user.php");
 		echo $account->login($link,$email,$password);
 	});
 	
+	$app->get('/accExist/:email', function($email) use ($link){
+		$account = new Account();
+		echo $account->checkExist($link,$email);
+	});
+	
 	$app->post('/accAdmin',function () use ($link,$app){
 		$request = $app->request();
 		$body = $request->getBody();
