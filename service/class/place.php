@@ -131,7 +131,27 @@
 		
 		function getPlaceFromName(){}
 		
-		function getPlaceFromDayLife(){}
+		function getPlaceFromDayLife($link,$days)
+		{
+			$sql = 'SELECT * FROM place WHERE day_life="'.$days.'"';
+			
+			if($result = mysqli_query($link, $sql)){
+				$num_rows = mysqli_num_rows($result);
+				if($num_rows == 0){
+					return '{"status":"error","message":"place not found"}';
+				}else{
+					$rows = array();
+					while($r = mysqli_fetch_assoc($result)) {
+						$r['photo'] = 'file_upload/place/'.$r['name'].'-'.$r['location'].'/'.$r['photo'];
+			
+						$rows[] = $r;
+					}
+					return $rows;
+				}
+			}else{
+				return '{"status":"error","message":"sql error"}';
+			}
+		}
 		
 		/*function getLastId($link)
 		{
@@ -246,7 +266,7 @@
 					$value = mysql_fetch_object($result2);
 					
 					
-					$result = mysqli_query($link, $sql)
+					$result = mysqli_query($link, $sql);
 					$rows = array();
 					while($r = mysqli_fetch_assoc($result)) {
 						$r['photo'] = 'file_upload/place/'.$value->name.'-'.$value->location.'/'.$r['photo'];

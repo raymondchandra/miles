@@ -176,6 +176,72 @@ include("class/user.php");
 		}
 		
 	});
+	$app->get('/place/:field/:value', function($field,$value) use ($link){
+		if($field == "days")
+		{
+			$place = new Place();
+			$respond = $place->getPlaceFromDayLife($link,$value);
+			if(is_string($respond))
+			{
+				echo $respond;
+			}
+			else
+			{
+				$getPlace;
+				$category = $place->getCategoryByPlace($link,$respond['id']);
+				if(!is_string($category))
+				{
+					$feature = array();
+					$price = array();
+					foreach($category as $categoryRows)
+					{
+						if($categoryRows['category']=="feature")
+						{
+							$feature[] = $categoryRows['value'];
+						}
+						else if($categoryRows['category']=="price")
+						{
+							$price[] = $categoryRows;
+						}
+					}
+					
+					//parse price
+					$lowPrice = explode(" ", $price[0]['value']);
+					$highPrice = explode(" ", $price[count($price)-1]['value']);
+					$priceSummary = "";
+					if($lowPrice[0]=="Below")
+					{
+						if($highPrice[0]=="Above")
+							$priceSummary = "Any Price";
+						else
+							$priceSummary = "Below ".$highPrice[count($highPrice)-1];
+					}
+					else if($highPrice[0]=="Above")
+					{
+						$priceSummary = "Above ".$lowPrice[0];
+					}
+					else
+					{
+						$priceSummary = $lowPrice[0]." - ".$highPrice[count($highPrice)-1];
+					}
+					
+					$getPlace = array(
+						"place" => $respond,
+						"feature" => $feature,
+						"price" => $priceSummary
+					);
+				}
+				else{
+					$getPlace = array(
+						"place" => $respond,
+						"feature" => "",
+						"price" => ""
+					);
+				}
+				echo json_encode($getPlace);
+			}
+		}
+	});
 	
 	$app->get('/place/:id', function($id) use ($link){
 		
