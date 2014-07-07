@@ -599,20 +599,108 @@ include("class/user.php");
 //end of timeline
 
 //follower
-	$app->get('/follow', function() use ($link){});
-	$app->get('/follow', function() use ($link){});
-	$app->post('/follow', function() use ($link){});
-	$app->delete('/follow', function() use ($link){});
+	$app->get('/following/:profile_id', function($profile_id) use ($link){
+		$user = new User();
+		
+		$respond = $user->getFollowing($link,$profile_id);
+		if(is_string($respond))
+		{
+			echo $respond;
+		}
+		else
+		{
+			echo json_encode($respond);
+		}
+	});
+	
+	$app->get('/follower/:follower_id', function($follower_id) use ($link){
+		$user = new User();
+		
+		$respond = $user->getFollower($link,$follower_id);
+		if(is_string($respond))
+		{
+			echo $respond;
+		}
+		else
+		{
+			echo json_encode($respond);
+		}
+	});
+	
+	$app->post('/follow', function() use ($link){
+		$request = $app->request();
+		$body = $request->getBody();
+		$input = json_decode($body,true);
+		
+		$user = new User();
+		echo $user->follow($link,$input['profile_id'],$input['follower_id']);
+	});
+	
+	$app->delete('/follow/:profile_id/:follower_id', function() use ($link){
+		$user = new User();
+		echo $user->unfollow($link,$profile_id,$follower_id);
+	});
 //end of follower
 
 //preferences
-	$app->get('/preference', function() use ($link){});
-	$app->post('/preference', function() use ($link){});
-	$app->delete('/preference', function() use ($link){});
+	$app->get('/preference/:profile_id', function($profile_id) use ($link){
+		$user = new User();
+		
+		$respond = $user->getPreferenceByUser($link,$profile_id);
+		if(is_string($respond))
+		{
+			echo $respond;
+		}
+		else
+		{
+			echo json_encode($respond);
+		}
+	});
+	
+	$app->post('/preference', function() use ($link){
+		$request = $app->request();
+		$body = $request->getBody();
+		$input = json_decode($body,true);
+		
+		$user = new User();
+		echo $user->addPreference($link,$input['profile_id'],$input['value']);
+	});
+	
+	$app->delete('/preference/:profile_id/:value', function($profile_id,$value) use ($link){
+		$user = new User();
+		echo $user->deletePreference($link,$input['profile_id'],$input['value']);
+	});
+	
 //end of preference
 
 //gallery
+	$app->get('/gallery/:place_id', function($place_id) use ($link){
+		$place = new Place();
+		
+		$respond = $place->getPhotoByPlace($link,$place_id);
+		if(is_string($respond))
+		{
+			echo $respond;
+		}
+		else
+		{
+			echo json_encode($respond);
+		}
+	});
 	
+	$app->post('/gallery', function() use ($link){
+		$request = $app->request();
+		$body = $request->getBody();
+		$input = json_decode($body,true);
+		
+		$place = new Place();
+		echo $place->addPhoto($link,$input['profile_id'],$input['place_id'],$input['photo']);
+	});
+	
+	$app->delete('/gallery/:id', function($id) use ($link){
+		$place = new Place();
+		echo $place->deletePhoto($link,$id);
+	});
 //end of gallery
 
 //run

@@ -202,23 +202,55 @@
 	//end of place_category
 	
 	//gallery
-		function addPhoto(){}
+		function addPhoto($link,$profile_id,$place_id,$photo)
+		{
+			$profile_id = mysqli_escape_string($link,$profile_id);
+			$place_id = mysqli_escape_string($link,$place_id);
+			$photo = mysqli_escape_string($link,$photo);
+			
+			$sql = 'INSERT INTO gallery (profile_id,place_id,photo) VALUES ("'.$profile_id.'", "'.$place_id.'","'.$photo.'")';
+			if (mysqli_query($link, $sql)) {
+				//success
+				return '{"status":"success"}';
+			}else{
+				//error
+				return '{"status":"error","message":"photo not inserted"}';
+			}
+		}
 		
 		function deletePhoto($link,$id)
 		{
 			$sql = 'DELETE FROM gallery WHERE id ='.$id;
 			if (mysqli_query($link, $sql)) {
 				//success
-				return "success";
+				return '{"status":"success"}';
 			}else{
 				//error
-				return '{"status":"error","message":"place not deleted"}';
+				return '{"status":"error","message":"photo not deleted"}';
 			}
 		}
 		
-		function getPhotoByUser(){}
+		//function getPhotoByUser(){}
 		
-		function getPhotoByPlace(){}
+		function getPhotoByPlace($link,$place_id)
+		{
+			$sql = 'SELECT * FROM gallery WHERE place_id="'.$place_id.'"';
+			
+			if($result = mysqli_query($link, $sql)){
+				$num_rows = mysqli_num_rows($result);
+				if($num_rows == 0){
+					return '{"status":"error","message":"photo not found"}';
+				}else{
+					$rows = array();
+					while($r = mysqli_fetch_assoc($result)) {
+						$rows[] = $r;
+					}
+					return $rows;
+				}
+			}else{
+				return '{"status":"error","message":"sql error"}';
+			}
+		}
 	//end of gallery
 	
 	//review

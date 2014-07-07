@@ -95,21 +95,54 @@
 	//end of follower
 	
 	//preference
-		function addPreference(){}
-		
-		function deletePreference($link,$id)
+		function addPreference($link,$profile_id,$value)
 		{
-			$sql = 'DELETE FROM preference WHERE id ='.$id;
+			$value = mysqli_escape_string($link,$value);
+			$profile_id = mysqli_escape_string($link,$profile_id);
+			$sql = 'INSERT INTO preference (profile_id,value) VALUES ('.$profile_id.',"'.$value.'")';
 			if (mysqli_query($link, $sql)) {
 				//success
-				return "success";
+				return '{"status":"success"}';
 			}else{
 				//error
-				return '{"status":"error","message":"place not deleted"}';
+				return '{"status":"error","message":"check in failed"}';
 			}
 		}
 		
-		function getPreferenceByUser(){}
+		function deletePreference($link,$profile_id,$value)
+		{
+			$value = mysqli_escape_string($link,$value);
+			$profile_id = mysqli_escape_string($link,$profile_id);
+			
+			$sql = 'DELETE FROM preference WHERE profile_id ='.$id.' AND value='.$value;
+			if (mysqli_query($link, $sql)) {
+				//success
+				return '{"status":"success"}';
+			}else{
+				//error
+				return '{"status":"error","message":"preference not deleted"}';
+			}
+		}
+		
+		function getPreferenceByUser($link,$profile_id)
+		{
+			$sql = 'SELECT * FROM preference WHERE place_id="'.$profile_id.'"';
+			
+			if($result = mysqli_query($link, $sql)){
+				$num_rows = mysqli_num_rows($result);
+				if($num_rows == 0){
+					return '{"status":"error","message":"preference not found"}';
+				}else{
+					$rows = array();
+					while($r = mysqli_fetch_assoc($result)) {
+						$rows[] = $r;
+					}
+					return $rows;
+				}
+			}else{
+				return '{"status":"error","message":"sql error"}';
+			}
+		}
 	//end of preference
 	
 	//profile
@@ -121,9 +154,8 @@
 			$birthday = mysqli_escape_string($link,$user['birthday']);
 			$sex = mysqli_escape_string($link,$user['sex']);
 			$photo = mysqli_escape_string($link,$user['photo']);
-			$email = mysqli_escape_string($link,$user['email']);
 			$phone = mysqli_escape_string($link,$user['phone']);
-			$sql = 'INSERT INTO profile (account_id,first_name,last_name,birthday,sex,photo,email,phone_number,num_follower,num_review,num_invited) VALUES ('.$account_id.',"'.$fname.'","'.$lname.'",'.$birthday.','.$sex.',"'.$photo.'","'.$email.'","'.$phone.'",0,0,0)';
+			$sql = 'INSERT INTO profile (account_id,first_name,last_name,birthday,sex,photo,phone_number,num_follower,num_review,num_invited) VALUES ('.$account_id.',"'.$fname.'","'.$lname.'",'.$birthday.','.$sex.',"'.$photo.'","'.$phone.'",0,0,0)';
 			if (mysqli_query($link, $sql)) {
 				//success
 				return "success";
