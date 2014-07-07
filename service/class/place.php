@@ -241,8 +241,15 @@
 				if($num_rows == 0){
 					return '{"status":"error","message":"photo not found"}';
 				}else{
+					$sql2 = 'SELECT name,location FROM profile WHERE id="'.$place_id.'" LIMIT 1';
+					$result2 = mysql_query($sql2);
+					$value = mysql_fetch_object($result2);
+					
+					
+					$result = mysqli_query($link, $sql)
 					$rows = array();
 					while($r = mysqli_fetch_assoc($result)) {
+						$r['photo'] = 'file_upload/place/'.$value->name.'-'.$value->location.'/'.$r['photo'];
 						$rows[] = $r;
 					}
 					return $rows;
