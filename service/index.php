@@ -64,7 +64,14 @@ include("class/user.php");
 			$inputUser['sex'] = $input['sex'];
 			$inputUser['photo'] = $input['photo'];
 			$inputUser['phone'] = $input['phone'];
-			$user->addUser($link,$inputUser);
+			$respond = $user->addUser($link,$inputUser);
+			if(is_string($respond)){
+				echo '{"status":"success","id":"'.mysqli_insert_id($link).'"}';
+			}
+			else
+			{
+				echo $respond;
+			}
 		}
 		else
 		{
@@ -247,6 +254,8 @@ include("class/user.php");
 		
 		$place = new Place();
 		$respond = $place->getPlaceFromId($link,$id);
+		$respond['photo'] = '../file_upload/place/'.$respond['name'].'-'.$respond['location'].'/'.$respond['photo'];
+			
 		if(is_string($respond))
 		{
 			echo $respond;
@@ -373,21 +382,32 @@ include("class/user.php");
 		
 		$inputPlace = $input['place'];
 		$inputCategory = $input['feature'];
-		$inputPrice = $input['price'];
+		$inputPrice = explode(";", $input['price']);
 		$place = new Place();
 		
 		$respond = $place->getPlaceFromId($link,$id);
+		$respond['photo'] = '../file_upload/place/'.$respond['name'].'-'.$respond['location'].'/'.$respond['photo'];
+		
 		if(is_string($respond))
 		{
 			echo $respond;
 		}
 		else
 		{
+			
 			//delete foto
 			$dir = '../file_upload/place/'.$respond['name'].'-'.$respond['location'].'/'.$respond['photo'];
-			unlink($dir);
+			if ($inputPlace['photo']!="" && file_exists($dir))
+			{
+				unlink($dir);
+			}
+			
+			if ($inputPlace['photo']=="")
+			{
+				$inputPlace['photo'] = $respond['photo'];
+			}
+			rename('../file_upload/place/'.$respond['name'].'-'.$respond['location'],'../file_upload/place/'.$inputPlace['name'].'-'.$inputPlace['location']);
 			$respond = $place->updatePlace($link,$id,$inputPlace);
-		
 			if($respond != "success")
 			{
 				echo $respond;
@@ -456,6 +476,8 @@ include("class/user.php");
         //echo '{"status":"tes"}';
 		$place = new Place();
 		$respond = $place->getPlaceFromId($link,$id);
+		$respond['photo'] = '../file_upload/place/'.$respond['name'].'-'.$respond['location'].'/'.$respond['photo'];
+		
 		if(is_string($respond))
 		{
 			echo $respond;
@@ -732,8 +754,17 @@ include("class/user.php");
 		$body = $request->getBody();
 		$input = json_decode($body,true);
 		
+		
 		$user = new User();
-		echo $user->addPreference($link,$input['profile_id'],$input['value']);
+		$ret = true;
+		foreach($input['value'] as $r)
+		{
+			$respond = $user->addPreference($link,$input['profile_id'],$r);
+			if($respond != "success") $ret = false;
+		}
+		if($ret) echo '{"status":"success"}';
+		else echo '{"status":"error"}';
+		
 	});
 	
 	$app->delete('/preference/:profile_id/:value', function($profile_id,$value) use ($link){

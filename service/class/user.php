@@ -102,7 +102,7 @@
 			$sql = 'INSERT INTO preference (profile_id,value) VALUES ('.$profile_id.',"'.$value.'")';
 			if (mysqli_query($link, $sql)) {
 				//success
-				return '{"status":"success"}';
+				return "success";
 			}else{
 				//error
 				return '{"status":"error","message":"check in failed"}';
@@ -161,7 +161,7 @@
 				return "success";
 			}else{
 				//error
-				return '{"status":"error","message":"place not inserted"}';
+				return '{"status":"error","message":"user not inserted"}';
 			}
 		}
 		
@@ -173,7 +173,7 @@
 				return "success";
 			}else{
 				//error
-				return '{"status":"error","message":"place not deleted"}';
+				return '{"status":"error","message":"user not deleted"}';
 			}
 		}
 		
@@ -185,7 +185,7 @@
 				return '{"status":"success"}';
 			}else{
 				//error
-				return '{"status":"error","message":"place not updated"}';
+				return '{"status":"error","message":"user not updated"}';
 			}
 		}
 		
@@ -197,7 +197,7 @@
 				return '{"status":"success"}';
 			}else{
 				//error
-				return '{"status":"error","message":"place not updated"}';
+				return '{"status":"error","message":"user not updated"}';
 			}
 		}
 		
@@ -209,7 +209,7 @@
 				return '{"status":"success"}';
 			}else{
 				//error
-				return '{"status":"error","message":"place not updated"}';
+				return '{"status":"error","message":"user not updated"}';
 			}
 		}
 		
@@ -236,9 +236,15 @@
 		
 		function getUserByAccount(){}
 		
-		function updateNumFollower(){}
+		function updateNumFollower($link,$id)
+		{
+			
+		}
 		
-		function updateNumReview(){}
+		function updateNumReview($link,$id)
+		{
+			
+		}
 		
 		function updateNumInvited(){}
 	//end of profile
