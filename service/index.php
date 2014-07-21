@@ -125,6 +125,7 @@ include("class/user.php");
 		}
 		else
 		{
+		
 			$allplace = array();
 			foreach($respond as $rows)
 			{
@@ -143,6 +144,10 @@ include("class/user.php");
 						{
 							$price[] = $categoryRows;
 						}
+						else if($categoryRows['category']=="cuisine")
+						{
+							$cuisine = $categoryRows['value'];
+						}
 					}
 					
 					//parse price
@@ -168,14 +173,16 @@ include("class/user.php");
 					$allplace[] = array(
 						"place" => $rows,
 						"feature" => $feature,
-						"price" => $priceSummary
+						"price" => $priceSummary,
+						"cuisine" => $cuisine
 					);
 				}
 				else{
 					$allplace[] = array(
 						"place" => $rows,
 						"feature" => "",
-						"price" => ""
+						"price" => "",
+						"cuisine" => ""
 					);
 				}
 			}
@@ -183,6 +190,7 @@ include("class/user.php");
 		}
 		
 	});
+	
 	$app->get('/place/:field/:value', function($field,$value) use ($link){
 		if($field == "days")
 		{
@@ -194,58 +202,68 @@ include("class/user.php");
 			}
 			else
 			{
-				$getPlace;
-				$category = $place->getCategoryByPlace($link,$respond['id']);
-				if(!is_string($category))
+			
+				$allplace = array();
+				foreach($respond as $rows)
 				{
-					$feature = array();
-					$price = array();
-					foreach($category as $categoryRows)
+					$category = $place->getCategoryByPlace($link,$rows['id']);
+					if(!is_string($category))
 					{
-						if($categoryRows['category']=="feature")
+						$feature = array();
+						$price = array();
+						foreach($category as $categoryRows)
 						{
-							$feature[] = $categoryRows['value'];
+							if($categoryRows['category']=="feature")
+							{
+								$feature[] = $categoryRows['value'];
+							}
+							else if($categoryRows['category']=="price")
+							{
+								$price[] = $categoryRows;
+							}
+							else if($categoryRows['category']=="cuisine")
+							{
+								$cuisine = $categoryRows['value'];
+							}
 						}
-						else if($categoryRows['category']=="price")
+						
+						//parse price
+						$lowPrice = explode(" ", $price[0]['value']);
+						$highPrice = explode(" ", $price[count($price)-1]['value']);
+						$priceSummary = "";
+						if($lowPrice[0]=="Below")
 						{
-							$price[] = $categoryRows;
+							if($highPrice[0]=="Above")
+								$priceSummary = "Any Price";
+							else
+								$priceSummary = "Below ".$highPrice[count($highPrice)-1];
 						}
-					}
-					
-					//parse price
-					$lowPrice = explode(" ", $price[0]['value']);
-					$highPrice = explode(" ", $price[count($price)-1]['value']);
-					$priceSummary = "";
-					if($lowPrice[0]=="Below")
-					{
-						if($highPrice[0]=="Above")
-							$priceSummary = "Any Price";
+						else if($highPrice[0]=="Above")
+						{
+							$priceSummary = "Above ".$lowPrice[0];
+						}
 						else
-							$priceSummary = "Below ".$highPrice[count($highPrice)-1];
+						{
+							$priceSummary = $lowPrice[0]." - ".$highPrice[count($highPrice)-1];
+						}
+						
+						$allplace[] = array(
+							"place" => $rows,
+							"feature" => $feature,
+							"price" => $priceSummary,
+							"cuisine" => $cuisine
+						);
 					}
-					else if($highPrice[0]=="Above")
-					{
-						$priceSummary = "Above ".$lowPrice[0];
+					else{
+						$allplace[] = array(
+							"place" => $rows,
+							"feature" => "",
+							"price" => "",
+							"cuisine" => ""
+						);
 					}
-					else
-					{
-						$priceSummary = $lowPrice[0]." - ".$highPrice[count($highPrice)-1];
-					}
-					
-					$getPlace = array(
-						"place" => $respond,
-						"feature" => $feature,
-						"price" => $priceSummary
-					);
 				}
-				else{
-					$getPlace = array(
-						"place" => $respond,
-						"feature" => "",
-						"price" => ""
-					);
-				}
-				echo json_encode($getPlace);
+				echo json_encode($allplace);
 			}
 		}
 	});
@@ -254,7 +272,6 @@ include("class/user.php");
 		
 		$place = new Place();
 		$respond = $place->getPlaceFromId($link,$id);
-		$respond['photo'] = '../file_upload/place/'.$respond['name'].'-'.$respond['location'].'/'.$respond['photo'];
 			
 		if(is_string($respond))
 		{
@@ -262,6 +279,7 @@ include("class/user.php");
 		}
 		else
 		{
+			$respond['photo'] = 'file_upload/place/'.$respond['name'].'-'.$respond['location'].'/'.$respond['photo'];
 			$getPlace;
 			$category = $place->getCategoryByPlace($link,$respond['id']);
 			if(!is_string($category))
@@ -277,6 +295,10 @@ include("class/user.php");
 					else if($categoryRows['category']=="price")
 					{
 						$price[] = $categoryRows;
+					}
+					else if($categoryRows['category']=="cuisine")
+					{
+						$cuisine = $categoryRows['value'];
 					}
 				}
 				
@@ -303,17 +325,19 @@ include("class/user.php");
 				$getPlace = array(
 					"place" => $respond,
 					"feature" => $feature,
-					"price" => $priceSummary
+					"price" => $priceSummary,
+					"cuisine" => $cuisine
 				);
 			}
 			else{
 				$getPlace = array(
 					"place" => $respond,
 					"feature" => "",
-					"price" => ""
+					"price" => "",
+					"cuisine" => ""
 				);
 			}
-			echo json_encode($getPlace);
+			echo str_replace('\\/', '/', json_encode($getPlace));
 		}
 		
 	});
@@ -326,6 +350,7 @@ include("class/user.php");
 		$inputPlace = $input['place'];
 		$inputCategory = $input['feature'];
 		$inputPrice = explode(";", $input['price']) ;
+		$inputCuisine = $input['cuisine'];
 		
 		$place = new Place();
 		$respond = $place->insertPlace($link,$inputPlace);
@@ -344,6 +369,10 @@ include("class/user.php");
 				if($respond!="success") $errorCheck = false;
 			}
 			
+			//cuisine
+			$respond = $place->addCategory($link,$place_id,"cuisine",$inputCuisine);
+			if($respond!="success") $errorCheck = false;
+				
 			$low = $inputPrice[0];
 			$high = $inputPrice[1];
 			if($low < $high)
@@ -383,6 +412,7 @@ include("class/user.php");
 		$inputPlace = $input['place'];
 		$inputCategory = $input['feature'];
 		$inputPrice = explode(";", $input['price']);
+		$inputCuisine = $input['cuisine'];
 		$place = new Place();
 		
 		$respond = $place->getPlaceFromId($link,$id);
@@ -422,6 +452,10 @@ include("class/user.php");
 					if($respond!="success") $errorCheck = false;
 				}
 				
+				//cuisine
+				$respond = $place->addCategory($link,$place_id,"cuisine",$inputCuisine);
+				if($respond!="success") $errorCheck = false;
+			
 				$low = $inputPrice[0];
 				$high = $inputPrice[1];
 				if($low < $high)
@@ -571,6 +605,8 @@ include("class/user.php");
 		$place = new Place();
 		$respond = $place->addReview($link,$review);
 		
+		$user = new User();
+		$user->updateNumReview($link,$review['profile_id']);
 		//timeline
 		if($respond == "success")
 		{
@@ -719,13 +755,21 @@ include("class/user.php");
 		}
 	});
 	
+	$app->get('/checkfollow/:profile_id/:following_id', function($profile_id,$following_id) use ($link){
+		$user = new User();
+		
+		echo $user->checkFollow($link,$profile_id,$following_id);
+	});
+	
 	$app->post('/follow', function() use ($link){
 		$request = $app->request();
 		$body = $request->getBody();
 		$input = json_decode($body,true);
-		
+		//echo '{"status":"tes"}';
 		$user = new User();
-		echo $user->follow($link,$input['profile_id'],$input['follower_id']);
+		$respond = $user->follow($link,$input['profile_id'],$input['follower_id']);
+		$user->updateNumFollower($link,$input['profile_id']);
+		echo $respond;
 	});
 	
 	$app->delete('/follow/:profile_id/:follower_id', function() use ($link){
@@ -749,7 +793,7 @@ include("class/user.php");
 		}
 	});
 	
-	$app->post('/preference', function() use ($link){
+	$app->post('/preference', function() use ($link,$app){
 		$request = $app->request();
 		$body = $request->getBody();
 		$input = json_decode($body,true);
@@ -785,21 +829,33 @@ include("class/user.php");
 		}
 		else
 		{
-			echo json_encode($respond);
+			echo str_replace('\\/', '/', json_encode($respond));
 		}
 	});
 	
-	$app->post('/gallery', function() use ($link){
+	$app->post('/gallery', function() use ($link,$app){
 		$request = $app->request();
 		$body = $request->getBody();
 		$input = json_decode($body,true);
-		
+		//echo '{"status":"'.$input['profile_id'].'-'.$input['place_id'].'-'.$input['photo'].'"}';
 		$place = new Place();
 		echo $place->addPhoto($link,$input['profile_id'],$input['place_id'],$input['photo']);
 	});
 	
 	$app->delete('/gallery/:id', function($id) use ($link){
 		$place = new Place();
+		
+		$respond1 = $place->getGalleryFromId($link,$id);
+		
+		
+		
+		$respond = $place->getPlaceFromId($link,$respond1['place_id']);
+		//delete foto
+			$dir = '../file_upload/place/'.$respond['name'].'-'.$respond['location'].'/'.$respond1['photo'];
+			if (file_exists($dir))
+			{
+				unlink($dir);
+			}
 		echo $place->deletePhoto($link,$id);
 	});
 //end of gallery

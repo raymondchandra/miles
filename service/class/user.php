@@ -92,6 +92,23 @@
 				return '{"status":"error","message":"sql error"}';
 			}
 		}
+		
+		function checkFollow($link,$profile_id,$following_id)
+		{
+			$sql = 'SELECT * FROM follower WHERE profile_id="'.$profile_id.'" AND follower_id="'.$follower_id.'"';
+			
+			if($result = mysqli_query($link, $sql)){
+				$num_rows = mysqli_num_rows($result);
+				if($num_rows == 1){
+					$value = mysqli_fetch_object($result);
+					return '{"status":"yes"}';
+				}else{
+					return '{"status":"no"}';
+				}
+			}else{
+				return '{"status":"error"}';
+			}
+		}
 	//end of follower
 	
 	//preference
@@ -102,7 +119,7 @@
 			$sql = 'INSERT INTO preference (profile_id,value) VALUES ('.$profile_id.',"'.$value.'")';
 			if (mysqli_query($link, $sql)) {
 				//success
-				return "success";
+				return '{"status":"success"}';
 			}else{
 				//error
 				return '{"status":"error","message":"check in failed"}';
@@ -238,12 +255,48 @@
 		
 		function updateNumFollower($link,$id)
 		{
+			$sql = 'SELECT COUNT(follower_id) as number FROM follower GROUP BY profile_id HAVING profile_id="'.$id.'"';
 			
+			if($result = mysqli_query($link, $sql)){
+				$num_rows = mysqli_num_rows($result);
+				if($num_rows == 0){
+					return false;
+				}else{
+					$r = mysqli_fetch_assoc($result);
+					
+					$sql = 'UPDATE profile SET num_follower="'.$r['number'].'" WHERE id='.$id;
+					if($result = mysqli_query($link, $sql)){
+						return true;
+					}else{
+						return false;
+					}
+				}
+			}else{
+				return false;
+			}
 		}
 		
 		function updateNumReview($link,$id)
 		{
+			$sql = 'SELECT COUNT(id) as number FROM review GROUP BY profile_id HAVING profile_id="'.$id.'"';
 			
+			if($result = mysqli_query($link, $sql)){
+				$num_rows = mysqli_num_rows($result);
+				if($num_rows == 0){
+					return false;
+				}else{
+					$r = mysqli_fetch_assoc($result);
+					
+					$sql = 'UPDATE profile SET num_review="'.$r['number'].'" WHERE id='.$id;
+					if($result = mysqli_query($link, $sql)){
+						return true;
+					}else{
+						return false;
+					}
+				}
+			}else{
+				return false;
+			}
 		}
 		
 		function updateNumInvited(){}

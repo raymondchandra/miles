@@ -9,8 +9,9 @@
 			$website = mysqli_escape_string($link,$place['website']);
 			$email = mysqli_escape_string($link,$place['email']);
 			$photo = mysqli_escape_string($link,$place['photo']);
+			$city = mysqli_escape_string($link,$place['city']);
 			$day_life = $place['days'];
-			$sql = 'INSERT INTO place (name,location,address,telp,website,email,rating,day_life, create_time,photo) VALUES ("'.$name.'", "'.$location.'","'.$address.'","'.$telp.'","'.$website.'","'.$email.'", 3, '.$day_life.', now(), "'.$photo.'")';
+			$sql = 'INSERT INTO place (name,location,address,telp,website,email,rating,day_life, create_time,photo,city) VALUES ("'.$name.'", "'.$location.'","'.$address.'","'.$telp.'","'.$website.'","'.$email.'", 3, '.$day_life.', now(), "'.$photo.'","'.$city.'")';
 			if (mysqli_query($link, $sql)) {
 				//success
 				return "success";
@@ -38,9 +39,10 @@
 			$website = mysqli_escape_string($link,$place['website']);
 			$email = mysqli_escape_string($link,$place['email']);
 			$photo = mysqli_escape_string($link,$place['photo']);
+			$city = mysqli_escape_string($link,$place['city']);
 			$day_life = $place['days'];
 			
-			$sql = 'UPDATE place SET name="'.$name.'",address="'.$address.'",telp="'.$telp.'",website="'.$website.'",email="'.$email.'", day_life='.$day_life.', create_time=now(), photo="'.$photo.'" WHERE id='.$id;
+			$sql = 'UPDATE place SET name="'.$name.'",address="'.$address.'",telp="'.$telp.'",website="'.$website.'",email="'.$email.'", day_life='.$day_life.', create_time=now(), photo="'.$photo.'",city="'.$city.'" WHERE id='.$id;
 			if (mysqli_query($link, $sql)) {
 				//success
 				return "success";
@@ -79,8 +81,7 @@
 				$num_rows = mysqli_num_rows($result);
 				if($num_rows == 1){
 					$rows = mysqli_fetch_assoc($result);
-					$rows['photo'] = 'file_upload/place/'.$rows['name'].'-'.$rows['location'].'/'.$rows['photo'];
-			
+					
 					return $rows;
 				}else{
 					return '{"status":"error","message":"place not found"}';
@@ -134,9 +135,9 @@
 		function getPlaceFromDayLife($link,$days)
 		{
 			$sql = 'SELECT * FROM place WHERE day_life="'.$days.'"';
-			
 			if($result = mysqli_query($link, $sql)){
 				$num_rows = mysqli_num_rows($result);
+				
 				if($num_rows == 0){
 					return '{"status":"error","message":"place not found"}';
 				}else{
@@ -224,11 +225,12 @@
 	//gallery
 		function addPhoto($link,$profile_id,$place_id,$photo)
 		{
-			$profile_id = mysqli_escape_string($link,$profile_id);
-			$place_id = mysqli_escape_string($link,$place_id);
+			//$profile_id = $profile_id;
+			//$place_id = $place_id;
 			$photo = mysqli_escape_string($link,$photo);
 			
-			$sql = 'INSERT INTO gallery (profile_id,place_id,photo) VALUES ("'.$profile_id.'", "'.$place_id.'","'.$photo.'")';
+			$sql = "INSERT INTO gallery (profile_id,place_id,photo) VALUES ('".$profile_id."','".$place_id."','".$photo."')";
+			//return '{"status":"'.$sql.'"}';
 			if (mysqli_query($link, $sql)) {
 				//success
 				return '{"status":"success"}';
@@ -261,18 +263,20 @@
 				if($num_rows == 0){
 					return '{"status":"error","message":"photo not found"}';
 				}else{
-					$sql2 = 'SELECT name,location FROM profile WHERE id="'.$place_id.'" LIMIT 1';
-					$result2 = mysql_query($sql2);
-					$value = mysql_fetch_object($result2);
-					
-					
-					$result = mysqli_query($link, $sql);
-					$rows = array();
-					while($r = mysqli_fetch_assoc($result)) {
-						$r['photo'] = 'file_upload/place/'.$value->name.'-'.$value->location.'/'.$r['photo'];
-						$rows[] = $r;
+					$sql2 = 'SELECT name,location FROM place WHERE id="'.$place_id.'" LIMIT 1';
+					if($result2 = mysqli_query($link,$sql2))
+					{
+						$value = mysqli_fetch_assoc($result2);
+						$rows = array();
+						while($r = mysqli_fetch_assoc($result)) {
+							$r['photo'] = 'file_upload/place/'.$value['name'].'-'.$value['location'].'/'.$r['photo'];
+							$rows[] = $r;
+						}
+						return $rows;
+					}else{
+						return '{"status":"error","message":"sql error"}';
 					}
-					return $rows;
+					
 				}
 			}else{
 				return '{"status":"error","message":"sql error"}';
@@ -352,7 +356,7 @@
 		
 		function getReviewByUser($link,$profile_id)
 		{
-			$sql = 'SELECT * FROM review WHERE place_id="'.$profile_id.'"';
+			$sql = 'SELECT * FROM review WHERE profile_id="'.$profile_id.'"';
 			
 			if($result = mysqli_query($link, $sql)){
 				$num_rows = mysqli_num_rows($result);

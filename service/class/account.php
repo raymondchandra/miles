@@ -106,7 +106,7 @@
 		
 		function checkExist($link,$email)
 		{
-			$sql = 'SELECT * FROM account WHERE username = "'.$email;
+			$sql = 'SELECT * FROM account WHERE username = "'.$email.'"';
 			
 			if($result = mysqli_query($link, $sql)){
 				$num_rows = mysqli_num_rows($result);
