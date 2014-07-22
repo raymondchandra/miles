@@ -110,7 +110,7 @@
 			
 			if($result = mysqli_query($link, $sql)){
 				$num_rows = mysqli_num_rows($result);
-				if($num_rows == 1){
+				if($num_rows >= 1){
 					$value = mysqli_fetch_object($result);
 					return '{"status":"exist"}';
 				}else{

@@ -154,22 +154,6 @@
 			}
 		}
 		
-		/*function getLastId($link)
-		{
-			$sql = 'SELECT id FROM place ORDER BY id DESC LIMIT 1';
-			
-			if($result = mysqli_query($link, $sql)){
-				$num_rows = mysqli_num_rows($result);
-				if($num_rows == 0){
-					return 0;
-				}else{
-					$ret = mysqli_fetch_assoc($result);
-					return $ret['id'];
-				}
-			}else{
-				return '{"status":"error","message":"sql error"}';
-			}
-		}*/
 	//end of place
 		
 	//place_category

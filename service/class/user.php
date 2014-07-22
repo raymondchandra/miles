@@ -122,7 +122,7 @@
 				return '{"status":"success"}';
 			}else{
 				//error
-				return '{"status":"error","message":"check in failed"}';
+				return '{"status":"error","message":"preference not inserted"}';
 			}
 		}
 		

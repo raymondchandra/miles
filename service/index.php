@@ -148,6 +148,10 @@ include("class/user.php");
 						{
 							$cuisine = $categoryRows['value'];
 						}
+						else if($categoryRows['category']=="membership")
+						{
+							$membership = $categoryRows['value'];
+						}
 					}
 					
 					//parse price
@@ -174,7 +178,8 @@ include("class/user.php");
 						"place" => $rows,
 						"feature" => $feature,
 						"price" => $priceSummary,
-						"cuisine" => $cuisine
+						"cuisine" => $cuisine,
+						"membership" => $membership
 					);
 				}
 				else{
@@ -182,7 +187,8 @@ include("class/user.php");
 						"place" => $rows,
 						"feature" => "",
 						"price" => "",
-						"cuisine" => ""
+						"cuisine" => "",
+						"membership" => ""
 					);
 				}
 			}
@@ -225,6 +231,10 @@ include("class/user.php");
 							{
 								$cuisine = $categoryRows['value'];
 							}
+							else if($categoryRows['category']=="membership")
+							{
+								$membership = $categoryRows['value'];
+							}
 						}
 						
 						//parse price
@@ -251,7 +261,8 @@ include("class/user.php");
 							"place" => $rows,
 							"feature" => $feature,
 							"price" => $priceSummary,
-							"cuisine" => $cuisine
+							"cuisine" => $cuisine,
+							"membership" => $membership
 						);
 					}
 					else{
@@ -259,7 +270,8 @@ include("class/user.php");
 							"place" => $rows,
 							"feature" => "",
 							"price" => "",
-							"cuisine" => ""
+							"cuisine" => "",
+							"membership" => ""
 						);
 					}
 				}
@@ -300,6 +312,10 @@ include("class/user.php");
 					{
 						$cuisine = $categoryRows['value'];
 					}
+					else if($categoryRows['category']=="membership")
+					{
+						$membership = $categoryRows['value'];
+					}
 				}
 				
 				//parse price
@@ -326,7 +342,8 @@ include("class/user.php");
 					"place" => $respond,
 					"feature" => $feature,
 					"price" => $priceSummary,
-					"cuisine" => $cuisine
+					"cuisine" => $cuisine,
+					"membership" => $membership
 				);
 			}
 			else{
@@ -334,7 +351,8 @@ include("class/user.php");
 					"place" => $respond,
 					"feature" => "",
 					"price" => "",
-					"cuisine" => ""
+					"cuisine" => "",
+					"membership" => ""
 				);
 			}
 			echo str_replace('\\/', '/', json_encode($getPlace));
@@ -351,6 +369,7 @@ include("class/user.php");
 		$inputCategory = $input['feature'];
 		$inputPrice = explode(";", $input['price']) ;
 		$inputCuisine = $input['cuisine'];
+		$inputMembership = $input['membership'];
 		
 		$place = new Place();
 		$respond = $place->insertPlace($link,$inputPlace);
@@ -373,6 +392,10 @@ include("class/user.php");
 			$respond = $place->addCategory($link,$place_id,"cuisine",$inputCuisine);
 			if($respond!="success") $errorCheck = false;
 				
+			//membership
+			$respond = $place->addCategory($link,$place_id,"membership",$inputMembership);
+			if($respond!="success") $errorCheck = false;
+			
 			$low = $inputPrice[0];
 			$high = $inputPrice[1];
 			if($low < $high)
@@ -454,6 +477,10 @@ include("class/user.php");
 				
 				//cuisine
 				$respond = $place->addCategory($link,$place_id,"cuisine",$inputCuisine);
+				if($respond!="success") $errorCheck = false;
+				
+				//membership
+				$respond = $place->addCategory($link,$place_id,"membership",$inputMembership);
 				if($respond!="success") $errorCheck = false;
 			
 				$low = $inputPrice[0];
