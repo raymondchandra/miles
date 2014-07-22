@@ -436,6 +436,8 @@ include("class/user.php");
 		$inputCategory = $input['feature'];
 		$inputPrice = explode(";", $input['price']);
 		$inputCuisine = $input['cuisine'];
+		$inputMembership = $input['membership'];
+		
 		$place = new Place();
 		
 		$respond = $place->getPlaceFromId($link,$id);
