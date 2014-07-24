@@ -11,7 +11,7 @@
 			$photo = mysqli_escape_string($link,$place['photo']);
 			$city = mysqli_escape_string($link,$place['city']);
 			$day_life = $place['days'];
-			$sql = "INSERT INTO place (name,location,address,telp,website,email,rating,day_life, create_time,photo,city) VALUES ('".$name."', '".$location."','".$address."','".$telp."','".$website."','".$email."', 3, ".$day_life.", now(), '".$photo."','".$city."')";
+			$sql = "INSERT INTO place (name,location,address,telp,website,email,rating,day_life, create_time,photo,city,visibility) VALUES ('".$name."', '".$location."','".$address."','".$telp."','".$website."','".$email."', 3, ".$day_life.", now(), '".$photo."','".$city."','1')";
 			if (mysqli_query($link, $sql)) {
 				//success
 				return "success";
@@ -108,7 +108,7 @@
 		}
 		
 		function getPlace($link){
-			$sql = 'SELECT * FROM place';
+			$sql = 'SELECT * FROM place WHERE visibility = 1';
 			
 			if($result = mysqli_query($link, $sql)){
 				$num_rows = mysqli_num_rows($result);
