@@ -11,7 +11,7 @@
 			$photo = mysqli_escape_string($link,$place['photo']);
 			$city = mysqli_escape_string($link,$place['city']);
 			$day_life = $place['days'];
-			$sql = 'INSERT INTO place (name,location,address,telp,website,email,rating,day_life, create_time,photo,city) VALUES ("'.$name.'", "'.$location.'","'.$address.'","'.$telp.'","'.$website.'","'.$email.'", 3, '.$day_life.', now(), "'.$photo.'","'.$city.'")';
+			$sql = "INSERT INTO place (name,location,address,telp,website,email,rating,day_life, create_time,photo,city) VALUES ('".$name."', '".$location."','".$address."','".$telp."','".$website."','".$email."', 3, ".$day_life.", now(), '".$photo."','".$city."')";
 			if (mysqli_query($link, $sql)) {
 				//success
 				return "success";
@@ -324,11 +324,11 @@
 					$rows = array();
 					while($r = mysqli_fetch_assoc($result)) {
 						
+						
 						$sql = 'SELECT last_name,first_name,photo FROM profile WHERE id="'.$r['profile_id'].'" LIMIT 1';
 						$result = mysqli_query($link,$sql);
 						$value = mysql_fetch_object($result);
 						$r['name'] = $value->first_name.' '.$value->last_name;
-						
 						$rows[] = $r;
 					}
 					return $rows;
