@@ -58,7 +58,7 @@
 					while($r = mysqli_fetch_assoc($result)) {
 						$sql = 'SELECT last_name,first_name,photo FROM profile WHERE id="'.$r['follower_id'].'" LIMIT 1';
 						$result2 = mysqli_query($link,$sql);
-						$value = mysql_fetch_object($result2);
+						$value = mysqli_fetch_object($result2);
 						$r['name'] = $value->first_name.' '.$value->last_name;
 						$r['photo'] = $value->photo;
 						$rows[] = $r;
@@ -83,7 +83,7 @@
 					while($r = mysqli_fetch_assoc($result)) {
 						$sql = 'SELECT last_name,first_name,photo FROM profile WHERE id="'.$r['profile_id'].'" LIMIT 1';
 						$result2 = mysqli_query($link,$sql);
-						$value = mysql_fetch_object($result2);
+						$value = mysqli_fetch_object($result2);
 						$r['name'] = $value->first_name.' '.$value->last_name;
 						$r['photo'] = $value->photo;
 						$rows[] = $r;

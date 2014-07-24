@@ -90,7 +90,7 @@ include("class/user.php");
 		}
 		else
 		{
-			//tambah last login
+			//tempel last login
 			$timeline = new Timeline();
 			$lastCheckIn = $timeline->getLastCheckInByUser($link,$id);
 			$respond['last_check_in'] = $lastCheckIn;
@@ -444,7 +444,7 @@ include("class/user.php");
 
 	$app->put('/place/:id',function($id) use ($link,$app) {
 		
-        $request = $app->request();
+        	$request = $app->request();
 		$body = $request->getBody();
 		$input = json_decode($body,true);
 		
@@ -494,11 +494,11 @@ include("class/user.php");
 				}
 				
 				//cuisine
-				$respond = $place->addCategory($link,$place_id,"cuisine",$inputCuisine);
+				$respond = $place->addCategory($link,$id,"cuisine",$inputCuisine);
 				if($respond!="success") $errorCheck = false;
 				
 				//membership
-				$respond = $place->addCategory($link,$place_id,"membership",$inputMembership);
+				$respond = $place->addCategory($link,$id,"membership",$inputMembership);
 				if($respond!="success") $errorCheck = false;
 			
 				$low = $inputPrice[0];
@@ -620,13 +620,20 @@ include("class/user.php");
 			}
 			else
 			{
-				$getLikeReview = $place->getLikeByReview($link,$respond['id'],$profile_id);
-				if($respond['status'] == "success")
+				$index = 0;
+				foreach($respond as $iter)
 				{
-					$respond['countLike'] = $getLikeReview['count'];
-					$respond['like'] = $getLikeReview['like'];
+					$getLikeReview = $place->getLikeByReview($link,$iter['id'],$profile_id);
+					if($getLikeReview['status'] == "success")
+					{
+						$respond[$index]['countLike'] = $getLikeReview['count'];
+						$respond[$index]['like'] = $getLikeReview['like'];
+					}else{
+						$respond[$index]['taeee'] = $getLikeReview['status'];
+					}
+					$index++;
 				}
-				echo json_encode($respond);
+				echo str_replace('\\/', '/', json_encode($respond));
 			}
 		}
 		else if($field == "user")
@@ -639,7 +646,7 @@ include("class/user.php");
 			else
 			{
 				$getLikeReview = $place->getLikeByReview($link,$respond['id'],$profile_id);
-				if($respond['status'] == "success")
+				if($getLikeReview ['status'] == "success")
 				{
 					$respond['countLike'] = $getLikeReview['count'];
 					$respond['like'] = $getLikeReview['like'];

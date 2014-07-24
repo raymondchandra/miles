@@ -275,7 +275,7 @@
 			$profile_id = mysqli_escape_string($link,$review['profile_id']);
 			$text = mysqli_escape_string($link,$review['text']);
 			$rating = $review['rating'];
-			$sql = 'INSERT INTO review (place_id,profile_id,text,rating,num_like) VALUES ('.$place_id.','.$profile_id.',"'.$text.'",'.$rating.',0)';
+			$sql = 'INSERT INTO review (place_id,profile_id,text,rating,num_like,date) VALUES ('.$place_id.','.$profile_id.',"'.$text.'",'.$rating.',0,now())';
 			if (mysqli_query($link, $sql)) {
 				//success
 				return "success";
@@ -302,7 +302,7 @@
 			$text = mysqli_escape_string($link,$review['text']);
 			$rating = $review['rating'];
 			
-			$sql = 'UPDATE review SET text="'.$text.'", rating="'.$rating.'" WHERE id='.$id;
+			$sql = 'UPDATE review SET text="'.$text.'", rating="'.$rating.'",date=now() WHERE id='.$id;
 			if (mysqli_query($link, $sql)) {
 				//success
 				return '{"status":"success"}';
@@ -314,7 +314,7 @@
 		
 		function getReviewByPlace($link,$place_id)
 		{
-			$sql = 'SELECT * FROM review WHERE place_id="'.$place_id.'"';
+			$sql = 'SELECT * FROM review WHERE place_id="'.$place_id.'" ORDER BY date';
 			
 			if($result = mysqli_query($link, $sql)){
 				$num_rows = mysqli_num_rows($result);
@@ -326,9 +326,10 @@
 						
 						
 						$sql = 'SELECT last_name,first_name,photo FROM profile WHERE id="'.$r['profile_id'].'" LIMIT 1';
-						$result = mysqli_query($link,$sql);
-						$value = mysql_fetch_object($result);
+						$result2 = mysqli_query($link,$sql);
+						$value = mysqli_fetch_object($result2);
 						$r['name'] = $value->first_name.' '.$value->last_name;
+						$r['photo'] = $value->photo;
 						$rows[] = $r;
 					}
 					return $rows;
@@ -340,7 +341,7 @@
 		
 		function getReviewByUser($link,$profile_id)
 		{
-			$sql = 'SELECT * FROM review WHERE profile_id="'.$profile_id.'"';
+			$sql = 'SELECT * FROM review WHERE profile_id="'.$profile_id.'" ORDER BY date';
 			
 			if($result = mysqli_query($link, $sql)){
 				$num_rows = mysqli_num_rows($result);
@@ -350,8 +351,8 @@
 					$rows = array();
 					while($r = mysqli_fetch_assoc($result)) {
 						$sql = 'SELECT name FROM place WHERE id="'.$r['place_id'].'" LIMIT 1';
-						$result = mysqli_query($link,$sql);
-						$value = mysql_fetch_object($result);
+						$result2 = mysqli_query($link,$sql);
+						$value = mysqli_fetch_object($result2);
 						$r['place'] = $value->name;
 						$rows[] = $r;
 					}
@@ -393,11 +394,11 @@
 			$sql = 'SELECT count(profile_id) as ct FROM like_review GROUP BY review_id HAVING review_id='.review_id;
 						
 			if($result = mysqli_query($link, $sql)){
-				$value = mysql_fetch_object($result);
+				$value = mysqli_fetch_object($result);
 				$numLike = $value->ct;
 				
-				$sql = 'SELECT * FROM like_review WHERE review_id='.$review_id.' AND profile_id='.$profile_id.' LIMIT 1';
-				if($result = mysqli_query($link, $sql)){
+				$sql2 = 'SELECT * FROM like_review WHERE review_id='.$review_id.' AND profile_id='.$profile_id.' LIMIT 1';
+				if($result = mysqli_query($link, $sql2)){
 					$num_rows = mysqli_num_rows($result);
 					$ret['count'] = $numLike;
 					$ret['status'] = "success";
@@ -408,12 +409,12 @@
 					}
 					return $ret;
 				}else{
-					$ret['status'] = "error";
+					$ret['status'] = "error1 ".$sql;
 					$ret['message'] = "sql error";
 					return $ret;
 				}
 			}else{
-				$ret['status'] = "error";
+				$ret['status'] = "error2";
 				$ret['message'] = "sql error";
 				return $ret;
 			}
