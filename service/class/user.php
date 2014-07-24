@@ -56,10 +56,11 @@
 				}else{
 					$rows = array();
 					while($r = mysqli_fetch_assoc($result)) {
-						$sql = 'SELECT last_name,first_name FROM profile WHERE id="'.$r['follower_id'].'" LIMIT 1';
-						$result = mysql_query($sql);
-						$value = mysql_fetch_object($result);
+						$sql = 'SELECT last_name,first_name,photo FROM profile WHERE id="'.$r['follower_id'].'" LIMIT 1';
+						$result2 = mysqli_query($link,$sql);
+						$value = mysql_fetch_object($result2);
 						$r['name'] = $value->first_name.' '.$value->last_name;
+						$r['photo'] = $value->photo;
 						$rows[] = $r;
 					}
 					return $rows;
@@ -80,10 +81,11 @@
 				}else{
 					$rows = array();
 					while($r = mysqli_fetch_assoc($result)) {
-						$sql = 'SELECT last_name,first_name FROM profile WHERE id="'.$r['profile_id'].'" LIMIT 1';
-						$result = mysql_query($sql);
-						$value = mysql_fetch_object($result);
+						$sql = 'SELECT last_name,first_name,photo FROM profile WHERE id="'.$r['profile_id'].'" LIMIT 1';
+						$result2 = mysqli_query($link,$sql);
+						$value = mysql_fetch_object($result2);
 						$r['name'] = $value->first_name.' '.$value->last_name;
+						$r['photo'] = $value->photo;
 						$rows[] = $r;
 					}
 					return $rows;
@@ -91,6 +93,11 @@
 			}else{
 				return '{"status":"error","message":"sql error"}';
 			}
+		}
+		
+		function getSuggestFollow($link,$profile_id)
+		{
+			
 		}
 		
 		function checkFollow($link,$profile_id,$following_id)
@@ -119,7 +126,7 @@
 			$sql = 'INSERT INTO preference (profile_id,value) VALUES ('.$profile_id.',"'.$value.'")';
 			if (mysqli_query($link, $sql)) {
 				//success
-				return '{"status":"success"}';
+				return "success";
 			}else{
 				//error
 				return '{"status":"error","message":"preference not inserted"}';
@@ -247,7 +254,25 @@
 			}
 		}
 		
-		function getUserByName(){}
+		function getUserByName($link,$name)
+		{
+			$sql = 'SELECT * FROM profile WHERE last_name LIKE "%'.$name.'%" OR first_name LIKE "%'.$name.'%"';
+			
+			if($result = mysqli_query($link, $sql)){
+				$num_rows = mysqli_num_rows($result);
+				if($num_rows == 0){
+					return '{"status":"error","message":"user not found"}';
+				}else{
+					$rows = array();
+					while($r = mysqli_fetch_assoc($result)) {
+						$rows[] = $r;
+					}
+					return $rows;
+				}
+			}else{
+				return '{"status":"error","message":"sql error"}';
+			}
+		}
 		
 		function getUserByEmail(){}
 		

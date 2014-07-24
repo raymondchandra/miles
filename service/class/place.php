@@ -326,7 +326,7 @@
 						
 						
 						$sql = 'SELECT last_name,first_name FROM profile WHERE id="'.$r['profile_id'].'" LIMIT 1';
-						$result = mysql_query($sql);
+						$result = mysqli_query($link,$sql);
 						$value = mysql_fetch_object($result);
 						$r['name'] = $value->first_name.' '.$value->last_name;
 						$rows[] = $r;
@@ -350,7 +350,7 @@
 					$rows = array();
 					while($r = mysqli_fetch_assoc($result)) {
 						$sql = 'SELECT name FROM place WHERE id="'.$r['place_id'].'" LIMIT 1';
-						$result = mysql_query($sql);
+						$result = mysqli_query($link,$sql);
 						$value = mysql_fetch_object($result);
 						$r['place'] = $value->name;
 						$rows[] = $r;

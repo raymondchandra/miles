@@ -65,7 +65,7 @@ include("class/user.php");
 			$inputUser['photo'] = $input['photo'];
 			$inputUser['phone'] = $input['phone'];
 			$respond = $user->addUser($link,$inputUser);
-			if(is_string($respond)){
+			if($respond=="success"){
 				echo '{"status":"success","id":"'.mysqli_insert_id($link).'"}';
 			}
 			else
@@ -95,6 +95,22 @@ include("class/user.php");
 			$lastCheckIn = $timeline->getLastCheckInByUser($link,$id);
 			$respond['last_check_in'] = $lastCheckIn;
 			echo json_encode($respond);
+		}
+	});
+	
+	$app->get('/user/:field/:value', function($field,$value) use ($link){
+		if($field == "name")
+		{
+			$user = new User();
+			$respond = $user->getUserByName($link,$value);
+			if(is_string($respond))
+			{
+				echo $respond;
+			}
+			else
+			{
+				echo json_encode($respond);
+			}
 		}
 	});
 	
@@ -835,6 +851,7 @@ include("class/user.php");
 			$respond = $user->addPreference($link,$input['profile_id'],$r);
 			if($respond != "success") $ret = false;
 		}
+		
 		if($ret) echo '{"status":"success"}';
 		else echo '{"status":"error"}';
 		
