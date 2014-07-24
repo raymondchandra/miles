@@ -324,11 +324,11 @@
 					$rows = array();
 					while($r = mysqli_fetch_assoc($result)) {
 						
-						
-						$sql = 'SELECT last_name,first_name FROM profile WHERE id="'.$r['profile_id'].'" LIMIT 1';
+						$sql = 'SELECT last_name,first_name,photo FROM profile WHERE id="'.$r['profile_id'].'" LIMIT 1';
 						$result = mysqli_query($link,$sql);
 						$value = mysql_fetch_object($result);
 						$r['name'] = $value->first_name.' '.$value->last_name;
+						
 						$rows[] = $r;
 					}
 					return $rows;
@@ -399,16 +399,23 @@
 				$sql = 'SELECT * FROM like_review WHERE review_id='.$review_id.' AND profile_id='.$profile_id.' LIMIT 1';
 				if($result = mysqli_query($link, $sql)){
 					$num_rows = mysqli_num_rows($result);
+					$ret['count'] = $numLike;
+					$ret['status'] = "success";
 					if($num_rows == 1){
-						return '{"count":"'.$numLike.'","like":"yes"}';
+						$ret['like'] = "yes";
 					}else{
-						return '{"count":"'.$numLike.'","like":"no"}';
+						$ret['like'] = "no";
 					}
+					return $ret;
 				}else{
-					return '{"status":"error","message":"sql error"}';
+					$ret['status'] = "error";
+					$ret['message'] = "sql error";
+					return $ret;
 				}
 			}else{
-				return '{"status":"error","message":"sql error"}';
+				$ret['status'] = "error";
+				$ret['message'] = "sql error";
+				return $ret;
 			}
 		}
 		

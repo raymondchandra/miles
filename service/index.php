@@ -609,7 +609,7 @@ include("class/user.php");
 //end of check_in
 
 //review
-	$app->get('/review/:field/:value',function ($field,$value) use ($link){
+	$app->get('/review/:field/:value/:profile_id',function ($field,$value,$profile_id) use ($link){
 		$place = new Place();
 		if($field == "place")
 		{
@@ -620,6 +620,12 @@ include("class/user.php");
 			}
 			else
 			{
+				$getLikeReview = $place->getLikeByReview($link,$respond['id'],$profile_id);
+				if($respond['status'] == "success")
+				{
+					$respond['countLike'] = $getLikeReview['count'];
+					$respond['like'] = $getLikeReview['like'];
+				}
 				echo json_encode($respond);
 			}
 		}
@@ -632,6 +638,12 @@ include("class/user.php");
 			}
 			else
 			{
+				$getLikeReview = $place->getLikeByReview($link,$respond['id'],$profile_id);
+				if($respond['status'] == "success")
+				{
+					$respond['countLike'] = $getLikeReview['count'];
+					$respond['like'] = $getLikeReview['like'];
+				}
 				echo json_encode($respond);
 			}
 		}
