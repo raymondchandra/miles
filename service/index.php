@@ -94,7 +94,7 @@ include("class/user.php");
 			$timeline = new Timeline();
 			$lastCheckIn = $timeline->getLastCheckInByUser($link,$id);
 			$respond['last_check_in'] = $lastCheckIn;
-			echo json_encode($respond);
+			echo str_replace('\\/', '/', json_encode($respond));
 		}
 	});
 	
@@ -109,7 +109,7 @@ include("class/user.php");
 			}
 			else
 			{
-				echo json_encode($respond);
+				echo str_replace('\\/', '/', json_encode($respond));
 			}
 		}
 	});
@@ -291,7 +291,7 @@ include("class/user.php");
 						);
 					}
 				}
-				echo json_encode($allplace);
+				echo str_replace('\\/', '/', json_encode($allplace));
 			}
 		}
 	});
@@ -552,8 +552,7 @@ include("class/user.php");
 	}
 	
 	$app->delete('/place/:id',function($id) use ($link) {
-        //echo '{"status":"tes"}';
-		$place = new Place();
+        $place = new Place();
 		$respond = $place->getPlaceFromId($link,$id);
 		$respond['photo'] = '../file_upload/place/'.$respond['name'].'-'.$respond['location'].'/'.$respond['photo'];
 		
@@ -579,6 +578,11 @@ include("class/user.php");
 				echo $respond;
 			}
 		}
+		
+		//delete gallery
+		//delete fav_place
+		//delete review
+		//delete check in
     });
 //end of place
 
@@ -623,13 +627,12 @@ include("class/user.php");
 				$index = 0;
 				foreach($respond as $iter)
 				{
-					$getLikeReview = $place->getLikeByReview($link,$iter['id'],$profile_id);
+					$getLikeReview = $place->checkLikeReview($link,$iter['id'],$profile_id);
 					if($getLikeReview['status'] == "success")
 					{
-						$respond[$index]['countLike'] = $getLikeReview['count'];
 						$respond[$index]['like'] = $getLikeReview['like'];
 					}else{
-						$respond[$index]['taeee'] = $getLikeReview['status'];
+						$respond[$index]['status'] = $getLikeReview['status'];
 					}
 					$index++;
 				}
@@ -645,7 +648,7 @@ include("class/user.php");
 			}
 			else
 			{
-				$getLikeReview = $place->getLikeByReview($link,$respond['id'],$profile_id);
+				$getLikeReview = $place->checkLikeReview($link,$respond['id'],$profile_id);
 				if($getLikeReview ['status'] == "success")
 				{
 					$respond['countLike'] = $getLikeReview['count'];
@@ -722,9 +725,9 @@ include("class/user.php");
 //like_review
 	//$app->get('/likeReview',function () use ($link,$app){});
 	
-	$app->get('/likeReview/:review_id/:profile_id',function ($review_id,$profile_id) use ($link,$app){
+	$app->get('/likeReview/:review_id',function ($review_id) use ($link,$app){
 		$place = new Place();
-		echo $place->getLikeByReview($link,$review_id,$profile_id);
+		echo $place->getLikeByReview($link,$review_id);
 	});
 	
 	$app->post('/likeReview',function () use ($link,$app){
@@ -747,8 +750,17 @@ include("class/user.php");
 				echo $place_name;
 			else
 			{
-				$timeline = new Timeline();
-				echo $timeline->postTimeline($link,$review['profile_id'],"likereview",$place_name,$review['place_id']);
+				$respond = $place->updateLikeReview($link,$review_id);
+				if($respond)
+				{
+					$timeline = new Timeline();
+					echo $timeline->postTimeline($link,$review['profile_id'],"likereview",$place_name,$review['place_id']);
+				}
+				else
+				{
+					echo '{"status":"error","message":"update failed"}';
+				}
+				
 			}
 		}
 		else
@@ -757,7 +769,18 @@ include("class/user.php");
 	
 	$app->delete('/likeReview/:review_id/:profile_id',function ($review_id,$profile_id) use ($link,$app){
 		$place = new Place();
-		echo $place->unlikeReview($link,$review_id,$profile_id);
+		$respond = $place->unlikeReview($link,$review_id,$profile_id);
+		
+		
+		$respond = $place->updateLikeReview($link,$review_id);
+		if($respond)
+		{
+			echo '{"status":"success"}';
+		}
+		else
+		{
+			echo '{"status":"error","message":"update failed"}';
+		}
 	});
 	
 //end of like_review
@@ -772,7 +795,7 @@ include("class/user.php");
 		}
 		else
 		{
-			echo json_encode($respond);
+			echo str_replace('\\/', '/', json_encode($respond));
 		}
 	});
 	
@@ -785,7 +808,7 @@ include("class/user.php");
 		}
 		else
 		{
-			echo json_encode($respond);
+			echo str_replace('\\/', '/', json_encode($respond));
 		}
 	});
 //end of timeline
@@ -801,7 +824,7 @@ include("class/user.php");
 		}
 		else
 		{
-			echo json_encode($respond);
+			echo str_replace('\\/', '/', json_encode($respond));
 		}
 	});
 	
@@ -815,7 +838,7 @@ include("class/user.php");
 		}
 		else
 		{
-			echo json_encode($respond);
+			echo str_replace('\\/', '/', json_encode($respond));
 		}
 	});
 	
@@ -839,6 +862,20 @@ include("class/user.php");
 	$app->delete('/follow/:profile_id/:follower_id', function() use ($link){
 		$user = new User();
 		echo $user->unfollow($link,$profile_id,$follower_id);
+	});
+	
+	$app->get('/suggestFollow/:profile_id', function($profile_id) use ($link){
+		$user = new User();
+		
+		$respond = $user->getSuggestFollow($link,$profile_id);
+		if(is_string($respond))
+		{
+			echo $respond;
+		}
+		else
+		{
+			echo str_replace('\\/', '/', json_encode($respond));
+		}
 	});
 //end of follower
 
@@ -908,21 +945,43 @@ include("class/user.php");
 	});
 	
 	$app->delete('/gallery/:id', function($id) use ($link){
+		echo deleteGallery($link,$id);
+	});
+	
+	function deletePlaceGallery($link,$place_id)
+	{
+		$place = new Place();
+		
+		$respond = $place->getPhotoByPlace($link,$place_id);
+		if(is_string($respond))
+		{
+			return $respond;
+		}
+		else
+		{
+			foreach($respond as $row)
+			{
+				deleteGallery($link,$row['id']);
+			}
+			return '{"status":"success"}';
+		}
+	}
+	
+	function deleteGallery($link,$id)
+	{
 		$place = new Place();
 		
 		$respond1 = $place->getGalleryFromId($link,$id);
 		
-		
-		
 		$respond = $place->getPlaceFromId($link,$respond1['place_id']);
 		//delete foto
-			$dir = '../file_upload/place/'.$respond['name'].'-'.$respond['location'].'/'.$respond1['photo'];
+			$dir = '../file_upload/place/'.$respond['name'].'-'.$respond['location'].'/'.$respond['photo'];
 			if (file_exists($dir))
 			{
 				unlink($dir);
 			}
-		echo $place->deletePhoto($link,$id);
-	});
+		return $place->deletePhoto($link,$id);
+	}
 //end of gallery
 
 //run

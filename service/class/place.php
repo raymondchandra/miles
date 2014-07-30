@@ -165,7 +165,7 @@
 				return "success";
 			}else{
 				//error
-				return '{"status":"error","message":"place not inserted"}';
+				return '{"status":"error","message":"place category not inserted"}';
 			}
 		}
 		
@@ -238,6 +238,23 @@
 		
 		//function getPhotoByUser(){}
 		
+		function getGalleryFromId($link,$id)
+		{
+			$sql = 'SELECT * FROM gallery WHERE id ='.$id.' LIMIT 1';
+			
+			if($result = mysqli_query($link, $sql)){
+				$num_rows = mysqli_num_rows($result);
+				if($num_rows == 1){
+					$rows = mysqli_fetch_assoc($result);
+					return $rows;
+				}else{
+					return '{"status":"error","message":"photo not found"}';
+				}
+			}else{
+				return '{"status":"error","message":"sql error"}';
+			}
+		}
+		
 		function getPhotoByPlace($link,$place_id)
 		{
 			$sql = 'SELECT * FROM gallery WHERE place_id="'.$place_id.'"';
@@ -293,7 +310,7 @@
 				return "success";
 			}else{
 				//error
-				return '{"status":"error","message":"place not deleted"}';
+				return '{"status":"error","message":"review not deleted"}';
 			}
 		}
 		
@@ -308,7 +325,7 @@
 				return '{"status":"success"}';
 			}else{
 				//error
-				return '{"status":"error","message":"check in failed"}';
+				return '{"status":"error","message":"failed to edit"}';
 			}
 		}
 		
@@ -373,7 +390,7 @@
 				return '{"status":"success"}';
 			}else{
 				//error
-				return '{"status":"error","message":"place not deleted"}';
+				return '{"status":"error","message":"failed to like"}';
 			}
 		}
 		
@@ -385,38 +402,67 @@
 				return '{"status":"success"}';
 			}else{
 				//error
-				return '{"status":"error","message":"place not deleted"}';
+				return '{"status":"error","message":"failed to unlike review"}';
 			}
 		}
 		
-		function getLikeByReview($link,$review_id,$profile_id)
+		function updateLikeReview($link,$review_id)
 		{
 			$sql = 'SELECT count(profile_id) as ct FROM like_review GROUP BY review_id HAVING review_id='.review_id;
-						
+			
 			if($result = mysqli_query($link, $sql)){
-				$value = mysqli_fetch_object($result);
-				$numLike = $value->ct;
-				
-				$sql2 = 'SELECT * FROM like_review WHERE review_id='.$review_id.' AND profile_id='.$profile_id.' LIMIT 1';
-				if($result = mysqli_query($link, $sql2)){
-					$num_rows = mysqli_num_rows($result);
-					$ret['count'] = $numLike;
-					$ret['status'] = "success";
-					if($num_rows == 1){
-						$ret['like'] = "yes";
-					}else{
-						$ret['like'] = "no";
-					}
-					return $ret;
+				$num_rows = mysqli_num_rows($result);
+				if($num_rows == 0){
+					return false;
 				}else{
-					$ret['status'] = "error1 ".$sql;
-					$ret['message'] = "sql error";
-					return $ret;
+					$r = mysqli_fetch_assoc($result);
+					
+					$sql = 'UPDATE review SET num_like="'.$r['ct'].'" WHERE id='.$review_id;
+					if($result = mysqli_query($link, $sql)){
+						return true;
+					}else{
+						return false;
+					}
 				}
 			}else{
-				$ret['status'] = "error2";
+				return false;
+			}
+		}
+		
+		function checkLikeReview($link,$review_id,$profile_id)
+		{
+			$sql = 'SELECT * FROM like_review WHERE review_id='.$review_id.' AND profile_id='.$profile_id.' LIMIT 1';
+			if($result = mysqli_query($link, $sql)){
+				$num_rows = mysqli_num_rows($result);
+				$ret['status'] = "success";
+				if($num_rows == 1){
+					$ret['like'] = "yes";
+				}else{
+					$ret['like'] = "no";
+				}
+				return $ret;
+			}else{
+				$ret['status'] = "error ";
 				$ret['message'] = "sql error";
 				return $ret;
+			}
+			
+		}
+		
+		function getLikeByReview($link,$review_id)
+		{
+			$sql = 'SELECT * FROM like_review WHERE review_id='.review_id;
+						
+			if($result = mysqli_query($link, $sql)){
+				$rows = array();
+				while($r = mysqli_fetch_assoc($result))
+				{
+					$rows[] = $r;
+				}
+				return json_encode($rows);
+				
+			}else{
+				return '{"status":"error","message":"sql error"}';
 			}
 		}
 		
@@ -428,7 +474,7 @@
 				return "success";
 			}else{
 				//error
-				return '{"status":"error","message":"place not deleted"}';
+				return '{"status":"error","message":"like review not deleted"}';
 			}
 		}
 	//end of like_review

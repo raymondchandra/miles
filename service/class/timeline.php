@@ -112,6 +112,12 @@
 				$num_rows = mysqli_num_rows($result);
 				if($num_rows > 0){
 					while($r = mysqli_fetch_assoc($result)) {
+						$sql = 'SELECT last_name,first_name,photo FROM profile WHERE id="'.$r['profile_id'].'" LIMIT 1';
+						$result2 = mysqli_query($link,$sql);
+						$value = mysqli_fetch_object($result2);
+						$r['name'] = $value->first_name.' '.$value->last_name;
+						$r['photo'] = $value->photo;
+						
 						$rows[] = $r;
 					}
 					return $rows;
@@ -132,6 +138,11 @@
 				$num_rows = mysqli_num_rows($result);
 				if($num_rows > 0){
 					while($r = mysqli_fetch_assoc($result)) {
+						$sql = 'SELECT last_name,first_name,photo FROM profile WHERE id="'.$r['profile_id'].'" LIMIT 1';
+						$result2 = mysqli_query($link,$sql);
+						$value = mysqli_fetch_object($result2);
+						$r['name'] = $value->first_name.' '.$value->last_name;
+						$r['photo'] = $value->photo;
 						$rows[] = $r;
 					}
 					return $rows;

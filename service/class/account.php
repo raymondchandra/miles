@@ -56,7 +56,7 @@
 				return "success";
 			}else{
 				//error
-				return '{"status":"error","message":"place not deleted"}';
+				return '{"status":"error","message":"account not deleted"}';
 			}
 		}
 		

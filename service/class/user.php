@@ -11,7 +11,7 @@
 				return "success";
 			}else{
 				//error
-				return '{"status":"error","message":"place not deleted"}';
+				return '{"status":"error","message":"fav not deleted"}';
 			}
 		}
 		
@@ -29,7 +29,7 @@
 				return '{"status":"success"}';
 			}else{
 				//error
-				return '{"status":"error","message":"place not deleted"}';
+				return '{"status":"error","message":"failed to follow"}';
 			}
 		}
 		
@@ -41,7 +41,7 @@
 				return '{"status":"success"}';
 			}else{
 				//error
-				return '{"status":"error","message":"place not deleted"}';
+				return '{"status":"error","message":"failed to unfollow"}';
 			}
 		}
 		
@@ -97,7 +97,49 @@
 		
 		function getSuggestFollow($link,$profile_id)
 		{
+			$sql = 'SELECT
+				  me.id                               AS member_id,
+				  their_friends.profile_id              AS suggested_friend_id,
+				  COUNT(*)                            AS friends_in_common
+				FROM
+				  profile        AS me
+				INNER JOIN
+				  follower    AS my_friends
+					ON my_friends.follower_id = me.id
+				INNER JOIN
+				  follower    AS their_friends
+					ON their_friends.follower_id = my_friends.profile_id
+				LEFT JOIN
+				  follower    AS friends_with_me
+					ON  friends_with_me.follower_id     = their_friends.profile_id
+					AND friends_with_me.profile_id = me.id
+				WHERE
+				  me.id = '.$profile_id.'
+				GROUP BY
+				  me.id,
+				  their_friends.profile_id
+				ORDER BY
+				  friends_in_common';
 			
+			if($result = mysqli_query($link, $sql)){
+				$num_rows = mysqli_num_rows($result);
+				if($num_rows == 0){
+					return '{"status":"error","message":"suggest friend not found"}';
+				}else{
+					$rows = array();
+					while($r = mysqli_fetch_assoc($result)) {
+						$sql = 'SELECT last_name,first_name,photo FROM profile WHERE id="'.$r['profile_id'].'" LIMIT 1';
+						$result2 = mysqli_query($link,$sql);
+						$value = mysqli_fetch_object($result2);
+						$r['name'] = $value->first_name.' '.$value->last_name;
+						$r['photo'] = $value->photo;
+						$rows[] = $r;
+					}
+					return $rows;
+				}
+			}else{
+				return '{"status":"error","message":"sql error"}';
+			}
 		}
 		
 		function checkFollow($link,$profile_id,$following_id)
@@ -150,7 +192,7 @@
 		
 		function getPreferenceByUser($link,$profile_id)
 		{
-			$sql = 'SELECT * FROM preference WHERE place_id="'.$profile_id.'"';
+			$sql = 'SELECT * FROM preference WHERE profile_id="'.$profile_id.'"';
 			
 			if($result = mysqli_query($link, $sql)){
 				$num_rows = mysqli_num_rows($result);
