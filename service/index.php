@@ -975,7 +975,7 @@ include("class/user.php");
 		
 		$respond = $place->getPlaceFromId($link,$respond1['place_id']);
 		//delete foto
-			$dir = '../file_upload/place/'.$respond['name'].'-'.$respond['location'].'/'.$respond['photo'];
+			$dir = '../file_upload/place/'.$respond['name'].'-'.$respond['location'].'/'.$respond1['photo'];
 			if (file_exists($dir))
 			{
 				unlink($dir);
@@ -983,6 +983,83 @@ include("class/user.php");
 		return $place->deletePhoto($link,$id);
 	}
 //end of gallery
+
+//recommendation
+	$app->get('/recommendation/:type', function($type) use ($link){
+		$place = new Place();
+		if($type=='new')
+		{
+			$respond = $place->getNewPlace($link);
+			if($respond['status'] =='success')
+			{
+				
+					$getPlace = $place->getPlaceFromId($link,$respond['value']['place_id']);
+					$respond['value']['name'] = $getPlace['name'];
+					$respond['value']['photo'] = 'file_upload/place/'.$getPlace['name'].'-'.$getPlace['location'].'/'.$getPlace['photo'];
+					
+				echo json_encode($respond['value']);
+			}
+			else
+			{
+				echo json_encode($respond);
+			}
+		}
+		else
+		{
+			$respond = $place->getRecommendationByType($link,$type);
+		
+			if($respond['status'] =='success')
+			{
+				$iter = 0;
+				foreach($respond['value'] as $rows)
+				{
+					$getPlace = $place->getPlaceFromId($link,$rows['place_id']);
+					$respond['value'][$iter]['name'] = $getPlace['name'];
+					$respond['value'][$iter]['photo'] = 'file_upload/place/'.$getPlace['name'].'-'.$getPlace['location'].'/'.$getPlace['photo'];
+					$iter++;
+				}
+				
+				echo json_encode($respond['value']);
+			}
+			else
+			{
+				echo json_encode($respond);
+			}
+		}
+		
+		
+	});
+	
+	$app->post('/recommendation/:type', function($type) use ($link,$app){
+		$request = $app->request();
+		$body = $request->getBody();
+		$input = json_decode($body,true);
+		
+		$place = new Place();
+		
+		$check = true;
+		for($i = 0; $i<10;$i++)
+		{
+			if($rows == "") $place_id = NULL;
+			else $place_id = $input['value'][$i];
+			
+			$exist = $place->checkRecommendationExist($link,$place_id,$type,($i+1));
+			if(!$exist)
+			{
+				$respond = $place->addRecommendation($link,$place_id,$type,($i+1));
+				if(!$respond) $check = false;
+			}else
+			{
+				$respond = $place->editRecommendation($link,$place_id,$type,($i+1));
+				if(!$respond) $check = false;
+			}
+			
+		}
+		
+		if($check) echo '{"status":"success"}';
+		else echo '{"status":"error","message":"sql error"}';
+	});
+//end of recommendation
 
 //run
 $app->run();

@@ -479,6 +479,88 @@
 		}
 	//end of like_review
 	
-	
+	//recommendation
+		function getNewPlace($link)
+		{
+			$sql = 'SELECT * FROM place ORDER BY create_time LIMIT 10';
+						
+			if($result = mysqli_query($link, $sql)){
+				$rows = array();
+				while($r = mysqli_fetch_assoc($result))
+				{
+					$rows[] = $r;
+				}
+				$respond['status'] = 'success';
+				$respond['value'] = $rows;
+				
+			}else{
+				$respond['status'] = 'error';
+				$respond['message'] = 'sql error';
+			}
+			return $respond;
+		}
+		
+		function addRecommendation($link,$place_id,$type,$ranking)
+		{
+			$type = mysqli_escape_string($link,$type);
+			$sql = 'INSERT INTO recommendation (place_id,type,ranking) VALUES ('.$place_id.',"'.$type.'",'.$ranking.')';
+			if (mysqli_query($link, $sql)) {
+				//success
+				return true;
+			}else{
+				//error
+				return false;
+			}
+		}
+		
+		function editRecommendation($link,$place_id,$type,$ranking)
+		{
+			$type = mysqli_escape_string($link,$type);
+			$sql = 'UPDATE recommendation SET place_id='.$place_id.' WHERE type="'.$type.'" AND ranking ="'.$ranking.'"';
+			if (mysqli_query($link, $sql)) {
+				//success
+				return true;
+			}else{
+				//error
+				return false;
+			}
+		}
+		
+		function getRecommendationByType($link,$type)
+		{
+			$sql = 'SELECT * FROM recommendation WHERE type='.$type.' ORDER BY ranking';
+						
+			if($result = mysqli_query($link, $sql)){
+				$rows = array();
+				while($r = mysqli_fetch_assoc($result))
+				{
+					$rows[] = $r;
+				}
+				$respond['status'] = 'success';
+				$respond['value'] = $rows;
+				
+			}else{
+				$respond['status'] = 'error';
+				$respond['message'] = 'sql error';
+			}
+			return $respond;
+		}
+		
+		function checkRecommendationExist($link,$place_id,$type,$ranking)
+		{
+			$sql = 'SELECT * FROM recommendation WHERE place_id = "'.$place_id.'" AND type="'.$type.'" AND ranking="'.$ranking.'"';
+			
+			if($result = mysqli_query($link, $sql)){
+				$num_rows = mysqli_num_rows($result);
+				if($num_rows >= 1){
+					return true;
+				}else{
+					return false;
+				}
+			}else{
+				return false;
+			}
+		}
+	//end of recommendation
 	}
 ?>
