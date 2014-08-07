@@ -230,23 +230,7 @@ include("class/user.php");
 	$app->get('/get15newplace', function() use ($link){
 		$place = new Place();		
 		$respond = $place->getPlace($link);
-		/*if(is_string($rows['create_time'])){	//jawabannya bukan string, harusnya objek
-			echo 'ini string';
-		}else{
-			echo 'bukan string';
-		}*/
 		
-		//$currentdate = new DateTime('2014-07-07');
-		//$getcurrentdate = getdate();
-		//$getcurrentdate['mon'] = $getcurrentdate['mon'] - 1;			
-		
-		//echo $currentdate['mon'];
-		//$currentdate_datetime = new DateTime($getcurrentdate);
-		//echo $getcurrentdate;
-		//$currentdate = $getcurrentdate->format('Y-m-d');
-		//$currentdate->sub(new DateInterval('P30D'));
-		//date_sub($getcurrentdate, date_interval_create_from_date_string('30 days')); //pengurang tanggal sampe 1 bulan
-		//echo 'berhasil';
 		$currentdate = new DateTime('now');	
 		$count = 0;
 		$result = array();
@@ -260,8 +244,7 @@ include("class/user.php");
 			$interval = $currentdate->diff($daterow);
 			$intervaldays = $interval->format('%a');
 			if($intervaldays < 30 ){
-				$count++;
-				//$result[] = 'id:'.$rows['id'].',name:'.$rows['name'].',address:'.$rows['address'];		
+				$count++;				
 				$id[] = $rows['id'];
 				$name[] = $rows['name'];
 				$address[] = $rows['address'];

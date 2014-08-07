@@ -567,7 +567,7 @@
 	//newcode
 		function getAllTrendingPlace($link)
 		{	
-			$sql = 'SELECT * FROM trending ORDER BY position,position ASC';
+			$sql = 'SELECT * FROM recommendation WHERE type=2 ORDER BY ranking,ranking ASC';
 				
 			if($result = mysqli_query($link,$sql)){
 				$num_rows = mysqli_num_rows($result);
@@ -587,7 +587,7 @@
 		
 		function getAllTopPlace($link)
 		{
-			$sql = 'SELECT * FROM top ORDER BY position,position ASC';
+			$sql = 'SELECT * FROM recommendation WHERE type=1 ORDER BY ranking,ranking ASC';
 			
 			if($result = mysqli_query($link,$sql)){
 				$num_rows = mysqli_num_rows($result);
@@ -609,7 +609,7 @@
 			$newpos = mysqli_escape_string($link,$position);		
 			$newplace = mysqli_escape_string($link,$newplaceid);
 			
-			$sql = 'UPDATE trending SET place_id='.$newplace.' WHERE position='.$newpos;			
+			$sql = 'UPDATE recommendation SET place_id='.$newplace.' WHERE ranking='.$newpos;			
 			
 			if (mysqli_query($link, $sql)) {
 				//success
@@ -624,7 +624,7 @@
 			$newpos = mysqli_escape_string($link,$position);		
 			$newplace = mysqli_escape_string($link,$newplaceid);
 			
-			$sql = 'UPDATE top SET place_id='.$newplace.' WHERE position='.$newpos;
+			$sql = 'UPDATE recommendation SET place_id='.$newplace.' WHERE ranking='.$newpos;
 			
 			if (mysqli_query($link, $sql)) {
 				//success
