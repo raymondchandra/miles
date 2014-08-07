@@ -17,6 +17,8 @@ include("class/user.php");
 		echo $account->login($link,$email,$password);
 	});
 	
+	
+	
 	$app->get('/accExist/:email', function($email) use ($link){
 		$account = new Account();
 		echo $account->checkExist($link,$email);
@@ -38,6 +40,21 @@ include("class/user.php");
 	$app->delete('/account/:id',function($id) use ($link) {
         $account = new Account();
 		echo $account->deleteAccount($link,$id);
+		
+	//newcode
+	$app->put('account',function() use ($link,$app){
+		$request = $app->request();
+		$body = $request->getBody();
+		$input = json_decode($body,true);
+		
+		$inputId = $input['id'];
+		$inputActive = $input['active'];
+		
+		$account = new Account();
+		
+		echo $account->changeActive($link,$inputId,$inputActive);
+	});
+	//endnewcode
     });
 //end of account
 
@@ -94,6 +111,10 @@ include("class/user.php");
 			$timeline = new Timeline();
 			$lastCheckIn = $timeline->getLastCheckInByUser($link,$id);
 			$respond['last_check_in'] = $lastCheckIn;
+			$lastPlace = $timeline->getLastCheckInPlaceByUser($link,$id);
+			$respond['last_place'] = $lastPlace;
+			$place = new Place();
+			$respond['last_place_name'] = $place->getNameFromId($link, $lastPlace);
 			echo str_replace('\\/', '/', json_encode($respond));
 		}
 	});
@@ -129,9 +150,295 @@ include("class/user.php");
 			echo $user->updateUserPhone($link,$id,$value);
 		}
 	});
+	
+	//get all user --->> ke account dulu baru ke
+	$app->get('/user', function() use ($link){
+		$account = new Account();
+		$respond = $account->getAllAccount($link);
+		if(is_string($respond)){
+			echo $respond;
+		}
+		else
+		{		
+			//echo $respond;
+			$user = new User();	
+			
+			$result = array();
+			$arrid = array();
+			$arractive = array();
+			$arrfirstname = array();
+			$arrlastname = array();
+			$arrphoto = array();
+					
+			
+			$counter = 0;
+				$newrow = array();
+			foreach($respond as $rows)
+			{
+				$newuser = $user->getUserById($link,$rows['id']);					
+				/*	$newrow[] = '
+								"active":"'.$rows['active'].'",
+								"first_name":"'.$newuser['first_name'].'",
+								"last_name":"'.$newuser['last_name'].'",
+								"photo":"'.$newuser['photo'].'"
+								';
+								*/
+					$counter++;		
+
+					$arrid[] = $rows['id'];
+						//$id = $rows['id'];
+					$arractive[] = $rows['active'];		
+						//$active = $rows['active'];		
+					$arrfirstname[] = $newuser['first_name'];
+						//$firstname = $newuser['first_name'];
+					$arrlastname[] = $newuser['last_name'];
+						//$lastname = $newuser['last_name'];					
+					$arrphoto[] = $newuser['photo'];
+						//$photo = $newuser['photo'];
+					
+					
+					/*$result[] = '
+								"active":"'.$active.'",
+								"first_name":"'.$firstname.'",
+								"last_name":"'.$lastname.'",
+								"photo":"'.$photo.'"
+								';
+					*/
+					
+					$result[] = array(
+						"id" => $arrid,
+						"active" => $arractive,
+						"first_name" => $arrfirstname,
+						"last_name" => $arrlastname,
+						"photo" => $arrphoto
+					);
+					
+			}
+
+			//echo json_encode($result);	
+			echo json_encode($result[$counter-1]);	
+			
+			//echo json_encode($newrow[$counter-1]);			
+			//echo json_encode($newrow[$counter-1]);
+		}
+	});
 //end of user
 
 //place
+	
+	//newcode -----> cari 15 new place terhitung 1 bulan ke belakang
+	$app->get('/get15newplace', function() use ($link){
+		$place = new Place();		
+		$respond = $place->getPlace($link);
+		/*if(is_string($rows['create_time'])){	//jawabannya bukan string, harusnya objek
+			echo 'ini string';
+		}else{
+			echo 'bukan string';
+		}*/
+		
+		//$currentdate = new DateTime('2014-07-07');
+		//$getcurrentdate = getdate();
+		//$getcurrentdate['mon'] = $getcurrentdate['mon'] - 1;			
+		
+		//echo $currentdate['mon'];
+		//$currentdate_datetime = new DateTime($getcurrentdate);
+		//echo $getcurrentdate;
+		//$currentdate = $getcurrentdate->format('Y-m-d');
+		//$currentdate->sub(new DateInterval('P30D'));
+		//date_sub($getcurrentdate, date_interval_create_from_date_string('30 days')); //pengurang tanggal sampe 1 bulan
+		//echo 'berhasil';
+		$currentdate = new DateTime('now');	
+		$count = 0;
+		$result = array();
+			$id = array();
+			$name = array();
+			$address = array();
+		foreach($respond as $rows)
+		{
+			$datetimerow = $rows['create_time']; 
+			$daterow = new DateTime($datetimerow);
+			$interval = $currentdate->diff($daterow);
+			$intervaldays = $interval->format('%a');
+			if($intervaldays < 30 ){
+				$count++;
+				//$result[] = 'id:'.$rows['id'].',name:'.$rows['name'].',address:'.$rows['address'];		
+				$id[] = $rows['id'];
+				$name[] = $rows['name'];
+				$address[] = $rows['address'];
+				
+			}
+			if($count>14){
+				break;
+			}
+			//echo $intervaldays;
+			//echo 'berhasil';
+			//$rows['id']
+			//$rows['name']
+			//$rows['address']
+			//echo $date;
+		}
+		$result[] = array(
+					"id" => $id,
+					"name" => $name,
+					"address" => $address
+				);
+		echo json_encode($result);
+				
+		/*$current_date = getdate();
+		//echo $current_date['month'];
+		$datetime1 = new DateTime('2009-10-11');
+		$datetime2 = new DateTime('2009-10-17');
+		$interval = $datetime1->diff($datetime2);
+		echo $interval->format('%a');*/
+	});
+	
+	//isi kolom position table trending (1-15)	
+	$app->get('/get15trendingplace', function() use ($link){	
+		$place = new Place();
+		$respond = $place->getAllTrendingPlace($link);
+		$result = array();
+			$position = array();
+			$id = array();
+			$name = array();
+			$address = array();
+			$telp = array();
+			$website = array();
+			$email = array();
+			$rating = array();
+			$day_life = array();
+			$create_time = array();
+			$photo = array();
+			$visibility = array();
+			$city = array();
+		if($respond == 'gagal'){
+			echo 'gagal';
+		}else{		
+			foreach($respond as $rows)
+			{	
+				//id name address telp website email rating day_life create_time photo visibility city
+				if($rows['position']>=1 && $rows['position']<=15){
+					$getplace = $place->getPlaceFromId($link,$rows['place_id']); 
+						$position[] = $rows['position'];
+						$id[] = $getplace['id'];
+						$name[] = $getplace['name'];
+						$address[] = $getplace['address'];
+						$telp[] = $getplace['telp'];
+						$website[] = $getplace['website'];
+						$email[] = $getplace['email'];
+						$rating[] = $getplace['rating'];
+						$day_life[] = $getplace['day_life'];
+						$create_time[] = $getplace['create_time'];
+						$photo[] = 'file_upload/place/'.$getplace['name'].'-'.$getplace['location'].'/'.$getplace['photo'];
+						$visibility[] = $getplace['visibility'];
+						$city[] = $geplace['city'];
+				}
+			}
+			$result[] = array(
+						"position" => $position,
+						"id" => $id,
+						"name" => $name,
+						"address" => $address,
+						"telp" => $telp,
+						"website" => $website,
+						"email" => $email,
+						"rating" => $rating,
+						"day_life" => $day_life,
+						"create_time" => $create_time,
+						"photo" => $photo,
+						"visibilty" => $visibility,
+						"city" => $city
+			);
+			echo json_encode($result);
+		}
+	});
+	
+	
+	//isi kolom position table top (1-15)
+	$app->get('/get15topplace', function() use ($link){
+		$place = new Place();
+		$respond = $place->getAllTopPlace($link);
+		$result = array();
+			$position = array();
+			$id = array();
+			$name = array();
+			$address = array();
+			$telp = array();
+			$website = array();
+			$email = array();
+			$rating = array();
+			$day_life = array();
+			$create_time = array();
+			$photo = array();
+			$visibility = array();
+			$city = array();
+		if($respond == 'gagal'){
+			echo 'gagal';
+		}else{		
+			foreach($respond as $rows)
+			{
+				//id name address telp website email rating day_life create_time photo visibility city
+				if($rows['position']>=1 && $rows['position']<=15){
+					$getplace = $place->getPlaceFromId($link,$rows['place_id']); 
+					
+					$position[] = $rows['position'];
+					$id[] = $getplace['id'];
+					$name[] = $getplace['name'];
+					$address[] = $getplace['address'];
+					$telp[] = $getplace['telp'];
+					$website[] = $getplace['website'];
+					$email[] = $getplace['email'];
+					$rating[] = $getplace['rating'];
+					$day_life[] = $getplace['day_life'];
+					$create_time[] = $getplace['create_time'];
+					$photo[] = 'file_upload/place/'.$getplace['name'].'-'.$getplace['location'].'/'.$getplace['photo'];
+					$visibility[] = $getplace['visibility'];
+					$city[] = $geplace['city'];
+				}
+			}
+			$result[] = array(
+						"position" => $position,
+						"id" => $id,
+						"name" => $name,
+						"address" => $address,
+						"telp" => $telp,
+						"website" => $website,
+						"email" => $email,
+						"rating" => $rating,
+						"day_life" => $day_life,
+						"create_time" => $create_time,
+						"photo" => $photo,
+						"visibilty" => $visibility,
+						"city" => $city
+			);
+			echo json_encode($result);
+		}
+	});
+	
+	$app->put('/trendingplace',function() use ($link,$app) {    
+		$request = $app->request();
+		$body = $request->getBody();
+		$input = json_decode($body,true);
+		
+		$inputPosition = $input['position'];
+		$inputNewPlaceId = $input['newplaceid'];
+		$place = new Place();					
+		
+		echo $place->updateTrendingPlace($link,$inputPosition,$inputNewPlaceId);		
+	});
+	
+	$app->put('/topplace',function() use ($link,$app) {        
+		$request = $app->request();
+		$body = $request->getBody();
+		$input = json_decode($body,true);
+		
+		$inputPosition = $input['position'];
+		$inputNewPlaceId = $input['newplaceid'];
+		$place = new Place();	
+		
+		echo $place->updateTopPlace($link,$inputPosition,$inputNewPlaceId);
+	});
+	//endnewcode
+	
 	$app->get('/place', function() use ($link){
 		$place = new Place();
 		$respond = $place->getPlace($link);
@@ -444,7 +751,7 @@ include("class/user.php");
 
 	$app->put('/place/:id',function($id) use ($link,$app) {
 		
-        	$request = $app->request();
+        $request = $app->request();
 		$body = $request->getBody();
 		$input = json_decode($body,true);
 		
@@ -457,7 +764,7 @@ include("class/user.php");
 		$place = new Place();
 		
 		$respond = $place->getPlaceFromId($link,$id);
-		$respond['photo'] = '../file_upload/place/'.$respond['name'].'-'.$respond['location'].'/'.$respond['photo'];
+		$respond['photo'] = '../file_upload/place/'.$respond['name'].'-'.$respond['location'].'/'.$respond['photo']; 
 		
 		if(is_string($respond))
 		{
@@ -531,6 +838,7 @@ include("class/user.php");
 		}
 		
     });
+	
 	function deleteDirectory($dir) {
 	    if (!file_exists($dir)) {
 	        return true;

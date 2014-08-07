@@ -562,5 +562,78 @@
 			}
 		}
 	//end of recommendation
+	
+	
+	//newcode
+		function getAllTrendingPlace($link)
+		{	
+			$sql = 'SELECT * FROM trending ORDER BY position,position ASC';
+				
+			if($result = mysqli_query($link,$sql)){
+				$num_rows = mysqli_num_rows($result);
+				if($num_rows >=1){
+					$rows = array();
+					while($r = mysqli_fetch_assoc($result)) {									
+						$rows[] = $r;
+					}
+					return $rows;
+				}else{
+					return 'gagal';
+				}
+			}else{
+				return 'gagal';
+			}
+		}
+		
+		function getAllTopPlace($link)
+		{
+			$sql = 'SELECT * FROM top ORDER BY position,position ASC';
+			
+			if($result = mysqli_query($link,$sql)){
+				$num_rows = mysqli_num_rows($result);
+				if($num_rows >=1){
+					$rows = array();
+					while($r = mysqli_fetch_assoc($result)) {									
+						$rows[] = $r;
+					}
+					return $rows;
+				}else{
+					return 'gagal';
+				}
+			}else{
+				return 'gagal';
+			}
+		}
+		
+		function updateTrendingPlace($link,$position,$newplaceid){		
+			$newpos = mysqli_escape_string($link,$position);		
+			$newplace = mysqli_escape_string($link,$newplaceid);
+			
+			$sql = 'UPDATE trending SET place_id='.$newplace.' WHERE position='.$newpos;			
+			
+			if (mysqli_query($link, $sql)) {
+				//success
+				return '{"status":"success"}';
+			}else{
+				//error
+				return '{"status":"error","message":"trending place not updated"}';
+			}
+		}
+		
+		function updateTopPlace($link,$position,$newplaceid){	
+			$newpos = mysqli_escape_string($link,$position);		
+			$newplace = mysqli_escape_string($link,$newplaceid);
+			
+			$sql = 'UPDATE top SET place_id='.$newplace.' WHERE position='.$newpos;
+			
+			if (mysqli_query($link, $sql)) {
+				//success
+				return '{"status":"success"}';
+			}else{
+				//error
+				return '{"status":"error","message":"top place not updated"}';
+			}
+		}
+	//endnewcode
 	}
 ?>

@@ -40,6 +40,24 @@
 			}
 		}
 		
+		//newcode
+		function changeActive($link,$id,$active)
+		{
+			$changeid = mysqli_escape_string($link,$id);
+			$changeactive = mysqli_escape_string($link,$active);
+			
+			$sql = 'UPDATE account SET active='.$changeactive.' WHERE id='.$changeid;
+			
+			if(mysqli_query($link,$sql)){
+				//success
+				return '{"status":"success"}';
+			}else{
+				//error
+				return '{"status":"error","message":"active not updated"}';
+			}
+		}
+		//endnewcode
+		
 		function changePassword()
 		{
 		}
@@ -68,6 +86,29 @@
 		{
 		}
 
+		//newcode -------------------------------------------------------------------------
+		//return all account yang user
+		function getAllAccount($link)
+		{	
+			$sql = 'SELECT * FROM account WHERE role = "user"';
+			
+			if($result = mysqli_query($link, $sql)){
+				$num_rows = mysqli_num_rows($result);
+				if($num_rows == 0){
+					return '{"status":"error","message":"no account"}';
+				}else{
+					$rows = array();
+					while($r = mysqli_fetch_assoc($result)){
+						$rows[] = $r;						
+					}
+					return $rows;
+				}
+			}else{
+				return '{"status":"error","message":"sql error"}';
+			}
+		}
+		//endnewcode -------------------------------------------------------------------------
+		
 		function getAccountById()
 		{
 			$sql = 'SELECT * FROM account WHERE id ='.$id;

@@ -47,6 +47,23 @@
 			}
 		}
 		
+		function getLastCheckInPlaceByUser($link,$profile_id)
+		{
+			$sql = 'SELECT place_id FROM check_in WHERE profile_id ='.$profile_id.' ORDER BY date DESC LIMIT 1';
+			
+			if($result = mysqli_query($link, $sql)){
+				$num_rows = mysqli_num_rows($result);
+				if($num_rows == 1){
+					$rows = mysqli_fetch_assoc($result);
+					return $rows['place_id'];
+				}else{
+					return "never";
+				}
+			}else{
+				return '{"status":"error","message":"sql error"}';
+			}
+		}
+		
 		function getCheckInByPlace($link,$place_id)
 		{
 			$sql = 'SELECT * FROM check_in WHERE place_id ='.$place_id;

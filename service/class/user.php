@@ -144,7 +144,7 @@
 		
 		function checkFollow($link,$profile_id,$following_id)
 		{
-			$sql = 'SELECT * FROM follower WHERE profile_id="'.$profile_id.'" AND follower_id="'.$follower_id.'"';
+			$sql = 'SELECT * FROM follower WHERE profile_id="'.$following_id.'" AND follower_id="'.$profile_id.'"';
 			
 			if($result = mysqli_query($link, $sql)){
 				$num_rows = mysqli_num_rows($result);
@@ -294,7 +294,7 @@
 			}else{
 				return '{"status":"error","message":"sql error"}';
 			}
-		}
+		}			
 		
 		function getUserByName($link,$name)
 		{
