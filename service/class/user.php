@@ -1,24 +1,82 @@
 <?php
 	class User{
 	//fav_place
-		function insertFavPlace(){}
-		
-		function deleteFavPlace($link,$id)
+		function insertFavPlace($link,$profile_id,$place_id)
 		{
-			$sql = 'DELETE FROM fav_place WHERE id ='.$id;
+			$sql = 'INSERT INTO fav_place (profile_id,place_id) VALUES ('.$profile_id.','.$place_id.')';
 			if (mysqli_query($link, $sql)) {
 				//success
-				return "success";
+				return '{"status":"success"}';
 			}else{
 				//error
-				return '{"status":"error","message":"fav not deleted"}';
+				return '{"status":"error","message":"failed to insert favourite place"}';
 			}
 		}
 		
-		function getFavPlaceByUser(){}
+		function deleteFavPlace($link,$profile_id,$place_id)
+		{
+			$sql = 'DELETE FROM fav_place WHERE profile_id ='.$follower_id.' AND place_id='.$place_id;
+			if (mysqli_query($link, $sql)) {
+				//success
+				return '{"status":"success"}';
+			}else{
+				//error
+				return '{"status":"error","message":"failed to delete favourite place"}';
+			}
+		}
 		
-		function getFavPlaceByPlace(){}
+		function getFavPlaceByUser($link,$profile_id)
+		{
+			$sql = 'SELECT place_id FROM fav_place WHERE profile_id="'.$profile_id.'"';
+			
+			if($result = mysqli_query($link, $sql)){
+				$num_rows = mysqli_num_rows($result);
+				if($num_rows == 0){
+					return '{"status":"error","message":"fav place not found"}';
+				}else{
+					$rows = array();
+					while($r = mysqli_fetch_assoc($result)) {
+						$sql = 'SELECT name,photo,location FROM place WHERE id="'.$r['place_id'].'" LIMIT 1';
+						$result2 = mysqli_query($link,$sql);
+						$value = mysqli_fetch_object($result2);
+						$r['name'] = $value->name;
+						$r['photo'] = 'file_upload/place/'.$value->name.'-'.$value->location.'/'.$value->photo;
+						$rows[] = $r;
+					}
+					return $rows;
+				}
+			}else{
+				return '{"status":"error","message":"sql error"}';
+			}
+		}
 	//end of fav_place
+	
+	//most_visited
+		function getMostVisited($link,$profile_id)
+		{
+			$sql = 'SELECT COUNT(id) as ct,place_id FROM check_in GROUP BY place_id,profile_id HAVING profile_id = "'.$profile_id.'" ORDER BY ct DESC LIMIT 3';
+			
+			if($result = mysqli_query($link, $sql)){
+				$num_rows = mysqli_num_rows($result);
+				if($num_rows == 0){
+					return '{"status":"error","message":"fav place not found"}';
+				}else{
+					$rows = array();
+					while($r = mysqli_fetch_assoc($result)) {
+						$sql = 'SELECT name,photo,location FROM place WHERE id="'.$r['place_id'].'" LIMIT 1';
+						$result2 = mysqli_query($link,$sql);
+						$value = mysqli_fetch_object($result2);
+						$r['name'] = $value->name;
+						$r['photo'] = 'file_upload/place/'.$value->name.'-'.$value->location.'/'.$value->photo;
+						$rows[] = $r;
+					}
+					return $rows;
+				}
+			}else{
+				return '{"status":"error","message":"sql error"}';
+			}
+		}
+	//end of most visited
 	
 	//follower
 		function follow($link,$profile_id,$follower_id)

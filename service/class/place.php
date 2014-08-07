@@ -34,6 +34,7 @@
 		
 		function updatePlace($link,$id,$place){
 			$name = mysqli_escape_string($link,$place['name']);
+			$location = mysqli_escape_string($link,$place['location']);
 			$address = mysqli_escape_string($link,$place['address']);
 			$telp = mysqli_escape_string($link,$place['telp']);
 			$website = mysqli_escape_string($link,$place['website']);
@@ -42,7 +43,7 @@
 			$city = mysqli_escape_string($link,$place['city']);
 			$day_life = $place['days'];
 			
-			$sql = 'UPDATE place SET name="'.$name.'",address="'.$address.'",telp="'.$telp.'",website="'.$website.'",email="'.$email.'", day_life='.$day_life.', create_time=now(), photo="'.$photo.'",city="'.$city.'" WHERE id='.$id;
+			$sql = 'UPDATE place SET name="'.$name.'",address="'.$address.'",location="'.$location.'", telp="'.$telp.'",website="'.$website.'",email="'.$email.'", day_life='.$day_life.', create_time=now(), photo="'.$photo.'",city="'.$city.'" WHERE id='.$id;
 			if (mysqli_query($link, $sql)) {
 				//success
 				return "success";
@@ -379,6 +380,23 @@
 				return '{"status":"error","message":"sql error"}';
 			}
 		}
+		
+		function getReviewById($link,$review_id)
+		{
+			$sql = 'SELECT * FROM review WHERE id="'.$review_id.'" LIMIT 1';
+			
+			if($result = mysqli_query($link, $sql)){
+				$num_rows = mysqli_num_rows($result);
+				if($num_rows == 0){
+					return '{"status":"error","message":"review not found"}';
+				}else{
+					$r = mysqli_fetch_assoc($result);
+					return $r;
+				}
+			}else{
+				return '{"status":"error","message":"sql error"}';
+			}
+		}
 	//end of review
 	
 	//like_review
@@ -387,7 +405,7 @@
 			$sql = 'INSERT INTO like_review (review_id,profile_id) VALUES ('.$review_id.','.$profile_id.')';
 			if (mysqli_query($link, $sql)) {
 				//success
-				return '{"status":"success"}';
+				return "success";
 			}else{
 				//error
 				return '{"status":"error","message":"failed to like"}';
@@ -408,7 +426,7 @@
 		
 		function updateLikeReview($link,$review_id)
 		{
-			$sql = 'SELECT count(profile_id) as ct FROM like_review GROUP BY review_id HAVING review_id='.review_id;
+			$sql = 'SELECT count(profile_id) as ct FROM like_review GROUP BY review_id HAVING review_id='.$review_id;
 			
 			if($result = mysqli_query($link, $sql)){
 				$num_rows = mysqli_num_rows($result);

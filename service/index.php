@@ -439,16 +439,21 @@ include("class/user.php");
 				if(!is_string($category))
 				{
 					$feature = array();
-					$price = array();
+				
+					//$price = array();
 					foreach($category as $categoryRows)
 					{
 						if($categoryRows['category']=="feature")
 						{
 							$feature[] = $categoryRows['value'];
 						}
-						else if($categoryRows['category']=="price")
+						else if($categoryRows['category']=="lowPrice")
 						{
-							$price[] = $categoryRows;
+							$lowPrice = $categoryRows;
+						}
+						else if($categoryRows['category']=="highPrice")
+						{
+							$highPrice = $categoryRows;
 						}
 						else if($categoryRows['category']=="cuisine")
 						{
@@ -460,8 +465,9 @@ include("class/user.php");
 						}
 					}
 					
+					$priceSummary = $lowPrice." ".$highPrice;
 					//parse price
-					$lowPrice = explode(" ", $price[0]['value']);
+					/*$lowPrice = explode(" ", $price[0]['value']);
 					$highPrice = explode(" ", $price[count($price)-1]['value']);
 					$priceSummary = "";
 					if($lowPrice[0]=="Below")
@@ -479,9 +485,9 @@ include("class/user.php");
 					{
 						$priceSummary = $lowPrice[0]." - ".$highPrice[count($highPrice)-1];
 					}
-					
-					$allplace[] = array(
-						"place" => $rows,
+					*/
+					$getPlace = array(
+						"place" => $respond,
 						"feature" => $feature,
 						"price" => $priceSummary,
 						"cuisine" => $cuisine,
@@ -522,16 +528,21 @@ include("class/user.php");
 					if(!is_string($category))
 					{
 						$feature = array();
-						$price = array();
+				
+						//$price = array();
 						foreach($category as $categoryRows)
 						{
 							if($categoryRows['category']=="feature")
 							{
 								$feature[] = $categoryRows['value'];
 							}
-							else if($categoryRows['category']=="price")
+							else if($categoryRows['category']=="lowPrice")
 							{
-								$price[] = $categoryRows;
+								$lowPrice = $categoryRows;
+							}
+							else if($categoryRows['category']=="highPrice")
+							{
+								$highPrice = $categoryRows;
 							}
 							else if($categoryRows['category']=="cuisine")
 							{
@@ -543,8 +554,9 @@ include("class/user.php");
 							}
 						}
 						
+						$priceSummary = $lowPrice." ".$highPrice;
 						//parse price
-						$lowPrice = explode(" ", $price[0]['value']);
+						/*$lowPrice = explode(" ", $price[0]['value']);
 						$highPrice = explode(" ", $price[count($price)-1]['value']);
 						$priceSummary = "";
 						if($lowPrice[0]=="Below")
@@ -562,9 +574,9 @@ include("class/user.php");
 						{
 							$priceSummary = $lowPrice[0]." - ".$highPrice[count($highPrice)-1];
 						}
-						
-						$allplace[] = array(
-							"place" => $rows,
+						*/
+						$getPlace = array(
+							"place" => $respond,
 							"feature" => $feature,
 							"price" => $priceSummary,
 							"cuisine" => $cuisine,
@@ -603,16 +615,21 @@ include("class/user.php");
 			if(!is_string($category))
 			{
 				$feature = array();
-				$price = array();
+				
+				//$price = array();
 				foreach($category as $categoryRows)
 				{
 					if($categoryRows['category']=="feature")
 					{
 						$feature[] = $categoryRows['value'];
 					}
-					else if($categoryRows['category']=="price")
+					else if($categoryRows['category']=="lowPrice")
 					{
-						$price[] = $categoryRows;
+						$lowPrice = $categoryRows;
+					}
+					else if($categoryRows['category']=="highPrice")
+					{
+						$highPrice = $categoryRows;
 					}
 					else if($categoryRows['category']=="cuisine")
 					{
@@ -624,8 +641,9 @@ include("class/user.php");
 					}
 				}
 				
+				$priceSummary = $lowPrice." ".$highPrice;
 				//parse price
-				$lowPrice = explode(" ", $price[0]['value']);
+				/*$lowPrice = explode(" ", $price[0]['value']);
 				$highPrice = explode(" ", $price[count($price)-1]['value']);
 				$priceSummary = "";
 				if($lowPrice[0]=="Below")
@@ -643,7 +661,7 @@ include("class/user.php");
 				{
 					$priceSummary = $lowPrice[0]." - ".$highPrice[count($highPrice)-1];
 				}
-				
+				*/
 				$getPlace = array(
 					"place" => $respond,
 					"feature" => $feature,
@@ -704,6 +722,14 @@ include("class/user.php");
 			
 			$low = $inputPrice[0];
 			$high = $inputPrice[1];
+			
+			//price
+			$respond = $place->addCategory($link,$place_id,"lowPrice",$low);
+			if($respond!="success") $errorCheck = false;
+			
+			$respond = $place->addCategory($link,$place_id,"highPrice",$high);
+			if($respond!="success") $errorCheck = false;
+			/*
 			if($low < $high)
 			{
 				if($low <= 30000)
@@ -726,6 +752,7 @@ include("class/user.php");
 					if($respond!="success") $errorCheck = false;
 				}
 			}
+			*/
 			if($errorCheck) echo '{"status":"success"}';
 			else echo '{"status":"error","message":"not all category inserted"}';
 		}
@@ -793,7 +820,12 @@ include("class/user.php");
 			
 				$low = $inputPrice[0];
 				$high = $inputPrice[1];
-				if($low < $high)
+				$respond = $place->addCategory($link,$place_id,"lowPrice",$low);
+				if($respond!="success") $errorCheck = false;
+			
+				$respond = $place->addCategory($link,$place_id,"highPrice",$high);
+				if($respond!="success") $errorCheck = false;
+				/*if($low < $high)
 				{
 					if($low <= 30000)
 					{
@@ -814,7 +846,7 @@ include("class/user.php");
 						$respond = $place->addCategory($link,$id,"price","Above 500000");
 						if($respond!="success") $errorCheck = false;
 					}
-				}
+				}*/
 				if($errorCheck) echo '{"status":"success"}';
 				else echo '{"status":"error","message":"not all category updated"}';
 			}
@@ -1035,6 +1067,7 @@ include("class/user.php");
 		//timeline
 		if($respond == "success")
 		{
+			$review = $place->getReviewById($link,$review_id);
 			$place_name = $place->getNameFromId($link,$review['place_id']);
 			json_decode($place_name);
 			if(json_last_error() == JSON_ERROR_NONE)
@@ -1044,6 +1077,7 @@ include("class/user.php");
 				$respond = $place->updateLikeReview($link,$review_id);
 				if($respond)
 				{
+					
 					$timeline = new Timeline();
 					echo $timeline->postTimeline($link,$review['profile_id'],"likereview",$place_name,$review['place_id']);
 				}
@@ -1274,6 +1308,41 @@ include("class/user.php");
 		return $place->deletePhoto($link,$id);
 	}
 //end of gallery
+
+//fav_place & most visited
+	$app->post('/favplace', function() use ($link){
+		$request = $app->request();
+		$body = $request->getBody();
+		$input = json_decode($body,true);
+		
+		$user = new User();
+		echo $user->insertFavPlace($link,$input['profile_id'],$input['place_id']);
+	});
+	
+	$app->delete('/favplace/:profile_id/:place_id', function($profile_id,$place_id) use ($link){
+		$user = new User();
+		echo $user->deleteFavPlace($link,$profile_id,$place_id);
+		
+	});
+	
+	$app->get('/favplace/:profile_id', function($profile_id) use ($link){
+		$user = new User();
+		$respond = $user->getFavPlaceByUser($link,$profile_id);
+		if(is_string($respond))
+			echo $respond;
+		else
+			echo str_replace('\\/', '/', json_encode($respond));
+	});
+	
+	$app->get('/favplace/:profile_id', function($profile_id) use ($link){
+		$user = new User();
+		$respond = $user->getMostVisited($link,$profile_id);
+		if(is_string($respond))
+			echo $respond;
+		else
+			echo str_replace('\\/', '/', json_encode($respond));
+	});
+//end of fav_place & most visited
 
 //recommendation
 	$app->get('/recommendation/:type', function($type) use ($link){
