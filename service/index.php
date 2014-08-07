@@ -11,6 +11,7 @@ include("class/place.php");
 include("class/timeline.php");
 include("class/user.php");
 
+//tes
 //account
 	$app->get('/accLogin/:email/:password', function($email,$password) use ($link){
 		$account = new Account();
@@ -226,53 +227,151 @@ include("class/user.php");
 
 //place
 	
-	//newcode -----> cari 15 new place terhitung 1 bulan ke belakang
-	$app->get('/get15newplace', function() use ($link){
+	//newcode 
+	//get 15 new place dari tabel place berdasarkan create_time
+	$app->get('/get15newplacetorecommendation', function() use ($link){				
 		$place = new Place();		
-		$respond = $place->getPlace($link);
+		//$respond = $place->getPlace($link);
+			$newrespond = $place->getNewPlace($link);
+			$respond = $newrespond['value'];
 		
-		$currentdate = new DateTime('now');	
-		$count = 0;
+		//$currentdate = new DateTime('now');	
+		//$count = 0;
 		$result = array();
 			$id = array();
 			$name = array();
 			$address = array();
+			$telp = array();			
+			$photo = array();
+			$feature = array();
+				$type = "new";
+				$ranking = 0;
 		foreach($respond as $rows)
 		{
-			$datetimerow = $rows['create_time']; 
-			$daterow = new DateTime($datetimerow);
-			$interval = $currentdate->diff($daterow);
-			$intervaldays = $interval->format('%a');
-			if($intervaldays < 30 ){
-				$count++;				
+			//$datetimerow = $rows['create_time']; 
+			//$daterow = new DateTime($datetimerow);
+			//$interval = $currentdate->diff($daterow);
+			//$intervaldays = $interval->format('%a');
+			//if($intervaldays < 30 ){
+				//$count++;				
 				$id[] = $rows['id'];
 				$name[] = $rows['name'];
 				$address[] = $rows['address'];
+				$telp[] = $rows['telp'];				
+				$photo[] = 'file_upload/place/'.$rows['name'].'-'.$rows['location'].'/'.$rows['photo'];				
 				
-			}
-			if($count>14){
-				break;
-			}
-			//echo $intervaldays;
-			//echo 'berhasil';
-			//$rows['id']
-			//$rows['name']
-			//$rows['address']
-			//echo $date;
+				$category = $place->getCategoryByPlace($link,$rows['id']);
+				if(!is_string($category))
+				{		
+					$tempfeature = array();			
+					foreach($category as $categoryRows)
+					{
+						if($categoryRows['value']==null){
+							break;
+						}
+						if($categoryRows['category']=="feature")
+						{							
+							$tempfeature[] = $categoryRows['value'];						
+						}																		
+					}
+					if($tempfeature==null){
+						$tempfeature[] = "";						
+					}
+				}else{
+					$tempfeature = array();
+					$tempfeature[] = "";
+				}
+				$feature[] = $tempfeature;
+				
+				//add 15 new place table place ke table recommendation
+				$ranking++;
+				$place->addRecommendation($link,$rows['id'],$type,$ranking);
+			//}
+			//if($count>14){
+			//	break;
+			//}
+			
 		}
 		$result[] = array(
 					"id" => $id,
 					"name" => $name,
-					"address" => $address
+					"address" => $address,
+					"telp" => $telp,					
+					"photo" => $photo,
+					"feature" => $feature
 				);
-		echo json_encode($result);
+		echo str_replace('\\/', '/', json_encode($result));						
+	});
+	
+	//HARUS RUBAH BIAR NGAMBIL DARI RECOMMENDATION
+	//cari 15 new place terhitung 1 bulan ke belakang
+	$app->get('/get15newplace', function() use ($link){				
+		$place = new Place();		
+		//$respond = $place->getPlace($link);
+			$newrespond = $place->getNewPlace($link);
+			$respond = $newrespond['value'];
+		
+		//$currentdate = new DateTime('now');	
+		//$count = 0;
+		$result = array();
+			$id = array();
+			$name = array();
+			$address = array();
+			$telp = array();			
+			$photo = array();
+			$feature = array();
 				
-		/*$current_date = getdate();
-		//echo $current_date['month'];
-		$datetime1 = new DateTime('2009-10-11');
-		$datetime2 = new DateTime('2009-10-17');
-		$interval = $datetime1->diff($datetime2);
-		echo $interval->format('%a');*/
+		foreach($respond as $rows)
+		{
+			//$datetimerow = $rows['create_time']; 
+			//$daterow = new DateTime($datetimerow);
+			//$interval = $currentdate->diff($daterow);
+			//$intervaldays = $interval->format('%a');
+			//if($intervaldays < 30 ){
+				//$count++;				
+				$id[] = $rows['id'];
+				$name[] = $rows['name'];
+				$address[] = $rows['address'];
+				$telp[] = $rows['telp'];				
+				$photo[] = 'file_upload/place/'.$rows['name'].'-'.$rows['location'].'/'.$rows['photo'];				
+				
+				$category = $place->getCategoryByPlace($link,$rows['id']);
+				if(!is_string($category))
+				{		
+					$tempfeature = array();			
+					foreach($category as $categoryRows)
+					{
+						if($categoryRows['value']==null){
+							break;
+						}
+						if($categoryRows['category']=="feature")
+						{							
+							$tempfeature[] = $categoryRows['value'];						
+						}																		
+					}
+					if($tempfeature==null){
+						$tempfeature[] = "";						
+					}
+				}else{
+					$tempfeature = array();
+					$tempfeature[] = "";
+				}
+				$feature[] = $tempfeature;
+			//}
+			//if($count>14){
+			//	break;
+			//}
+			
+		}
+		$result[] = array(
+					"id" => $id,
+					"name" => $name,
+					"address" => $address,
+					"telp" => $telp,					
+					"photo" => $photo,
+					"feature" => $feature
+				);
+		echo str_replace('\\/', '/', json_encode($result));						
 	});
 	
 	//isi kolom position table trending (1-15)	
@@ -294,14 +393,14 @@ include("class/user.php");
 			$visibility = array();
 			$city = array();
 		if($respond == 'gagal'){
-			echo 'gagal';
+			echo '{"status":"error","message":"trending place not got"}';
 		}else{		
 			foreach($respond as $rows)
 			{	
 				//id name address telp website email rating day_life create_time photo visibility city
-				if($rows['position']>=1 && $rows['position']<=15){
+				if($rows['ranking']>=1 && $rows['ranking']<=15){
 					$getplace = $place->getPlaceFromId($link,$rows['place_id']); 
-						$position[] = $rows['position'];
+						$position[] = $rows['ranking'];
 						$id[] = $getplace['id'];
 						$name[] = $getplace['name'];
 						$address[] = $getplace['address'];
@@ -355,15 +454,15 @@ include("class/user.php");
 			$visibility = array();
 			$city = array();
 		if($respond == 'gagal'){
-			echo 'gagal';
+			echo '{"status":"error","message":"top place not got"}';
 		}else{		
 			foreach($respond as $rows)
 			{
 				//id name address telp website email rating day_life create_time photo visibility city
-				if($rows['position']>=1 && $rows['position']<=15){
+				if($rows['ranking']>=1 && $rows['ranking']<=15){
 					$getplace = $place->getPlaceFromId($link,$rows['place_id']); 
 					
-					$position[] = $rows['position'];
+					$position[] = $rows['ranking'];
 					$id[] = $getplace['id'];
 					$name[] = $getplace['name'];
 					$address[] = $getplace['address'];
@@ -375,7 +474,7 @@ include("class/user.php");
 					$create_time[] = $getplace['create_time'];
 					$photo[] = 'file_upload/place/'.$getplace['name'].'-'.$getplace['location'].'/'.$getplace['photo'];
 					$visibility[] = $getplace['visibility'];
-					$city[] = $geplace['city'];
+					$city[] = $getplace['city'];
 				}
 			}
 			$result[] = array(
