@@ -11,6 +11,7 @@ include("class/place.php");
 include("class/timeline.php");
 include("class/user.php");
 
+//tes
 //account
 	$app->get('/accLogin/:email/:password', function($email,$password) use ($link){
 		$account = new Account();
@@ -237,6 +238,15 @@ include("class/user.php");
 			$id = array();
 			$name = array();
 			$address = array();
+			$telp = array();
+			$website = array();
+			$email = array();
+			$rating = array();
+			$day_life = array();
+			$create_time = array();
+			$photo = array();
+			$visibility = array();
+			$city = array();
 		foreach($respond as $rows)
 		{
 			$datetimerow = $rows['create_time']; 
@@ -248,7 +258,15 @@ include("class/user.php");
 				$id[] = $rows['id'];
 				$name[] = $rows['name'];
 				$address[] = $rows['address'];
-				
+				$telp[] = $rows['telp'];
+				$website[] = $rows['website'];
+				$email[] = $rows['email'];
+				$rating[] = $rows['rating'];
+				$day_life[] = $rows['day_life'];
+				$create_time[] = $rows['create_time'];
+				$photo[] = $rows['photo'];
+				$visibility[] = $rows['visibility'];
+				$city[] = $rows['city'];
 			}
 			if($count>14){
 				break;
@@ -263,16 +281,18 @@ include("class/user.php");
 		$result[] = array(
 					"id" => $id,
 					"name" => $name,
-					"address" => $address
+					"address" => $address,
+					"telp" => $telp,
+					"website" => $website,
+					"email" => $email,
+					"rating" => $rating,
+					"day_life" => $day_life,
+					"create_time" => $create_time,
+					"photo" => $photo,
+					"visibilty" => $visibility,
+					"city" => $city
 				);
-		echo json_encode($result);
-				
-		/*$current_date = getdate();
-		//echo $current_date['month'];
-		$datetime1 = new DateTime('2009-10-11');
-		$datetime2 = new DateTime('2009-10-17');
-		$interval = $datetime1->diff($datetime2);
-		echo $interval->format('%a');*/
+		echo json_encode($result);						
 	});
 	
 	//isi kolom position table trending (1-15)	
@@ -299,9 +319,9 @@ include("class/user.php");
 			foreach($respond as $rows)
 			{	
 				//id name address telp website email rating day_life create_time photo visibility city
-				if($rows['position']>=1 && $rows['position']<=15){
+				if($rows['ranking']>=1 && $rows['ranking']<=15){
 					$getplace = $place->getPlaceFromId($link,$rows['place_id']); 
-						$position[] = $rows['position'];
+						$position[] = $rows['ranking'];
 						$id[] = $getplace['id'];
 						$name[] = $getplace['name'];
 						$address[] = $getplace['address'];
@@ -360,10 +380,10 @@ include("class/user.php");
 			foreach($respond as $rows)
 			{
 				//id name address telp website email rating day_life create_time photo visibility city
-				if($rows['position']>=1 && $rows['position']<=15){
+				if($rows['ranking']>=1 && $rows['ranking']<=15){
 					$getplace = $place->getPlaceFromId($link,$rows['place_id']); 
 					
-					$position[] = $rows['position'];
+					$position[] = $rows['ranking'];
 					$id[] = $getplace['id'];
 					$name[] = $getplace['name'];
 					$address[] = $getplace['address'];

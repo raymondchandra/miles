@@ -482,8 +482,9 @@
 	//recommendation
 		function getNewPlace($link)
 		{
-			$sql = 'SELECT * FROM place ORDER BY create_time LIMIT 10';
-						
+			//$sql = 'SELECT * FROM place ORDER BY create_time LIMIT 10'; //sql direvisi
+			$sql = 'SELECT * FROM place ORDER BY create_time DESC LIMIT 15';			
+				
 			if($result = mysqli_query($link, $sql)){
 				$rows = array();
 				while($r = mysqli_fetch_assoc($result))
@@ -567,6 +568,7 @@
 	//newcode
 		function getAllTrendingPlace($link)
 		{	
+			//table recommendation : type 2 -> trending
 			$sql = 'SELECT * FROM recommendation WHERE type=2 ORDER BY ranking,ranking ASC';
 				
 			if($result = mysqli_query($link,$sql)){
@@ -587,6 +589,7 @@
 		
 		function getAllTopPlace($link)
 		{
+			//table recommendation : type 1 -> top
 			$sql = 'SELECT * FROM recommendation WHERE type=1 ORDER BY ranking,ranking ASC';
 			
 			if($result = mysqli_query($link,$sql)){
