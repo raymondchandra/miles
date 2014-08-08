@@ -227,8 +227,9 @@ include("class/user.php");
 
 //place
 	
-	//newcode 
+	//newcode
 	//get 15 new place dari tabel place berdasarkan create_time
+	//lalu skalian ngisi ke tabel recommendation
 	$app->get('/get15newplacetorecommendation', function() use ($link){				
 		$place = new Place();		
 		//$respond = $place->getPlace($link);
@@ -302,6 +303,70 @@ include("class/user.php");
 				);
 		echo str_replace('\\/', '/', json_encode($result));						
 	});
+	
+		//cobacode
+		$app->get('/dumpget15newplace', function() use ($link){		
+			$place = new Place();
+			$type = "new";
+			$newrespond = $place->getRecommendationByType($link,$type);
+			echo $newrespond['status'];
+			echo $newrespond['value']['id'];
+			
+			if(is_string($newrespond)){
+				echo $newrespond;
+			}else{
+				$respond = $newrespond['value'];			
+					$result = array();
+					$id = array();
+					$name = array();
+					$address = array();
+					$telp = array();			
+					$photo = array();
+					$feature = array();				
+				/*foreach($respond as $rows)
+				{			
+					$inputplace = $place->getPlaceFromId($link,$rows['place_id']);				
+					$id[] = $inputplace['id'];
+					$name[] = $inputplace['name'];
+					$address[] = $inputplace['address'];
+					$telp[] = $inputplace['telp'];				
+					$photo[] = 'file_upload/place/'.$inputplace['name'].'-'.$inputplace['location'].'/'.$inputplace['photo'];				
+					
+					$category = $place->getCategoryByPlace($link,$inputplace['id']);
+					if(!is_string($category))
+					{		
+						$tempfeature = array();			
+						foreach($category as $categoryRows)
+						{
+							if($categoryRows['value']==null){
+								break;
+							}
+							if($categoryRows['category']=="feature")
+							{							
+								$tempfeature[] = $categoryRows['value'];						
+							}																		
+						}
+						if($tempfeature==null){
+							$tempfeature[] = "";						
+						}
+					}else{
+						$tempfeature = array();
+						$tempfeature[] = "";
+					}
+					$feature[] = $tempfeature;						
+				}*/
+				$result[] = array(
+						"id" => $id,
+						"name" => $name,
+						"address" => $address,
+						"telp" => $telp,					
+						"photo" => $photo,
+						"feature" => $feature
+					);
+				echo str_replace('\\/', '/', json_encode($result));
+			}				
+		});
+		//endcobacode
 	
 	//HARUS RUBAH BIAR NGAMBIL DARI RECOMMENDATION
 	//cari 15 new place terhitung 1 bulan ke belakang

@@ -548,6 +548,9 @@
 		function getRecommendationByType($link,$type)
 		{
 			$sql = 'SELECT * FROM recommendation WHERE type='.$type.' ORDER BY ranking';
+				
+			//newcode					
+			//$respond = array();			
 						
 			if($result = mysqli_query($link, $sql)){
 				$rows = array();
@@ -580,6 +583,13 @@
 				return false;
 			}
 		}
+		
+		//newcode
+		//function checkRecommendationExistByPlaceId($link,$place_id,$type)
+		//{
+		//	$sql = 
+		//}
+		//endnewcode
 	//end of recommendation
 	
 	
