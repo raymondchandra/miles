@@ -42,7 +42,7 @@ include("class/user.php");
 	});
 	
 	//newcode
-	$app->put('account',function() use ($link,$app){
+	$app->put('/account',function() use ($link,$app){
 		$request = $app->request();
 		$body = $request->getBody();
 		$input = json_decode($body,true);
@@ -318,6 +318,7 @@ include("class/user.php");
 		}else{
 			$respond = $newrespond['value'];			
 				$result = array();
+				$position = array();
 				$id = array();
 				$name = array();
 				$address = array();
@@ -327,6 +328,7 @@ include("class/user.php");
 			foreach($respond as $rows)
 			{			
 				$inputplace = $place->getPlaceFromId($link,$rows['place_id']);				
+				$position[] = $rows['ranking'];
 				$id[] = $inputplace['id'];
 				$name[] = $inputplace['name'];
 				$address[] = $inputplace['address'];
@@ -357,6 +359,7 @@ include("class/user.php");
 				$feature[] = $tempfeature;						
 			}
 			$result[] = array(
+					"position" => $position,
 					"id" => $id,
 					"name" => $name,
 					"address" => $address,
@@ -370,8 +373,9 @@ include("class/user.php");
 				
 	//isi kolom position table trending (1-15)	
 	$app->get('/get15trendingplace', function() use ($link){	
-		$place = new Place();
-		$respond = $place->getAllTrendingPlace($link);
+		$place = new Place();		
+		$type = "trending";
+		$newrespond = $place->getRecommendationByType($link,$type);	
 		$result = array();
 			$position = array();
 			$id = array();
@@ -385,10 +389,11 @@ include("class/user.php");
 			$create_time = array();
 			$photo = array();
 			$visibility = array();
-			$city = array();
-		if($respond == 'gagal'){
-			echo '{"status":"error","message":"trending place not got"}';
+			$city = array();		
+		if(is_string($newrespond)){			
+			echo $newrespond;
 		}else{		
+			$respond = $newrespond['value'];
 			foreach($respond as $rows)
 			{	
 				//id name address telp website email rating day_life create_time photo visibility city
@@ -406,7 +411,7 @@ include("class/user.php");
 						$create_time[] = $getplace['create_time'];
 						$photo[] = 'file_upload/place/'.$getplace['name'].'-'.$getplace['location'].'/'.$getplace['photo'];
 						$visibility[] = $getplace['visibility'];
-						$city[] = $geplace['city'];
+						$city[] = $getplace['city'];
 				}
 			}
 			$result[] = array(
@@ -424,7 +429,7 @@ include("class/user.php");
 						"visibilty" => $visibility,
 						"city" => $city
 			);
-			echo json_encode($result);
+			echo str_replace('\\/', '/', json_encode($result));			
 		}
 	});
 	
@@ -432,7 +437,9 @@ include("class/user.php");
 	//isi kolom position table top (1-15)
 	$app->get('/get15topplace', function() use ($link){
 		$place = new Place();
-		$respond = $place->getAllTopPlace($link);
+		$type = "top";
+		$newrespond = $place->getRecommendationByType($link,$type);		
+				
 		$result = array();
 			$position = array();
 			$id = array();
@@ -447,9 +454,10 @@ include("class/user.php");
 			$photo = array();
 			$visibility = array();
 			$city = array();
-		if($respond == 'gagal'){
-			echo '{"status":"error","message":"top place not got"}';
-		}else{		
+		if(is_string($newrespond)){
+			echo $newrespond;
+		}else{	
+			$respond = $newrespond['value'];
 			foreach($respond as $rows)
 			{
 				//id name address telp website email rating day_life create_time photo visibility city
@@ -486,10 +494,36 @@ include("class/user.php");
 						"visibilty" => $visibility,
 						"city" => $city
 			);
-			echo json_encode($result);
+			echo str_replace('\\/', '/', json_encode($result));			
 		}
 	});
 	
+	//update new place
+	$app->put('/newplace', function() use ($link,$app){
+		$request = $app->request();
+		$body = $request->getBody();
+		$input = json_decode($body,true);
+		
+		$inputPosition = $input['position'];
+		$inputNewPlaceId = $input['newplaceid'];
+		$type = "new";
+		
+		$place = new Place();	
+		
+		//cek apakah ada place_id yang baru ini ada di posisi yang lain
+		$checkplace = $place->checkRecommendationExistByTypeAndPlaceId($link,$type,$inputNewPlaceId);
+		if($checkplace){ 
+			//ambil 
+			$temp = $place->getRecommendationByTypeAndPlaceId($link,$type,$inputNewPlaceId);
+			//hapus record place_id 
+			$place->editRecommendation($link,"-1",$type,$temp['value']['ranking']);			
+		}
+		
+		//isi new place_id pada posisi
+		echo $place->editRecommendation($link,$inputNewPlaceId,$type,$inputPosition);			
+	});
+	
+	//update trending place
 	$app->put('/trendingplace',function() use ($link,$app) {    
 		$request = $app->request();
 		$body = $request->getBody();
@@ -497,11 +531,24 @@ include("class/user.php");
 		
 		$inputPosition = $input['position'];
 		$inputNewPlaceId = $input['newplaceid'];
-		$place = new Place();					
+		$type = "trending";
 		
-		echo $place->updateTrendingPlace($link,$inputPosition,$inputNewPlaceId);		
+		$place = new Place();	
+		
+		//cek apakah ada place_id yang baru ini ada di posisi yang lain
+		$checkplace = $place->checkRecommendationExistByTypeAndPlaceId($link,$type,$inputNewPlaceId);
+		if($checkplace){ 
+			//ambil 
+			$temp = $place->getRecommendationByTypeAndPlaceId($link,$type,$inputNewPlaceId);
+			//hapus record place_id 
+			$place->editRecommendation($link,"-1",$type,$temp['value']['ranking']);			
+		}
+		
+		//isi new place_id pada posisi
+		echo $place->editRecommendation($link,$inputNewPlaceId,$type,$inputPosition);			
 	});
 	
+	//update top place
 	$app->put('/topplace',function() use ($link,$app) {        
 		$request = $app->request();
 		$body = $request->getBody();
@@ -509,9 +556,21 @@ include("class/user.php");
 		
 		$inputPosition = $input['position'];
 		$inputNewPlaceId = $input['newplaceid'];
+		$type = "top";
+		
 		$place = new Place();	
 		
-		echo $place->updateTopPlace($link,$inputPosition,$inputNewPlaceId);
+		//cek apakah ada place_id yang baru ini ada di posisi yang lain
+		$checkplace = $place->checkRecommendationExistByTypeAndPlaceId($link,$type,$inputNewPlaceId);
+		if($checkplace){ 
+			//ambil 
+			$temp = $place->getRecommendationByTypeAndPlaceId($link,$type,$inputNewPlaceId);
+			//hapus record place_id 
+			$place->editRecommendation($link,"-1",$type,$temp['value']['ranking']);			
+		}
+		
+		//isi new place_id pada posisi
+		echo $place->editRecommendation($link,$inputNewPlaceId,$type,$inputPosition);			
 	});
 	//endnewcode
 	

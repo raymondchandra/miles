@@ -655,57 +655,46 @@
 		}
 		
 		//newcode
-		//function checkRecommendationExistByPlaceId($link,$place_id,$type)
-		//{
-		//	$sql = 
-		//}
+		function checkRecommendationExistByTypeAndPlaceId($link,$type,$place_id)
+		{
+			$sql = 'SELECT * FROM recommendation WHERE place_id='.$place_id.' AND type="'.$type.'" ';
+			
+			if($result = mysqli_query($link, $sql)){
+				$num_rows = mysqli_num_rows($result);
+				if($num_rows == 1){
+					return true;
+				}else{
+					return false;
+				}
+			}else{
+				return false;
+			}
+		}
+		
+		function getRecommendationByTypeAndPlaceId($link,$type,$place_id)
+		{			
+			$sql = 'SELECT * FROM recommendation WHERE type="'.$type.'" AND place_id='.$place_id;							
+						
+			if($result = mysqli_query($link, $sql)){	
+				$num_rows = mysqli_num_rows($result);
+				if($num_rows == 1){					
+					$rows = mysqli_fetch_assoc($result);					
+										
+					$respond['status'] = 'success';
+					$respond['value'] = $rows;
+				}
+			}else{
+				$respond['status'] = 'error';
+				$respond['message'] = 'sql error';
+			}
+			return $respond;
+		}
 		//endnewcode
 	//end of recommendation
 	
 	
-	//newcode
-		function getAllTrendingPlace($link)
-		{	
-			//table recommendation : type 2 -> trending
-			$sql = 'SELECT * FROM recommendation WHERE type=2 ORDER BY ranking,ranking ASC';
-				
-			if($result = mysqli_query($link,$sql)){
-				$num_rows = mysqli_num_rows($result);
-				if($num_rows >=1){
-					$rows = array();
-					while($r = mysqli_fetch_assoc($result)) {									
-						$rows[] = $r;
-					}
-					return $rows;
-				}else{
-					return 'gagal';
-				}
-			}else{
-				return 'gagal';
-			}
-		}
-		
-		function getAllTopPlace($link)
-		{
-			//table recommendation : type 1 -> top
-			$sql = 'SELECT * FROM recommendation WHERE type=1 ORDER BY ranking,ranking ASC';
-			
-			if($result = mysqli_query($link,$sql)){
-				$num_rows = mysqli_num_rows($result);
-				if($num_rows >=1){
-					$rows = array();
-					while($r = mysqli_fetch_assoc($result)) {									
-						$rows[] = $r;
-					}
-					return $rows;
-				}else{
-					return 'gagal';
-				}
-			}else{
-				return 'gagal';
-			}
-		}
-		
+	//newcode		
+		/*	
 		function updateTrendingPlace($link,$position,$newplaceid){		
 			$newpos = mysqli_escape_string($link,$position);		
 			$newplace = mysqli_escape_string($link,$newplaceid);
@@ -735,6 +724,7 @@
 				return '{"status":"error","message":"top place not updated"}';
 			}
 		}
+		*/
 	//endnewcode
 	}
 ?>
