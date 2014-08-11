@@ -547,16 +547,14 @@
 		
 		function getRecommendationByType($link,$type)
 		{
-			$sql = 'SELECT * FROM recommendation WHERE type='.$type.' ORDER BY ranking';
-				
-			//newcode					
-			//$respond = array();			
+			$type = mysqli_escape_string($link,$type);
+			$sql = 'SELECT * FROM recommendation WHERE type='.$type.' ORDER BY ranking';							
 						
 			if($result = mysqli_query($link, $sql)){
 				$rows = array();
 				while($r = mysqli_fetch_assoc($result))
 				{
-					$rows[] = $r;
+					$rows[] = $r;						
 				}
 				$respond['status'] = 'success';
 				$respond['value'] = $rows;

@@ -16,9 +16,7 @@ include("class/user.php");
 	$app->get('/accLogin/:email/:password', function($email,$password) use ($link){
 		$account = new Account();
 		echo $account->login($link,$email,$password);
-	});
-	
-	
+	});		
 	
 	$app->get('/accExist/:email', function($email) use ($link){
 		$account = new Account();
@@ -41,7 +39,8 @@ include("class/user.php");
 	$app->delete('/account/:id',function($id) use ($link) {
         $account = new Account();
 		echo $account->deleteAccount($link,$id);
-		
+	});
+	
 	//newcode
 	$app->put('account',function() use ($link,$app){
 		$request = $app->request();
@@ -56,7 +55,7 @@ include("class/user.php");
 		echo $account->changeActive($link,$inputId,$inputActive);
 	});
 	//endnewcode
-    });
+    
 //end of account
 
 //user
@@ -152,6 +151,7 @@ include("class/user.php");
 		}
 	});
 	
+	//newcode
 	//get all user --->> ke account dulu baru ke
 	$app->get('/user', function() use ($link){
 		$account = new Account();
@@ -223,6 +223,8 @@ include("class/user.php");
 			//echo json_encode($newrow[$counter-1]);
 		}
 	});
+	//endnewcode
+	
 //end of user
 
 //place
@@ -308,12 +310,12 @@ include("class/user.php");
 		$app->get('/dumpget15newplace', function() use ($link){		
 			$place = new Place();
 			$type = "new";
-			$newrespond = $place->getRecommendationByType($link,$type);
+			$newrespond = $place->getRecommendationByType($link,$type);		
 			echo $newrespond['status'];
 			echo $newrespond['value']['id'];
 			
-			if(is_string($newrespond)){
-				echo $newrespond;
+			if(is_string($newrespond)){ //if ($newrespond['status']=='error'){
+				echo $newrespond;		//echo $newrespond;
 			}else{
 				$respond = $newrespond['value'];			
 					$result = array();
@@ -323,7 +325,7 @@ include("class/user.php");
 					$telp = array();			
 					$photo = array();
 					$feature = array();				
-				/*foreach($respond as $rows)
+				foreach($respond as $rows)
 				{			
 					$inputplace = $place->getPlaceFromId($link,$rows['place_id']);				
 					$id[] = $inputplace['id'];
@@ -354,7 +356,7 @@ include("class/user.php");
 						$tempfeature[] = "";
 					}
 					$feature[] = $tempfeature;						
-				}*/
+				}
 				$result[] = array(
 						"id" => $id,
 						"name" => $name,
@@ -595,8 +597,9 @@ include("class/user.php");
 		}
 		else
 		{
-		
+			
 			$allplace = array();
+					
 			foreach($respond as $rows)
 			{
 				$category = $place->getCategoryByPlace($link,$rows['id']);
@@ -604,7 +607,6 @@ include("class/user.php");
 				{
 					$feature = array();
 				
-					//$price = array();
 					foreach($category as $categoryRows)
 					{
 						if($categoryRows['category']=="feature")
@@ -630,28 +632,9 @@ include("class/user.php");
 					}
 					
 					$priceSummary = $lowPrice." ".$highPrice;
-					//parse price
-					/*$lowPrice = explode(" ", $price[0]['value']);
-					$highPrice = explode(" ", $price[count($price)-1]['value']);
-					$priceSummary = "";
-					if($lowPrice[0]=="Below")
-					{
-						if($highPrice[0]=="Above")
-							$priceSummary = "Any Price";
-						else
-							$priceSummary = "Below ".$highPrice[count($highPrice)-1];
-					}
-					else if($highPrice[0]=="Above")
-					{
-						$priceSummary = "Above ".$lowPrice[0];
-					}
-					else
-					{
-						$priceSummary = $lowPrice[0]." - ".$highPrice[count($highPrice)-1];
-					}
-					*/
-					$getPlace = array(
-						"place" => $respond,
+					
+					$allplace[] = array(
+						"place" => $rows,
 						"feature" => $feature,
 						"price" => $priceSummary,
 						"cuisine" => $cuisine,
@@ -668,7 +651,7 @@ include("class/user.php");
 					);
 				}
 			}
-			echo json_encode($allplace);
+			echo str_replace('\\/', '/', json_encode($allplace));
 		}
 		
 	});
@@ -739,8 +722,8 @@ include("class/user.php");
 							$priceSummary = $lowPrice[0]." - ".$highPrice[count($highPrice)-1];
 						}
 						*/
-						$getPlace = array(
-							"place" => $respond,
+						$allplace[] = array(
+							"place" => $rows,
 							"feature" => $feature,
 							"price" => $priceSummary,
 							"cuisine" => $cuisine,
@@ -1498,7 +1481,7 @@ include("class/user.php");
 			echo str_replace('\\/', '/', json_encode($respond));
 	});
 	
-	$app->get('/favplace/:profile_id', function($profile_id) use ($link){
+	$app->get('/visited/:profile_id', function($profile_id) use ($link){
 		$user = new User();
 		$respond = $user->getMostVisited($link,$profile_id);
 		if(is_string($respond))
