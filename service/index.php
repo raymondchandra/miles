@@ -305,104 +305,35 @@ include("class/user.php");
 				);
 		echo str_replace('\\/', '/', json_encode($result));						
 	});
-	
-		//cobacode
-		$app->get('/dumpget15newplace', function() use ($link){		
-			$place = new Place();
-			$type = "new";
-			$newrespond = $place->getRecommendationByType($link,$type);		
-			echo $newrespond['status'];
-			echo $newrespond['value']['id'];
-			
-			if(is_string($newrespond)){ //if ($newrespond['status']=='error'){
-				echo $newrespond;		//echo $newrespond;
-			}else{
-				$respond = $newrespond['value'];			
-					$result = array();
-					$id = array();
-					$name = array();
-					$address = array();
-					$telp = array();			
-					$photo = array();
-					$feature = array();				
-				foreach($respond as $rows)
-				{			
-					$inputplace = $place->getPlaceFromId($link,$rows['place_id']);				
-					$id[] = $inputplace['id'];
-					$name[] = $inputplace['name'];
-					$address[] = $inputplace['address'];
-					$telp[] = $inputplace['telp'];				
-					$photo[] = 'file_upload/place/'.$inputplace['name'].'-'.$inputplace['location'].'/'.$inputplace['photo'];				
-					
-					$category = $place->getCategoryByPlace($link,$inputplace['id']);
-					if(!is_string($category))
-					{		
-						$tempfeature = array();			
-						foreach($category as $categoryRows)
-						{
-							if($categoryRows['value']==null){
-								break;
-							}
-							if($categoryRows['category']=="feature")
-							{							
-								$tempfeature[] = $categoryRows['value'];						
-							}																		
-						}
-						if($tempfeature==null){
-							$tempfeature[] = "";						
-						}
-					}else{
-						$tempfeature = array();
-						$tempfeature[] = "";
-					}
-					$feature[] = $tempfeature;						
-				}
-				$result[] = array(
-						"id" => $id,
-						"name" => $name,
-						"address" => $address,
-						"telp" => $telp,					
-						"photo" => $photo,
-						"feature" => $feature
-					);
-				echo str_replace('\\/', '/', json_encode($result));
-			}				
-		});
-		//endcobacode
-	
-	//HARUS RUBAH BIAR NGAMBIL DARI RECOMMENDATION
-	//cari 15 new place terhitung 1 bulan ke belakang
-	$app->get('/get15newplace', function() use ($link){				
-		$place = new Place();		
-		//$respond = $place->getPlace($link);
-			$newrespond = $place->getNewPlace($link);
-			$respond = $newrespond['value'];
+				
+	$app->get('/get15newplace', function() use ($link){		
+		$place = new Place();
+		$type = "new";
+		$newrespond = $place->getRecommendationByType($link,$type);		
+		//echo $newrespond['status'];
+		//echo $newrespond['value']['id'];
 		
-		//$currentdate = new DateTime('now');	
-		//$count = 0;
-		$result = array();
-			$id = array();
-			$name = array();
-			$address = array();
-			$telp = array();			
-			$photo = array();
-			$feature = array();
+		if(is_string($newrespond)){ //if ($newrespond['status']=='error'){
+			echo $newrespond;		//echo $newrespond;
+		}else{
+			$respond = $newrespond['value'];			
+				$result = array();
+				$id = array();
+				$name = array();
+				$address = array();
+				$telp = array();			
+				$photo = array();
+				$feature = array();				
+			foreach($respond as $rows)
+			{			
+				$inputplace = $place->getPlaceFromId($link,$rows['place_id']);				
+				$id[] = $inputplace['id'];
+				$name[] = $inputplace['name'];
+				$address[] = $inputplace['address'];
+				$telp[] = $inputplace['telp'];				
+				$photo[] = 'file_upload/place/'.$inputplace['name'].'-'.$inputplace['location'].'/'.$inputplace['photo'];				
 				
-		foreach($respond as $rows)
-		{
-			//$datetimerow = $rows['create_time']; 
-			//$daterow = new DateTime($datetimerow);
-			//$interval = $currentdate->diff($daterow);
-			//$intervaldays = $interval->format('%a');
-			//if($intervaldays < 30 ){
-				//$count++;				
-				$id[] = $rows['id'];
-				$name[] = $rows['name'];
-				$address[] = $rows['address'];
-				$telp[] = $rows['telp'];				
-				$photo[] = 'file_upload/place/'.$rows['name'].'-'.$rows['location'].'/'.$rows['photo'];				
-				
-				$category = $place->getCategoryByPlace($link,$rows['id']);
+				$category = $place->getCategoryByPlace($link,$inputplace['id']);
 				if(!is_string($category))
 				{		
 					$tempfeature = array();			
@@ -423,14 +354,9 @@ include("class/user.php");
 					$tempfeature = array();
 					$tempfeature[] = "";
 				}
-				$feature[] = $tempfeature;
-			//}
-			//if($count>14){
-			//	break;
-			//}
-			
-		}
-		$result[] = array(
+				$feature[] = $tempfeature;						
+			}
+			$result[] = array(
 					"id" => $id,
 					"name" => $name,
 					"address" => $address,
@@ -438,9 +364,10 @@ include("class/user.php");
 					"photo" => $photo,
 					"feature" => $feature
 				);
-		echo str_replace('\\/', '/', json_encode($result));						
+			echo str_replace('\\/', '/', json_encode($result));
+		}				
 	});
-	
+				
 	//isi kolom position table trending (1-15)	
 	$app->get('/get15trendingplace', function() use ($link){	
 		$place = new Place();
