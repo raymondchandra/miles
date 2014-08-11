@@ -123,7 +123,7 @@
 			$sql = 'DELETE FROM event WHERE id ='.$id;
 			if (!mysqli_query($link, $sql)) $check = false;
 			
-			if ($check)) {
+			if ($check) {
 				$ret['status'] = "success";
 				return $ret;
 			}else{
@@ -448,36 +448,6 @@
 			}else{
 				//error
 				return '{"status":"error","message":"failed to invite"}';
-			}
-		}
-			$sql = 'SELECT * FROM event_going WHERE event_id ='.$event_id;
-			
-			if($result = mysqli_query($link, $sql)){
-				$num_rows = mysqli_num_rows($result);
-				if($num_rows == 0){
-					//error
-					$ret['status'] = "error";
-					$ret['message'] = "0 going";
-					return $ret;
-				}else{
-					$rows = array();
-					while($r = mysqli_fetch_assoc($result)) {
-						$sql = 'SELECT last_name,first_name,photo FROM profile WHERE id="'.$r['profile_id'].'" LIMIT 1';
-						$result2 = mysqli_query($link,$sql);
-						$value = mysqli_fetch_object($result2);
-						$r['name'] = $value->first_name.' '.$value->last_name;
-						$r['photo'] = $value->photo;
-						$rows[] = $r;
-					}
-					$ret['status'] = "success";
-					$ret['value'] = $rows;
-					return $ret;
-				}
-			}else{
-				//error
-				$ret['status'] = "error";
-				$ret['message'] = "sql error";
-				return $ret;
 			}
 		}
 	//end of event_going
