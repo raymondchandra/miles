@@ -43,10 +43,11 @@
 		//newcode
 		function changeActive($link,$id,$active)
 		{
-			$changeid = mysqli_escape_string($link,$id);
-			$changeactive = mysqli_escape_string($link,$active);
+			//$changeid = mysqli_escape_string($link,$id);
+			//$changeactive = mysqli_escape_string($link,$active);
 			
-			$sql = 'UPDATE account SET active='.$changeactive.' WHERE id='.$changeid;
+			//$sql = 'UPDATE account SET active='.$changeactive.' WHERE id='.$changeid;			
+			$sql = 'UPDATE account SET active='.$active.' WHERE id='.$id;
 			
 			if(mysqli_query($link,$sql)){
 				//success

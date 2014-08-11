@@ -16,9 +16,7 @@ include("class/user.php");
 	$app->get('/accLogin/:email/:password', function($email,$password) use ($link){
 		$account = new Account();
 		echo $account->login($link,$email,$password);
-	});
-	
-	
+	});		
 	
 	$app->get('/accExist/:email', function($email) use ($link){
 		$account = new Account();
@@ -41,7 +39,8 @@ include("class/user.php");
 	$app->delete('/account/:id',function($id) use ($link) {
         $account = new Account();
 		echo $account->deleteAccount($link,$id);
-		
+	});
+	
 	//newcode
 	$app->put('account',function() use ($link,$app){
 		$request = $app->request();
@@ -56,7 +55,7 @@ include("class/user.php");
 		echo $account->changeActive($link,$inputId,$inputActive);
 	});
 	//endnewcode
-    });
+    
 //end of account
 
 //user
@@ -152,6 +151,7 @@ include("class/user.php");
 		}
 	});
 	
+	//newcode
 	//get all user --->> ke account dulu baru ke
 	$app->get('/user', function() use ($link){
 		$account = new Account();
@@ -223,12 +223,15 @@ include("class/user.php");
 			//echo json_encode($newrow[$counter-1]);
 		}
 	});
+	//endnewcode
+	
 //end of user
 
 //place
 	
-	//newcode 
+	//newcode
 	//get 15 new place dari tabel place berdasarkan create_time
+	//lalu skalian ngisi ke tabel recommendation
 	$app->get('/get15newplacetorecommendation', function() use ($link){				
 		$place = new Place();		
 		//$respond = $place->getPlace($link);
@@ -302,40 +305,35 @@ include("class/user.php");
 				);
 		echo str_replace('\\/', '/', json_encode($result));						
 	});
-	
-	//HARUS RUBAH BIAR NGAMBIL DARI RECOMMENDATION
-	//cari 15 new place terhitung 1 bulan ke belakang
-	$app->get('/get15newplace', function() use ($link){				
-		$place = new Place();		
-		//$respond = $place->getPlace($link);
-			$newrespond = $place->getNewPlace($link);
-			$respond = $newrespond['value'];
+				
+	$app->get('/get15newplace', function() use ($link){		
+		$place = new Place();
+		$type = "new";
+		$newrespond = $place->getRecommendationByType($link,$type);		
+		//echo $newrespond['status'];
+		//echo $newrespond['value']['id'];
 		
-		//$currentdate = new DateTime('now');	
-		//$count = 0;
-		$result = array();
-			$id = array();
-			$name = array();
-			$address = array();
-			$telp = array();			
-			$photo = array();
-			$feature = array();
+		if(is_string($newrespond)){ //if ($newrespond['status']=='error'){
+			echo $newrespond;		//echo $newrespond;
+		}else{
+			$respond = $newrespond['value'];			
+				$result = array();
+				$id = array();
+				$name = array();
+				$address = array();
+				$telp = array();			
+				$photo = array();
+				$feature = array();				
+			foreach($respond as $rows)
+			{			
+				$inputplace = $place->getPlaceFromId($link,$rows['place_id']);				
+				$id[] = $inputplace['id'];
+				$name[] = $inputplace['name'];
+				$address[] = $inputplace['address'];
+				$telp[] = $inputplace['telp'];				
+				$photo[] = 'file_upload/place/'.$inputplace['name'].'-'.$inputplace['location'].'/'.$inputplace['photo'];				
 				
-		foreach($respond as $rows)
-		{
-			//$datetimerow = $rows['create_time']; 
-			//$daterow = new DateTime($datetimerow);
-			//$interval = $currentdate->diff($daterow);
-			//$intervaldays = $interval->format('%a');
-			//if($intervaldays < 30 ){
-				//$count++;				
-				$id[] = $rows['id'];
-				$name[] = $rows['name'];
-				$address[] = $rows['address'];
-				$telp[] = $rows['telp'];				
-				$photo[] = 'file_upload/place/'.$rows['name'].'-'.$rows['location'].'/'.$rows['photo'];				
-				
-				$category = $place->getCategoryByPlace($link,$rows['id']);
+				$category = $place->getCategoryByPlace($link,$inputplace['id']);
 				if(!is_string($category))
 				{		
 					$tempfeature = array();			
@@ -356,14 +354,9 @@ include("class/user.php");
 					$tempfeature = array();
 					$tempfeature[] = "";
 				}
-				$feature[] = $tempfeature;
-			//}
-			//if($count>14){
-			//	break;
-			//}
-			
-		}
-		$result[] = array(
+				$feature[] = $tempfeature;						
+			}
+			$result[] = array(
 					"id" => $id,
 					"name" => $name,
 					"address" => $address,
@@ -371,9 +364,10 @@ include("class/user.php");
 					"photo" => $photo,
 					"feature" => $feature
 				);
-		echo str_replace('\\/', '/', json_encode($result));						
+			echo str_replace('\\/', '/', json_encode($result));
+		}				
 	});
-	
+				
 	//isi kolom position table trending (1-15)	
 	$app->get('/get15trendingplace', function() use ($link){	
 		$place = new Place();
@@ -530,8 +524,9 @@ include("class/user.php");
 		}
 		else
 		{
-		
+			
 			$allplace = array();
+					
 			foreach($respond as $rows)
 			{
 				$category = $place->getCategoryByPlace($link,$rows['id']);
@@ -539,7 +534,6 @@ include("class/user.php");
 				{
 					$feature = array();
 				
-					//$price = array();
 					foreach($category as $categoryRows)
 					{
 						if($categoryRows['category']=="feature")
@@ -565,6 +559,7 @@ include("class/user.php");
 					}
 					
 					$priceSummary = $lowPrice." ".$highPrice;
+
 					//parse price
 					/*$lowPrice = explode(" ", $price[0]['value']);
 					$highPrice = explode(" ", $price[count($price)-1]['value']);
@@ -585,6 +580,7 @@ include("class/user.php");
 						$priceSummary = $lowPrice[0]." - ".$highPrice[count($highPrice)-1];
 					}
 					*/
+
 					$allplace[] = array(
 						"place" => $rows,
 						"feature" => $feature,
@@ -1448,7 +1444,7 @@ include("class/user.php");
 		else
 			echo str_replace('\\/', '/', json_encode($respond));
 	});
-	
+
 	$app->get('/checkFavplace/:place_id/:profile_id', function($place_id,$profile_id) use ($link){
 		$user = new User();
 		echo $user->checkFavPlace($link,$place_id,$profile_id);
