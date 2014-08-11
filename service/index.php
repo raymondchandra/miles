@@ -585,8 +585,8 @@ include("class/user.php");
 						$priceSummary = $lowPrice[0]." - ".$highPrice[count($highPrice)-1];
 					}
 					*/
-					$getPlace = array(
-						"place" => $respond,
+					$allplace[] = array(
+						"place" => $rows,
 						"feature" => $feature,
 						"price" => $priceSummary,
 						"cuisine" => $cuisine,
@@ -603,15 +603,15 @@ include("class/user.php");
 					);
 				}
 			}
-			echo json_encode($allplace);
+			echo str_replace('\\/', '/', json_encode($allplace));
 		}
 		
 	});
 	
 	$app->get('/place/:field/:value', function($field,$value) use ($link){
+		$place = new Place();
 		if($field == "days")
 		{
-			$place = new Place();
 			$respond = $place->getPlaceFromDayLife($link,$value);
 			if(is_string($respond))
 			{
@@ -674,8 +674,8 @@ include("class/user.php");
 							$priceSummary = $lowPrice[0]." - ".$highPrice[count($highPrice)-1];
 						}
 						*/
-						$getPlace = array(
-							"place" => $respond,
+						$allplace[] = array(
+							"place" => $rows,
 							"feature" => $feature,
 							"price" => $priceSummary,
 							"cuisine" => $cuisine,
@@ -694,7 +694,23 @@ include("class/user.php");
 				}
 				echo str_replace('\\/', '/', json_encode($allplace));
 			}
+		}else if($field == "name"){
+			
 		}
+	});
+	
+	$app->get('/searchPlace/:name/:city/:offset', function($name,$city,$offset) use ($link){
+		$place = new Place();
+		$respond = $place->getPlaceFromName($link,$name,$city,$offset);
+		if(is_string($respond))
+		{
+			echo $respond;
+		}
+		else
+		{
+			echo str_replace('\\/', '/', json_encode($respond));
+		}
+	
 	});
 	
 	$app->get('/place/:id', function($id) use ($link){
@@ -873,7 +889,7 @@ include("class/user.php");
 		$place = new Place();
 		
 		$respond = $place->getPlaceFromId($link,$id);
-		$respond['photo'] = '../file_upload/place/'.$respond['name'].'-'.$respond['location'].'/'.$respond['photo']; 
+		//$respond['photo'] = '../file_upload/place/'.$respond['name'].'-'.$respond['location'].'/'.$respond['photo']; 
 		
 		if(is_string($respond))
 		{
@@ -1125,7 +1141,7 @@ include("class/user.php");
 		$review['rating'] = $input['rating'];
 		//review
 		$place = new Place();
-		echo $place->addReview($link,$review);
+		echo $place->editReview($link,$id,$review);
 	});
 	
 	$app->delete('/review/:id',function($id) use ($link) {
@@ -1283,7 +1299,7 @@ include("class/user.php");
 		echo $respond;
 	});
 	
-	$app->delete('/follow/:profile_id/:follower_id', function() use ($link){
+	$app->delete('/follow/:profile_id/:follower_id', function($profile_id,$follower_id) use ($link){
 		$user = new User();
 		echo $user->unfollow($link,$profile_id,$follower_id);
 	});
@@ -1433,7 +1449,12 @@ include("class/user.php");
 			echo str_replace('\\/', '/', json_encode($respond));
 	});
 	
-	$app->get('/favplace/:profile_id', function($profile_id) use ($link){
+	$app->get('/checkFavplace/:place_id/:profile_id', function($place_id,$profile_id) use ($link){
+		$user = new User();
+		echo $user->checkFavPlace($link,$place_id,$profile_id);
+	});
+	
+	$app->get('/visited/:profile_id', function($profile_id) use ($link){
 		$user = new User();
 		$respond = $user->getMostVisited($link,$profile_id);
 		if(is_string($respond))
@@ -1520,6 +1541,270 @@ include("class/user.php");
 	});
 //end of recommendation
 
+//event
+	$app->post('/event/:type',function ($type) use ($link,$app){
+		$request = $app->request();
+		$body = $request->getBody();
+		$input = json_decode($body,true);
+		$event = new Event();
+		if($type == "public")
+		{
+			$respond = $event->addPublicEvent($link,$input['event'],$input['place_id']);
+			echo json_encode($respond);
+		}
+		else if($type == "private")
+		{
+			$check = $event->checkOngoingEvent($link,$input['profile_id']);
+			if($check)
+			{
+				$place = new Place();
+				$respond = $place->insertPrivatePlace($link,$input['event']);
+				if($respond == "success")
+				{
+					$place_id = mysqli_insert_id($link);//ngambil dr place
+					$respond = $event->addPrivateEvent($link,$input['event'],$place_id,$input['profile_id']);
+					echo json_encode($respond);
+				}
+				else
+				{
+					echo $respond;
+				}
+			}
+		}
+	});
+	
+	$app->put('/event/:id',function ($id) use ($link,$app){
+		$request = $app->request();
+		$body = $request->getBody();
+		$input = json_decode($body,true);
+		
+		$event = new Event();
+		$check = $event->isPublic($link,$id);
+		if($check == 1)
+		{
+			$respond = $event->editPublicEvent($link,$input['event'],$id,$input['place_id']);
+			echo json_encode($respond);
+		}
+		else if($check == 0)
+		{
+			$place = new Place();
+			$respond = $place->editPrivatePlace($link,$input['event']);
+			if($respond == "success")
+			{
+				$respond = $event->editPrivateEvent($link,$input['event'],$id);
+				echo json_encode($respond);
+			}
+			else
+			{
+				echo $respond;
+			}
+		}
+	});
+	
+	$app->put('/event/photo/:id/:newphoto',function ($id,$newphoto) use ($link,$app){
+		$request = $app->request();
+		$body = $request->getBody();
+		$input = json_decode($body,true);
+		
+		$event = new Event();
+		
+		$respond = $event->getEventById($link,$id);
+		$check = $event->isPublic($link,$id);
+		//if($check)
+		//{
+			//delete foto
+			$dir = '../file_upload/event/'.$respond['id'].'/'.$respond['photo'];
+			if ($newphoto!="" && file_exists($dir))
+			{
+				unlink($dir);
+			}
+			$respond = $event->updatePhoto($link,$id,$newphoto);
+			echo json_encode($respond);
+		/*}
+		else
+		{
+			
+			$respond = $event->updatePhoto($link,$id,$newphoto);
+			if($respond['status']== "success")
+			{
+				$place= new Place();
+				$respond = $place->updatePhoto($link,$place_id,$newphoto);
+			}else{
+				echo json_encode($respond);
+			}
+			
+		}*/
+	});
+	
+	$app->delete('/event/:id',function ($id) use ($link,$app){
+		$event = new Event();
+		
+		//delete smua gallery
+		$event = new Event();
+		
+		$respond = $event->getPhotoByEvent($link,$place_id);
+		if(is_string($respond))
+		{
+			return $respond;
+		}
+		else
+		{
+			foreach($respond as $row)
+			{
+				deleteEventGallery($link,$row['id']);
+			}
+			return '{"status":"success"}';
+		}
+		
+		$respond = $event->delEvent($link,$id);
+		echo json_encode($respond);
+	});
+	
+	
+	
+	$app->get('/event/:id',function ($id) use ($link,$app){
+		$event = new Event();
+		$respond = $event->getEventById($link,$id);
+		echo str_replace('\\/', '/', json_encode($respond));
+	});
+	
+	$app->get('/event/member/:membership',function ($membership) use ($link,$app){
+		$event = new Event();
+		if($membership == "public")
+			$public = 1;
+		else if($membership == "private")
+			$public = 0;
+		
+		$respond = $event->getEventById($link,$public);
+		echo str_replace('\\/', '/', json_encode($respond));
+		
+	});
+	
+	$app->get('/checkHost/:event_id/:profile_id',function ($event_id,$profile_id) use ($link,$app){
+		$event = new Event();
+		$respond = $event->checkHost($link,$event_id,$profile_id);
+		echo '{"status":"'.$respond.'"}';
+	});
+//end of event
+
+//event_comment
+	$app->get('/evtComment/:event_id',function ($event_id) use ($link){
+		$event = new Event();
+		$respond = $event->getEventCommentByEvent($link,$event_id);
+		if(is_string($respond))
+		{
+			echo $respond;
+		}
+		else
+		{
+			echo str_replace('\\/', '/', json_encode($respond));
+		}
+		
+		
+	});
+	
+	$app->post('/evtComment',function () use ($link,$app){
+		$request = $app->request();
+		$body = $request->getBody();
+		$input = json_decode($body,true);
+		
+		$event_id = $input['event_id'];
+		$profile_id = $input['profile_id'];
+		$text = $input['text'];
+		//review
+		$event = new Event();
+		echo $event->addEventComment($link,$event_id,$profile_id,$text);
+	});
+	
+	$app->put('/evtComment/:id',function($id) use ($link,$app) {
+		$request = $app->request();
+		$body = $request->getBody();
+		$input = json_decode($body,true);
+		
+		$text = $input['text'];
+		//review
+		$event = new Event();
+		echo $event->editEventComment($link,$id,$text);
+	});
+	
+	$app->delete('/evtComment/:id',function($id) use ($link) {
+		$event = new Event();
+		$respond = $event->deleteEventComment($link,$id);
+		echo json_encode($respond);
+	});
+//end of event_comment
+
+//event_gallery
+	$app->get('/evtGallery/:event_id', function($event_id) use ($link){
+		$event = new Event();
+		$respond = $event->getPhotoByEvent($link,$event_id);
+		echo str_replace('\\/', '/', json_encode($respond));
+	});
+	
+	$app->post('/evtGallery', function() use ($link,$app){
+		$request = $app->request();
+		$body = $request->getBody();
+		$input = json_decode($body,true);
+		$event = new Event();
+		echo $event->addPhoto($link,$input['event_id'],$input['photo']);
+	});
+	
+	$app->delete('/evtGallery/:id', function($id) use ($link){
+		echo deleteEventGallery($link,$id);
+		
+	});
+	function deleteEventGallery($link,$id)
+	{
+		$event = new Event();
+		$respond1 = $event->getGalleryFromId($link,$id);
+		
+		$respond = $event->getEventById($link,$respond1['event_id']);
+		//delete foto
+			$dir = '../file_upload/event/'.$respond1['id'].'/'.$respond['photo'];
+			if (file_exists($dir))
+			{
+				unlink($dir);
+			}
+		return $event->deletePhoto($link,$id);
+	}
+//end of event_gallery
+
+//event_invited
+	$app->get('/evtInvited/:field/:value', function($field,$value) use ($link){
+		$event = new Event();
+		if($field == "event")
+		{
+			$respond = $event->getInvitedByEvent($link,$value);
+			echo str_replace('\\/', '/', json_encode($respond));
+		}
+		else if($field == "user")
+		{
+			$respond = $event->getInvitedByUser($link,$value);
+			echo str_replace('\\/', '/', json_encode($respond));
+		}
+	});
+	
+	$app->post('/evtInvited', function() use ($link){
+		$request = $app->request();
+		$body = $request->getBody();
+		$input = json_decode($body,true);
+		
+		$event = new Event();
+		$respond = $event->inviteUser($link,$input['event_id'],$input['profile_id']);
+		$user->updateNumInvited($link,$input['profile_id']);
+		echo $respond;
+	});
+	
+	$app->delete('/evtInvited/:event_id/:profile_id', function($event_id,$profile_id) use ($link){
+		$event = new Event();
+		echo $event->delInvited($link,$event_id,$profile_id);
+	});
+	
+	$app->put('/evtInvited/:event_id/:profile_id/:rsvp', function($event_id,$profile_id,$rsvp) use ($link){
+		$event = new Event();
+		echo $event->goingEvent($link,$event_id,$profile_id,$rsvp);
+	});
+//end of event_invited
 //run
 $app->run();
 

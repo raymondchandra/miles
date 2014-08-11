@@ -49,6 +49,23 @@
 				return '{"status":"error","message":"sql error"}';
 			}
 		}
+		
+		function checkFavPlace($link,$place_id,$profile_id)
+		{
+			$sql = 'SELECT * FROM fav_place WHERE profile_id="'.$profile_id.'" AND place_id="'.$place_id.'"';
+			
+			if($result = mysqli_query($link, $sql)){
+				$num_rows = mysqli_num_rows($result);
+				if($num_rows >= 1){
+					$value = mysqli_fetch_object($result);
+					return '{"status":"yes"}';
+				}else{
+					return '{"status":"no"}';
+				}
+			}else{
+				return '{"status":"error"}';
+			}
+		}
 	//end of fav_place
 	
 	//most_visited
@@ -424,7 +441,28 @@
 			}
 		}
 		
-		function updateNumInvited(){}
+		function updateNumInvited($link,$id)
+		{
+			$sql = 'SELECT COUNT(id) as number FROM event_invite GROUP BY profile_id HAVING profile_id="'.$id.'"';
+			
+			if($result = mysqli_query($link, $sql)){
+				$num_rows = mysqli_num_rows($result);
+				if($num_rows == 0){
+					return false;
+				}else{
+					$r = mysqli_fetch_assoc($result);
+					
+					$sql = 'UPDATE profile SET num_invited="'.$r['number'].'" WHERE id='.$id;
+					if($result = mysqli_query($link, $sql)){
+						return true;
+					}else{
+						return false;
+					}
+				}
+			}else{
+				return false;
+			}
+		}
 	//end of profile
 	
 	//setting 

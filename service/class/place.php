@@ -53,10 +53,6 @@
 			}
 		}
 		
-		function updatePhoto($link,$id,$dir)
-		{
-			
-		}
 		
 		function countRating($link,$id)
 		{
@@ -131,11 +127,31 @@
 		
 		function getPlaceFromLocation(){}
 		
-		function getPlaceFromName(){}
+		function getPlaceFromName($link,$name,$city,$offset)
+		{
+			$sql = 'SELECT * FROM place WHERE visibility = 1 AND name LIKE "'.$name.'" AND city LIKE "'.$city.'"LIMIT '.$offset.',20' ;
+			if($result = mysqli_query($link, $sql)){
+				$num_rows = mysqli_num_rows($result);
+				
+				if($num_rows == 0){
+					return '{"status":"error","message":"place not found"}';
+				}else{
+					$rows = array();
+					while($r = mysqli_fetch_assoc($result)) {
+						$r['photo'] = 'file_upload/place/'.$r['name'].'-'.$r['location'].'/'.$r['photo'];
+			
+						$rows[] = $r;
+					}
+					return $rows;
+				}
+			}else{
+				return '{"status":"error","message":"sql error"}';
+			}
+		}
 		
 		function getPlaceFromDayLife($link,$days)
 		{
-			$sql = 'SELECT * FROM place WHERE day_life="'.$days.'"';
+			$sql = 'SELECT * FROM place WHERE day_life="'.$days.'" AND visibility = 1';
 			if($result = mysqli_query($link, $sql)){
 				$num_rows = mysqli_num_rows($result);
 				
@@ -157,6 +173,62 @@
 		
 	//end of place
 		
+	//private place
+		function insertPrivatePlace($link,$event){
+			$name = mysqli_escape_string($link,"Event ".$event['name']);
+			$location = mysqli_escape_string($link,$event['location']);
+			$address = mysqli_escape_string($link,$event['address']);
+			//$photo = mysqli_escape_string($link,$event['photo']);
+			$sql = "INSERT INTO place (name,location,address,create_time,visibility) VALUES ('".$name."', '".$location."','".$address."', now(),'0')";
+			if (mysqli_query($link, $sql)) {
+				//success
+				return "success";
+			}else{
+				//error
+				return '{"status":"error","message":"place not inserted"}';
+			}
+		}
+		
+		function editPrivatePlace($link,$event,$id){
+			$name = mysqli_escape_string($link,"Event ".$event['name']);
+			$location = mysqli_escape_string($link,$event['location']);
+			$address = mysqli_escape_string($link,$event['address']);
+			$sql = "UPDATE place SET name='".$name."',location='".$location."',address='".$address."' WHERE id ='".$id."'" ;
+			if (mysqli_query($link, $sql)) {
+				//success
+				return "success";
+			}else{
+				//error
+				return '{"status":"error","message":"place not updated"}';
+			}
+		}
+		
+		function getPrivatePlace($link)
+		{
+			$sql = 'SELECT id,name,location,address FROM place WHERE visibility = 0';
+			
+			if($result = mysqli_query($link, $sql)){
+				$num_rows = mysqli_num_rows($result);
+				if($num_rows == 0){
+					return '{"status":"error","message":"place not found"}';
+				}else{
+					$rows = array();
+					while($r = mysqli_fetch_assoc($result)) {
+						$sql = 'SELECT * FROM event WHERE place_id="'.$r['id'].'" LIMIT 1';
+						$result2 = mysqli_query($link,$sql);
+						$value = mysqli_fetch_object($result2);
+						$r['photo'] = 'file_upload/event/'.$value->id.'/'.$value->photo;
+			
+						$rows[] = $r;
+					}
+					return $rows;
+				}
+			}else{
+				return '{"status":"error","message":"sql error"}';
+			}
+		}
+	//end of private place
+	
 	//place_category
 		function addCategory($link,$place_id,$category,$value)
 		{
