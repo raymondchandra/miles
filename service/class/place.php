@@ -655,57 +655,63 @@
 		}
 		
 		//newcode
-		//function checkRecommendationExistByPlaceId($link,$place_id,$type)
-		//{
-		//	$sql = 
-		//}
-		//endnewcode
-	//end of recommendation
-	
-	
-	//newcode
-		function getAllTrendingPlace($link)
-		{	
-			//table recommendation : type 2 -> trending
-			$sql = 'SELECT * FROM recommendation WHERE type=2 ORDER BY ranking,ranking ASC';
-				
-			if($result = mysqli_query($link,$sql)){
+		function checkRecommendationExistByTypeAndPlaceId($link,$type,$place_id)
+		{
+			$sql = 'SELECT * FROM recommendation WHERE place_id='.$place_id.' AND type="'.$type.'" ';
+			
+			if($result = mysqli_query($link, $sql)){
 				$num_rows = mysqli_num_rows($result);
-				if($num_rows >=1){
-					$rows = array();
-					while($r = mysqli_fetch_assoc($result)) {									
-						$rows[] = $r;
-					}
-					return $rows;
+				if($num_rows == 1){
+					return true;
 				}else{
-					return 'gagal';
+					return false;
 				}
 			}else{
-				return 'gagal';
+				return false;
 			}
 		}
 		
-		function getAllTopPlace($link)
+		function getRecommendationByTypeAndPlaceId($link,$type,$place_id)
+		{			
+			$sql = 'SELECT * FROM recommendation WHERE type="'.$type.'" AND place_id='.$place_id;							
+						
+			if($result = mysqli_query($link, $sql)){	
+				$num_rows = mysqli_num_rows($result);
+				if($num_rows == 1){					
+					$rows = mysqli_fetch_assoc($result);					
+										
+					$respond['status'] = 'success';
+					$respond['value'] = $rows;
+				}
+			}else{
+				$respond['status'] = 'error';
+				$respond['message'] = 'sql error';
+			}
+			return $respond;
+		}
+		
+		function getRankingByPlace($link,$place_id)
 		{
-			//table recommendation : type 1 -> top
-			$sql = 'SELECT * FROM recommendation WHERE type=1 ORDER BY ranking,ranking ASC';
+			$sql = 'SELECT ranking FROM recommendation WHERE place_id='.$place_id.' AND type=1 ';
 			
 			if($result = mysqli_query($link,$sql)){
 				$num_rows = mysqli_num_rows($result);
 				if($num_rows >=1){
-					$rows = array();
-					while($r = mysqli_fetch_assoc($result)) {									
-						$rows[] = $r;
-					}
-					return $rows;
+					$row = mysqli_fetch_assoc($result);
+					return $row['ranking'];
 				}else{
-					return 'gagal';
+					return '-';
 				}
 			}else{
 				return 'gagal';
 			}
 		}
-		
+		//endnewcode
+	//end of recommendation
+	
+	
+	//newcode		
+		/*	
 		function updateTrendingPlace($link,$position,$newplaceid){		
 			$newpos = mysqli_escape_string($link,$position);		
 			$newplace = mysqli_escape_string($link,$newplaceid);
@@ -735,23 +741,8 @@
 				return '{"status":"error","message":"top place not updated"}';
 			}
 		}
-		
-		function getRankingByPlace($link,$place_id)
-		{
-			$sql = 'SELECT ranking FROM recommendation WHERE place_id='.$place_id.' AND type=1 ';
-			
-			if($result = mysqli_query($link,$sql)){
-				$num_rows = mysqli_num_rows($result);
-				if($num_rows >=1){
-					$row = mysqli_fetch_assoc($result);
-					return $row['ranking'];
-				}else{
-					return '-';
-				}
-			}else{
-				return 'gagal';
-			}
-		}
+		*/
+
 	//endnewcode
 	}
 ?>
