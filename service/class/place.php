@@ -735,6 +735,23 @@
 				return '{"status":"error","message":"top place not updated"}';
 			}
 		}
+		
+		function getRankingByPlace($link,$place_id)
+		{
+			$sql = 'SELECT ranking FROM recommendation WHERE place_id='.$place_id.' AND type=1 ';
+			
+			if($result = mysqli_query($link,$sql)){
+				$num_rows = mysqli_num_rows($result);
+				if($num_rows >=1){
+					$row = mysqli_fetch_assoc($result);
+					return $row['ranking'];
+				}else{
+					return '-';
+				}
+			}else{
+				return 'gagal';
+			}
+		}
 	//endnewcode
 	}
 ?>

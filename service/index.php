@@ -56,6 +56,23 @@ include("class/user.php");
 	});
 	//endnewcode
     
+	$app->put('changePassword',function() use ($link,$app){
+		$request = $app->request();
+		$body = $request->getBody();
+		$input = json_decode($body,true);
+		
+		$profile_id = $input['profile_id'];
+		$oldpassword = $input['oldpassword'];
+		$newpassword = $input['newpassword']
+		
+		$account = new Account();
+		
+		$respond = $account->changePassword($link,$profile_id,$oldpassword,$newpassword);
+		if($respond)
+			echo '{"status":"success"}';
+		else
+			echo '{"status":"error"}';
+	});
 //end of account
 
 //user
@@ -580,13 +597,14 @@ include("class/user.php");
 						$priceSummary = $lowPrice[0]." - ".$highPrice[count($highPrice)-1];
 					}
 					*/
-
+					$top = $place->getRankingByPlace($link,$rows['id']);
 					$allplace[] = array(
 						"place" => $rows,
 						"feature" => $feature,
 						"price" => $priceSummary,
 						"cuisine" => $cuisine,
-						"membership" => $membership
+						"membership" => $membership,
+						"top" => $top
 					);
 				}
 				else{
@@ -595,7 +613,8 @@ include("class/user.php");
 						"feature" => "",
 						"price" => "",
 						"cuisine" => "",
-						"membership" => ""
+						"membership" => "",
+						"top" => ""
 					);
 				}
 			}
@@ -670,12 +689,14 @@ include("class/user.php");
 							$priceSummary = $lowPrice[0]." - ".$highPrice[count($highPrice)-1];
 						}
 						*/
+						$top = $place->getRankingByPlace($link,$rows['id']);
 						$allplace[] = array(
 							"place" => $rows,
 							"feature" => $feature,
 							"price" => $priceSummary,
 							"cuisine" => $cuisine,
-							"membership" => $membership
+							"membership" => $membership,
+							"top" => $top
 						);
 					}
 					else{
@@ -684,7 +705,8 @@ include("class/user.php");
 							"feature" => "",
 							"price" => "",
 							"cuisine" => "",
-							"membership" => ""
+							"membership" => "",
+							"top" => ""
 						);
 					}
 				}
@@ -773,12 +795,15 @@ include("class/user.php");
 					$priceSummary = $lowPrice[0]." - ".$highPrice[count($highPrice)-1];
 				}
 				*/
+				$top = $place->getRankingByPlace($link,$rows['id']);
+				
 				$getPlace = array(
 					"place" => $respond,
 					"feature" => $feature,
 					"price" => $priceSummary,
 					"cuisine" => $cuisine,
-					"membership" => $membership
+					"membership" => $membership,
+					"top" => $top
 				);
 			}
 			else{
@@ -787,7 +812,8 @@ include("class/user.php");
 					"feature" => "",
 					"price" => "",
 					"cuisine" => "",
-					"membership" => ""
+					"membership" => "",
+					"top" => ""
 				);
 			}
 			echo str_replace('\\/', '/', json_encode($getPlace));

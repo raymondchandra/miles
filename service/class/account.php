@@ -59,8 +59,39 @@
 		}
 		//endnewcode
 		
-		function changePassword()
+		function changePassword($link,$profile_id,$oldpassword,$newpassword)
 		{
+			$sql = 'SELECT account_id FROM profile WHERE id ='.$profile_id;
+			
+			if($result = mysqli_query($link, $sql)){
+				$num_rows = mysqli_num_rows($result);
+				if($num_rows == 1){
+					$rows = mysqli_fetch_assoc($result);
+					$account_id = $rows['account_id'];
+					$sql = 'SELECT * FROM account WHERE id ='.$account_id.' LIMIT 1';
+					$result2 = mysqli_query($link, $sql)
+					$rows2 = mysqli_fetch_assoc($result2);
+					if($oldpassword == $rows2['password']){
+					
+						$sql = 'UPDATE account SET password='.$newpassword.' WHERE id='.$account_id;
+						if(mysqli_query($link,$sql)){
+							//success
+							return true;
+						}else{
+							//error
+							return false;
+						}
+					}else{
+						return false;
+					}
+				}else{
+					return false;
+				}
+			}else{
+				return false;
+			}
+			
+			
 		}
 		
 		function nonActiveAccount()
