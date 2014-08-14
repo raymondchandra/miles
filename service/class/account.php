@@ -69,7 +69,7 @@
 					$rows = mysqli_fetch_assoc($result);
 					$account_id = $rows['account_id'];
 					$sql = 'SELECT * FROM account WHERE id ='.$account_id.' LIMIT 1';
-					$result2 = mysqli_query($link, $sql)
+					$result2 = mysqli_query($link, $sql);
 					$rows2 = mysqli_fetch_assoc($result2);
 					if($oldpassword == $rows2['password']){
 					

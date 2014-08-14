@@ -63,7 +63,7 @@ include("class/user.php");
 		
 		$profile_id = $input['profile_id'];
 		$oldpassword = $input['oldpassword'];
-		$newpassword = $input['newpassword']
+		$newpassword = $input['newpassword'];
 		
 		$account = new Account();
 		
@@ -606,6 +606,8 @@ include("class/user.php");
 			foreach($respond as $rows)
 			{
 				$category = $place->getCategoryByPlace($link,$rows['id']);
+				$top = $place->getRankingByPlace($link,$rows['id']);
+					
 				if(!is_string($category))
 				{
 					$feature = array();
@@ -656,7 +658,6 @@ include("class/user.php");
 						$priceSummary = $lowPrice[0]." - ".$highPrice[count($highPrice)-1];
 					}
 					*/
-					$top = $place->getRankingByPlace($link,$rows['id']);
 					$allplace[] = array(
 						"place" => $rows,
 						"feature" => $feature,
@@ -673,7 +674,7 @@ include("class/user.php");
 						"price" => "",
 						"cuisine" => "",
 						"membership" => "",
-						"top" => ""
+						"top" => $top
 					);
 				}
 			}
@@ -698,6 +699,8 @@ include("class/user.php");
 				foreach($respond as $rows)
 				{
 					$category = $place->getCategoryByPlace($link,$rows['id']);
+					$top = $place->getRankingByPlace($link,$rows['id']);
+						
 					if(!is_string($category))
 					{
 						$feature = array();
@@ -748,7 +751,6 @@ include("class/user.php");
 							$priceSummary = $lowPrice[0]." - ".$highPrice[count($highPrice)-1];
 						}
 						*/
-						$top = $place->getRankingByPlace($link,$rows['id']);
 						$allplace[] = array(
 							"place" => $rows,
 							"feature" => $feature,
@@ -765,7 +767,7 @@ include("class/user.php");
 							"price" => "",
 							"cuisine" => "",
 							"membership" => "",
-							"top" => ""
+							"top" => $top
 						);
 					}
 				}
@@ -804,6 +806,8 @@ include("class/user.php");
 			$respond['photo'] = 'file_upload/place/'.$respond['name'].'-'.$respond['location'].'/'.$respond['photo'];
 			$getPlace;
 			$category = $place->getCategoryByPlace($link,$respond['id']);
+			$top = $place->getRankingByPlace($link,$rows['id']);
+				
 			if(!is_string($category))
 			{
 				$feature = array();
@@ -854,7 +858,6 @@ include("class/user.php");
 					$priceSummary = $lowPrice[0]." - ".$highPrice[count($highPrice)-1];
 				}
 				*/
-				$top = $place->getRankingByPlace($link,$rows['id']);
 				
 				$getPlace = array(
 					"place" => $respond,
@@ -872,7 +875,7 @@ include("class/user.php");
 					"price" => "",
 					"cuisine" => "",
 					"membership" => "",
-					"top" => ""
+					"top" => $top
 				);
 			}
 			echo str_replace('\\/', '/', json_encode($getPlace));
@@ -1756,7 +1759,7 @@ include("class/user.php");
 		else if($membership == "private")
 			$public = 0;
 		
-		$respond = $event->getEventById($link,$public);
+		$respond = $event->getEventByMembership($link,$public);
 		echo str_replace('\\/', '/', json_encode($respond));
 		
 	});
