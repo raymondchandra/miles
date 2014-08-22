@@ -93,9 +93,55 @@
 			
 			
 		}
+		function getRandomString($length = 8) {
+			$validCharacters = "abcdefghijklmnopqrstuxyvwzABCDEFGHIJKLMNOPQRSTUXYVWZ+-*#&@!?1234567890";
+			$validCharNumber = strlen($validCharacters);
+		 
+			$result = "";
+		 
+			for ($i = 0; $i < $length; $i++) {
+				$index = mt_rand(0, $validCharNumber - 1);
+				$result .= $validCharacters[$index];
+			}
+		 
+			return $result;
+		}
 		
-		function nonActiveAccount()
+		function forgotPassword($link,$profile_id)
 		{
+			$sql = 'SELECT account_id FROM profile WHERE id ='.$profile_id;
+			
+			if($result = mysqli_query($link, $sql)){
+				$num_rows = mysqli_num_rows($result);
+				if($num_rows == 1){
+					$rows = mysqli_fetch_assoc($result);
+					$account_id = $rows['account_id'];
+					
+					$newPassword = getRandomString();
+					$sql = 'UPDATE account SET password='.md5($newPassword).' WHERE id='.$account_id;
+					
+					if(mysqli_query($link,$sql)){
+						//success
+						//kirim email
+						/*
+						$subject = "Miles's password";
+						$message = "You've just reset your Miles password, the following are your new passworrd: ".$newPassword;
+						$email = $rows['username'];
+						$message = wordwrap($message, 70);
+						$from = 'noreply@milesyourday.com';
+						mail($email,$subject,$message,"From: $from\n");
+						*/
+						return true;
+					}else{
+						//error
+						return false;
+					}
+				}else{
+					return false;
+				}
+			}else{
+				return false;
+			}
 		}
 		
 		function deleteAccount($link,$id)

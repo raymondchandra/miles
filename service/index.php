@@ -56,7 +56,7 @@ include("class/user.php");
 	});
 	//endnewcode
     
-	$app->put('changePassword',function() use ($link,$app){
+	$app->put('/changePassword',function() use ($link,$app){
 		$request = $app->request();
 		$body = $request->getBody();
 		$input = json_decode($body,true);
@@ -69,6 +69,23 @@ include("class/user.php");
 		
 		$respond = $account->changePassword($link,$profile_id,$oldpassword,$newpassword);
 		if($respond)
+			echo '{"status":"success"}';
+		else
+			echo '{"status":"error"}';
+	});
+	
+	$app->put('/forgotPassword',function() use ($link,$app){
+		$request = $app->request();
+		$body = $request->getBody();
+		$input = json_decode($body,true);
+		
+		$profile_id = $input['profile_id'];
+		
+		$account = new Account();
+		
+		$respond = $account->forgotPassword($link,$profile_id);
+		if($respond)
+			
 			echo '{"status":"success"}';
 		else
 			echo '{"status":"error"}';
@@ -806,7 +823,7 @@ include("class/user.php");
 			$respond['photo'] = 'file_upload/place/'.$respond['name'].'-'.$respond['location'].'/'.$respond['photo'];
 			$getPlace;
 			$category = $place->getCategoryByPlace($link,$respond['id']);
-			$top = $place->getRankingByPlace($link,$rows['id']);
+			$top = $place->getRankingByPlace($link,$respond['id']);
 				
 			if(!is_string($category))
 			{
@@ -1295,7 +1312,6 @@ include("class/user.php");
 		$place = new Place();
 		$respond = $place->unlikeReview($link,$review_id,$profile_id);
 		
-		
 		$respond = $place->updateLikeReview($link,$review_id);
 		if($respond)
 		{
@@ -1385,7 +1401,9 @@ include("class/user.php");
 	
 	$app->delete('/follow/:profile_id/:follower_id', function($profile_id,$follower_id) use ($link){
 		$user = new User();
-		echo $user->unfollow($link,$profile_id,$follower_id);
+		$respond = $user->unfollow($link,$profile_id,$follower_id);
+		$user->updateNumFollower($link,$profile_id);
+		echo $respond;
 	});
 	
 	$app->get('/suggestFollow/:profile_id', function($profile_id) use ($link){
@@ -1633,26 +1651,26 @@ include("class/user.php");
 		$event = new Event();
 		if($type == "public")
 		{
-			$respond = $event->addPublicEvent($link,$input['event'],$input['place_id']);
-			echo json_encode($respond);
+			$respond = $event->addPublicEvent($link,$input['event']);
+			echo str_replace('\\/', '/', json_encode($respond));
 		}
 		else if($type == "private")
 		{
 			$check = $event->checkOngoingEvent($link,$input['profile_id']);
 			if($check)
 			{
-				$place = new Place();
-				$respond = $place->insertPrivatePlace($link,$input['event']);
-				if($respond == "success")
-				{
-					$place_id = mysqli_insert_id($link);//ngambil dr place
-					$respond = $event->addPrivateEvent($link,$input['event'],$place_id,$input['profile_id']);
-					echo json_encode($respond);
-				}
-				else
-				{
-					echo $respond;
-				}
+				//$place = new Place();
+				//$respond = $place->insertPrivatePlace($link,$input['event']);
+				//if($respond == "success")
+				//{
+				//$place_id = mysqli_insert_id($link);//ngambil dr place
+				$respond = $event->addPrivateEvent($link,$input['event'],$input['profile_id']);
+				echo str_replace('\\/', '/', json_encode($respond));
+				//}
+				//else
+				//{
+				//	echo $respond;
+				//}
 			}
 		}
 	});
@@ -1666,22 +1684,22 @@ include("class/user.php");
 		$check = $event->isPublic($link,$id);
 		if($check == 1)
 		{
-			$respond = $event->editPublicEvent($link,$input['event'],$id,$input['place_id']);
+			$respond = $event->editPublicEvent($link,$input['event'],$id);
 			echo json_encode($respond);
 		}
 		else if($check == 0)
 		{
-			$place = new Place();
-			$respond = $place->editPrivatePlace($link,$input['event']);
-			if($respond == "success")
-			{
+			//$place = new Place();
+			//$respond = $place->editPrivatePlace($link,$input['event']);
+			//if($respond == "success")
+			//{
 				$respond = $event->editPrivateEvent($link,$input['event'],$id);
 				echo json_encode($respond);
-			}
-			else
-			{
-				echo $respond;
-			}
+			//}
+			//else
+			//{
+			//	echo $respond;
+			//}
 		}
 	});
 	
@@ -1889,6 +1907,54 @@ include("class/user.php");
 		echo $event->goingEvent($link,$event_id,$profile_id,$rsvp);
 	});
 //end of event_invited
+
+//setting
+	$app->get('/setting/:profile_id', function($profile_id) use ($link){
+		$user = new User();
+		$respond = $user->getSettingByUser($link,$profile_id);
+		echo json_encode($respond);
+	});
+	
+	$app->post('/setting', function() use ($link,$app){
+		$request = $app->request();
+		$body = $request->getBody();
+		$input = json_decode($body,true);
+		
+		$profile_id = $input['profile_id'];
+		$type = $input['type'];
+		$value = $input['value'];
+		
+		$user = new User();
+		$respond = $user->addSetting($link,$profile_id,$type,$value);
+		if($respond)
+		{
+			echo '{"status":"success"}';
+		}else
+		{
+			echo '{"status":"error"}';
+		}
+	});
+	
+	$app->put('/setting', function() use ($link){
+		$request = $app->request();
+		$body = $request->getBody();
+		$input = json_decode($body,true);
+		
+		$profile_id = $input['profile_id'];
+		$type = $input['type'];
+		$value = $input['value'];
+		
+		$user = new User();
+		$respond = $user->updateSettingByUserType($link,$profile_id,$type,$value);
+		if($respond)
+		{
+			echo '{"status":"success"}';
+		}else
+		{
+			echo '{"status":"error"}';
+		}
+	});
+//end of setting
 //run
 $app->run();
 

@@ -174,7 +174,7 @@
 	//end of place
 		
 	//private place
-		function insertPrivatePlace($link,$event){
+		/*function insertPrivatePlace($link,$event){
 			$name = mysqli_escape_string($link,"Event ".$event['name']);
 			$location = mysqli_escape_string($link,$event['location']);
 			$address = mysqli_escape_string($link,$event['address']);
@@ -226,7 +226,7 @@
 			}else{
 				return '{"status":"error","message":"sql error"}';
 			}
-		}
+		}*/
 	//end of private place
 	
 	//place_category
@@ -503,7 +503,14 @@
 			if($result = mysqli_query($link, $sql)){
 				$num_rows = mysqli_num_rows($result);
 				if($num_rows == 0){
-					return false;
+					$r = mysqli_fetch_assoc($result);
+					
+					$sql = 'UPDATE review SET num_like=0 WHERE id='.$review_id;
+					if($result = mysqli_query($link, $sql)){
+						return true;
+					}else{
+						return false;
+					}
 				}else{
 					$r = mysqli_fetch_assoc($result);
 					
@@ -541,8 +548,7 @@
 		
 		function getLikeByReview($link,$review_id)
 		{
-			$sql = 'SELECT * FROM like_review WHERE review_id='.review_id;
-						
+			$sql = 'SELECT * FROM like_review WHERE review_id='.$review_id;
 			if($result = mysqli_query($link, $sql)){
 				$rows = array();
 				while($r = mysqli_fetch_assoc($result))

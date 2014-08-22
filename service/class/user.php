@@ -15,7 +15,7 @@
 		
 		function deleteFavPlace($link,$profile_id,$place_id)
 		{
-			$sql = 'DELETE FROM fav_place WHERE profile_id ='.$follower_id.' AND place_id='.$place_id;
+			$sql = 'DELETE FROM fav_place WHERE profile_id ='.$profile_id.' AND place_id='.$place_id;
 			if (mysqli_query($link, $sql)) {
 				//success
 				return '{"status":"success"}';
@@ -402,7 +402,12 @@
 			if($result = mysqli_query($link, $sql)){
 				$num_rows = mysqli_num_rows($result);
 				if($num_rows == 0){
-					return false;
+					$sql = 'UPDATE profile SET num_follower=0 WHERE id='.$id;
+					if($result = mysqli_query($link, $sql)){
+						return true;
+					}else{
+						return false;
+					}
 				}else{
 					$r = mysqli_fetch_assoc($result);
 					
@@ -425,7 +430,12 @@
 			if($result = mysqli_query($link, $sql)){
 				$num_rows = mysqli_num_rows($result);
 				if($num_rows == 0){
-					return false;
+					$sql = 'UPDATE profile SET num_review=0 WHERE id='.$id;
+					if($result = mysqli_query($link, $sql)){
+						return true;
+					}else{
+						return false;
+					}
 				}else{
 					$r = mysqli_fetch_assoc($result);
 					
@@ -466,11 +476,50 @@
 	//end of profile
 	
 	//setting 
-		function addSetting(){}
+		function addSetting($link,$profile_id,$type,$value)
+		{
+			$type = mysqli_escape_string($link,$type);
+			$value = mysqli_escape_string($link,$value);
+			$sql = 'INSERT INTO setting (profile_id,type,value) VALUES ('.$profile_id.',"'.$type.'",'.$value.')';
+			if (mysqli_query($link, $sql)) {
+				return true;
+			}else{
+				return false;
+			}
+		}
 		
-		function updateSettingByUserType(){}
+		function updateSettingByUserType($link,$profile_id,$type,$value)
+		{
+			$type = mysqli_escape_string($link,$type);
+			$value = mysqli_escape_string($link,$value);
+			
+			$sql = 'UPDATE setting SET value='.$value.' WHERE type="'.$profile_id.'" AND profile_id="'.$profile_id.'"';
+			if (mysqli_query($link, $sql)) {
+				return true;
+			}else{
+				return false;
+			}
+		}
 		
-		function getSettingByUser(){}
+		function getSettingByUser($link,$profile_id)
+		{
+			$sql = 'SELECT * FROM setting WHERE type="'.$profile_id.'"';							
+						
+			if($result = mysqli_query($link, $sql)){				
+				$rows = array();
+				while($r = mysqli_fetch_assoc($result))
+				{
+					$rows[] = $r;						
+				}
+				$respond['status'] = 'success';
+				$respond['value'] = $rows;
+				
+			}else{
+				$respond['status'] = 'error';
+				$respond['message'] = 'sql error';
+			}
+			return $respond;
+		}
 	//end of setting
 	}
 ?>

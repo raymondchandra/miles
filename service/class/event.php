@@ -1,7 +1,7 @@
 <?php
 	class Event{
 	//event
-		function addPublicEvent($link,$event,$place_id)
+		function addPublicEvent($link,$event)
 		{
 			$name = mysqli_escape_string($link,$event['name']);
 			$cp = mysqli_escape_string($link,$event['cp']);
@@ -13,10 +13,10 @@
 			$dresscode = mysqli_escape_string($link,$event['dresscode']);
 			$price = mysqli_escape_string($link,$event['price']);
 			$type = mysqli_escape_string($link,$event['type']);
-			
+			$location = mysqli_escape_string($link,$event['location']);
 			$membership = 1;
 			
-			$sql = "INSERT INTO event (name,cp,website,place_id,start_time,end_time,description,membership,photo,dresscode,price,type) VALUES ('".$name."', '".$cp."','".$website."','".$place_id."','".$start_time."','".$end_time."', '".$description."', ".$membership.", '".$photo."', '".$dresscode."','".$price."','".$type."')";
+			$sql = "INSERT INTO event (name,cp,website,start_time,end_time,description,membership,photo,dresscode,price,type,location) VALUES ('".$name."', '".$cp."','".$website."','".$start_time."','".$end_time."', '".$description."', ".$membership.", '".$photo."', '".$dresscode."','".$price."','".$type."','".$location."')";
 			if (mysqli_query($link, $sql)) {
 				//success
 				$ret['status'] = "success";
@@ -29,7 +29,7 @@
 			}
 		}
 		
-		function editPublicEvent($link,$event,$id,$place_id)
+		function editPublicEvent($link,$event,$id)
 		{
 			$name = mysqli_escape_string($link,$event['name']);
 			$cp = mysqli_escape_string($link,$event['cp']);
@@ -41,9 +41,9 @@
 			$dresscode = mysqli_escape_string($link,$event['dresscode']);
 			$price = mysqli_escape_string($link,$event['price']);
 			$type = mysqli_escape_string($link,$event['type']);
-			
+			$location = mysqli_escape_string($link,$event['location']);
 			$membership = 1;
-			$sql = 'UPDATE event SET name="'.$name.'",cp="'.$cp.'",website="'.$website.'",place_id="'.$place_id.'",start_time="'.$start_time.'",end_time="'.$end_time.'",description="'.$description.'",membership="'.$membership.'",photo="'.$photo.'",dresscode="'.$dresscode.'",price="'.$price.'",type="'.$type.'" WHERE id='.$id;
+			$sql = 'UPDATE event SET name="'.$name.'",cp="'.$cp.'",website="'.$website.'",start_time="'.$start_time.'",end_time="'.$end_time.'",description="'.$description.'",membership="'.$membership.'",photo="'.$photo.'",dresscode="'.$dresscode.'",price="'.$price.'",type="'.$type.'",location="'.$location.'" WHERE id='.$id;
 			
 			if (mysqli_query($link, $sql)) {
 				//success
@@ -57,17 +57,18 @@
 			}
 		}
 		
-		function addPrivateEvent($link,$event,$place_id,$host)
+		function addPrivateEvent($link,$event,$host)
 		{
 			$name = mysqli_escape_string($link,$event['name']);
 			$start_time = $event['start_time']; //YYYY-MM-DD HH:MM:SS
 			$end_time = $event['end_time']; //YYYY-MM-DD HH:MM:SS
 			$description = mysqli_escape_string($link,$event['description']);
 			$photo = mysqli_escape_string($link,$event['photo']);
+			$location = mysqli_escape_string($link,$event['location']);
 			
 			$membership = 0;
 			
-			$sql = "INSERT INTO event (name,host,website,place_id,start_time,end_time,description,membership,photo) VALUES ('".$name."', '".$host."','".$place_id."','".$start_time."','".$end_time."', '".$description."', ".$membership.", '".$photo."')";
+			$sql = "INSERT INTO event (name,host,website,start_time,end_time,description,membership,photo,location) VALUES ('".$name."', '".$host."','".$start_time."','".$end_time."', '".$description."', ".$membership.", '".$photo."', '".$location."')";
 			if (mysqli_query($link, $sql)) {
 				//success
 				$ret['status'] = "success";
@@ -87,11 +88,12 @@
 			$end_time = $event['end_time']; //YYYY-MM-DD HH:MM:SS
 			$description = mysqli_escape_string($link,$event['description']);
 			$photo = mysqli_escape_string($link,$event['photo']);
+			$location = mysqli_escape_string($link,$event['location']);
 			
 			$membership = 0;
 			
 			$membership = 1;
-			$sql = 'UPDATE event SET name="'.$name.'",start_time="'.$start_time.'",end_time="'.$end_time.'",description="'.$description.'",membership="'.$membership.'",photo="'.$photo.'" WHERE id='.$id;
+			$sql = 'UPDATE event SET name="'.$name.'",start_time="'.$start_time.'",end_time="'.$end_time.'",description="'.$description.'",membership="'.$membership.'",photo="'.$photo.'",location="'.$location.'" WHERE id='.$id;
 			
 			if (mysqli_query($link, $sql)) {
 				//success
